@@ -1,0 +1,36 @@
+[package]
+name = "qtrs"
+version = "0.1.0"
+edition = "2021"
+authors = ["zhanghaoxvan <3592114583@qq.com>"]
+license = "MIT OR Apache-2.0"
+description = "qtrs - A type-safe, builder-pattern-driven Qt6 GUI library for Rust"
+repository = "https://github.com/zhanghaoxvan/qtrs"
+readme = "README.md"
+
+[dependencies]
+cxx = "1.0"
+
+[build-dependencies]
+system-deps = "1.3"
+cxx-build = "1.0"
+pkg-config = "0.3"
+
+[features]
+default = []
+qml = []   # enable QML / Qt Quick support (requires qt6-declarative-dev)
+ui = []    # enable .ui file loading from Qt Designer (requires qt6-tools-dev)
+
+[[example]]
+name = "login"
+path = "examples/login.rs"
+required-features = ["qml"]
+
+[[example]]
+name = "basic"
+path = "examples/basic.rs"
+
+[package.metadata.system-deps]
+qt6-core = { name = "Qt6Core", version = "6.0" }
+qt6-gui = { name = "Qt6Gui", version = "6.0" }
+qt6-widgets = { name = "Qt6Widgets", version = "6.0" }
