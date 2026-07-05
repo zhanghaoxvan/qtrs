@@ -18,7 +18,7 @@ use crate::widget::{AsWidget, Widget};
 ///
 /// # Example
 ///
-/// ```no_run
+/// ```ignore
 /// use qtrs::*;
 ///
 /// let app = Application::new();

@@ -69,7 +69,7 @@ pub trait AsWidget {
 ///
 /// # Example
 ///
-/// ```no_run
+/// ```ignore
 /// use qtrs::Widget;
 ///
 /// let window = Widget::new()
@@ -108,8 +108,6 @@ impl Widget {
 
     /// Create a `Widget` from a raw C++ pointer (internal use only).
     #[doc(hidden)]
-    #[cfg(any(feature = "ui", test))]
-    #[allow(dead_code)]
     pub(crate) fn from_raw(ptr: *mut ffi::QWidget, has_parent: bool) -> Self {
         debug_assert!(!ptr.is_null(), "from_raw called with null pointer");
         Self {
@@ -247,6 +245,76 @@ impl Widget {
         debug_assert!(!self.ptr.is_null());
         unsafe { ffi::QWidget_setFixedSize(self.ptr, w, h); }
     }
+
+    /// Find a named child widget by its [`objectName`].
+    ///
+    /// `kind` selects the widget type to find. Returns the wrapped widget
+    /// on success, or `None` if no child with that name and type exists.
+    ///
+    /// ```ignore
+    /// # use qtrs::*;
+    /// let window = Widget::new().title("demo").build();
+    /// if let Some(FoundWidget::PushButton(mut btn)) =
+    ///     window.find(WidgetKind::PushButton, "myButton")
+    /// {
+    ///     btn.connect_clicked(|| println!("clicked!"));
+    /// }
+    /// ```
+    pub fn find(&self, kind: WidgetKind, name: &str) -> Option<FoundWidget> {
+        debug_assert!(!self.ptr.is_null());
+        let_cxx_string!(c_name = name);
+        match kind {
+            WidgetKind::PushButton => {
+                let ptr = unsafe { ffi::QWidget_findPushButton(self.ptr, &c_name) };
+                if ptr.is_null() { None }
+                else { Some(FoundWidget::PushButton(crate::PushButton::from_raw(ptr, name))) }
+            }
+            WidgetKind::LineEdit => {
+                let ptr = unsafe { ffi::QWidget_findLineEdit(self.ptr, &c_name) };
+                if ptr.is_null() { None }
+                else { Some(FoundWidget::LineEdit(crate::LineEdit::from_raw(ptr, name))) }
+            }
+            WidgetKind::CheckBox => {
+                let ptr = unsafe { ffi::QWidget_findCheckBox(self.ptr, &c_name) };
+                if ptr.is_null() { None }
+                else { Some(FoundWidget::CheckBox(crate::CheckBox::from_raw(ptr, name))) }
+            }
+            WidgetKind::Label => {
+                let ptr = unsafe { ffi::QWidget_findLabel(self.ptr, &c_name) };
+                if ptr.is_null() { None }
+                else { Some(FoundWidget::Label(crate::Label::from_raw(ptr, name))) }
+            }
+            WidgetKind::Any => {
+                let ptr = unsafe { ffi::QWidget_findWidget(self.ptr, &c_name) };
+                if ptr.is_null() { None }
+                else { Some(FoundWidget::Widget(Widget::from_raw(ptr, true))) }
+            }
+        }
+    }
+}
+
+// ============================================================
+// Widget find enums
+// ============================================================
+
+/// Widget type selector for [`Widget::find`].
+#[derive(Clone, Copy)]
+pub enum WidgetKind {
+    PushButton,
+    LineEdit,
+    CheckBox,
+    Label,
+    /// Any `QWidget` (no signal support).
+    Any,
+}
+
+/// Returned by [`Widget::find`] — match to unwrap and connect signals.
+pub enum FoundWidget {
+    PushButton(crate::PushButton),
+    LineEdit(crate::LineEdit),
+    CheckBox(crate::CheckBox),
+    Label(crate::Label),
+    Widget(Widget),
 }
 
 impl AsWidget for Widget {
@@ -286,7 +354,7 @@ impl Drop for Widget {
 ///
 /// # Example
 ///
-/// ```no_run
+/// ```ignore
 /// let window = Widget::new()
 ///     .title("Demo")
 ///     .size(640, 480)

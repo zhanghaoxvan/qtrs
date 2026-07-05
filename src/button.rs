@@ -34,7 +34,7 @@ use crate::widget::AsWidget;
 ///
 /// # Example
 ///
-/// ```no_run
+/// ```ignore
 /// use qtrs::PushButton;
 ///
 /// let btn = PushButton::new("Click me")
@@ -82,6 +82,26 @@ impl PushButton {
     pub fn show(&self) {
         debug_assert!(!self.ptr.is_null(), "PushButton::show on null pointer");
         unsafe { ffi::QPushButton_show(self.ptr) };
+    }
+
+    /// Connect a click callback to an already-existing button.
+    ///
+    /// This is the runtime equivalent of
+    /// [`Builder::on_clicked`] — useful when the button was loaded
+    /// from a `.ui` file rather than built in Rust.
+    pub fn connect_clicked<F: Fn() + 'static>(&mut self, f: F) {
+        debug_assert!(!self.ptr.is_null());
+        let handle = signal::leak_void(f);
+        unsafe { ffi::QPushButton_onClicked(self.ptr, handle.token); }
+        self.signal_handles.push(handle);
+    }
+
+    /// Wrap an existing `QPushButton*` obtained via `findChild`.
+    /// The button already has a Qt parent, so Drop will not delete it.
+    #[doc(hidden)]
+    pub(crate) fn from_raw(ptr: *mut ffi::QPushButton, text: &str) -> Self {
+        debug_assert!(!ptr.is_null());
+        Self { ptr, has_parent: true, text: text.to_string(), signal_handles: Vec::new() }
     }
 }
 

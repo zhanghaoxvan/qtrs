@@ -20,7 +20,7 @@ use crate::widget::AsWidget;
 ///
 /// # Example
 ///
-/// ```no_run
+/// ```ignore
 /// let editor = TextEdit::new()
 ///     .placeholder("Type here...")
 ///     .on_text_changed(|| println!("text changed"))

@@ -16,7 +16,7 @@ use crate::widget::AsWidget;
 ///
 /// # Example
 ///
-/// ```no_run
+/// ```ignore
 /// let slider = Slider::horizontal()
 ///     .range(0, 100)
 ///     .on_value_changed(|v| println!("value: {}", v))

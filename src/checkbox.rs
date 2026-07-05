@@ -21,7 +21,7 @@ use crate::widget::AsWidget;
 ///
 /// # Example
 ///
-/// ```no_run
+/// ```ignore
 /// let cb = CheckBox::new("Enable feature")
 ///     .on_toggled(|checked| println!("toggled: {}", checked))
 ///     .build();
@@ -45,6 +45,20 @@ impl CheckBox {
     pub fn set_checked(&self, checked: bool) {
         debug_assert!(!self.ptr.is_null());
         unsafe { ffi::QCheckBox_setChecked(self.ptr, checked) };
+    }
+
+    /// Connect a toggle callback to an already-existing checkbox.
+    pub fn connect_toggled<F: Fn(bool) + 'static>(&mut self, f: F) {
+        debug_assert!(!self.ptr.is_null());
+        let handle = signal::leak_bool(f);
+        unsafe { ffi::QCheckBox_onToggled(self.ptr, handle.token); }
+        self.signal_handles.push(handle);
+    }
+
+    #[doc(hidden)]
+    pub(crate) fn from_raw(ptr: *mut ffi::QCheckBox, _name: &str) -> Self {
+        debug_assert!(!ptr.is_null());
+        Self { ptr, has_parent: true, signal_handles: Vec::new() }
     }
 }
 

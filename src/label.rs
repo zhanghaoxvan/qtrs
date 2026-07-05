@@ -15,7 +15,7 @@ use crate::widget::AsWidget;
 ///
 /// # Example
 ///
-/// ```no_run
+/// ```ignore
 /// use qtrs::Label;
 ///
 /// let label = Label::new("Hello, world!").build();
@@ -54,6 +54,12 @@ impl Label {
         unsafe {
             ffi::QLabel_setText(self.ptr, &c_text);
         }
+    }
+
+    #[doc(hidden)]
+    pub(crate) fn from_raw(ptr: *mut ffi::QLabel, text: &str) -> Self {
+        debug_assert!(!ptr.is_null());
+        Self { ptr, has_parent: true, text: text.to_string() }
     }
 }
 

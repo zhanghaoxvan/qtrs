@@ -65,3 +65,20 @@ inline QWidget *toQWidget_QTextEdit(QTextEdit *w) {
 inline QWidget *toQWidget_QSlider(QSlider *w) {
     return static_cast<QWidget *>(w);
 }
+
+// --- findChild by objectName (for widgets loaded from .ui files) ---
+inline QPushButton *QWidget_findPushButton(QWidget *parent, const std::string &name) {
+    return parent->findChild<QPushButton *>(QString::fromStdString(name));
+}
+inline QLineEdit *QWidget_findLineEdit(QWidget *parent, const std::string &name) {
+    return parent->findChild<QLineEdit *>(QString::fromStdString(name));
+}
+inline QCheckBox *QWidget_findCheckBox(QWidget *parent, const std::string &name) {
+    return parent->findChild<QCheckBox *>(QString::fromStdString(name));
+}
+inline QLabel *QWidget_findLabel(QWidget *parent, const std::string &name) {
+    return parent->findChild<QLabel *>(QString::fromStdString(name));
+}
+inline QWidget *QWidget_findWidget(QWidget *parent, const std::string &name) {
+    return parent->findChild<QWidget *>(QString::fromStdString(name));
+}

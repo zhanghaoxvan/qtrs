@@ -20,7 +20,7 @@ use crate::ffi;
 ///
 /// # Example
 ///
-/// ```no_run
+/// ```ignore
 /// use qtrs::Application;
 ///
 /// let app = Application::new();

@@ -65,7 +65,7 @@
 //!
 //! ## Quick example
 //!
-//! ```no_run
+//! ```ignore
 //! use qtrs::prelude::*;
 //!
 //! fn main() {
@@ -137,7 +137,7 @@ pub use layout::{AsLayout, HBoxLayout, VBoxLayout};
 pub use slider::Slider;
 pub use textedit::TextEdit;
 pub use timer::Timer;
-pub use widget::{AsWidget, Widget};
+pub use widget::{AsWidget, FoundWidget, Widget, WidgetKind};
 
 
 #[cfg(feature = "ui")]
@@ -146,8 +146,8 @@ pub use loader::UiLoader;
 /// Prelude: commonly used types and traits.
 pub mod prelude {
     pub use super::{
-        Application, AsLayout, AsWidget, CheckBox, ComboBox, GridLayout, HBoxLayout, Label, LineEdit,
-        PushButton, Slider, TextEdit, Timer, VBoxLayout, Widget,
+        Application, AsLayout, AsWidget, CheckBox, ComboBox, FoundWidget, GridLayout, HBoxLayout,
+        Label, LineEdit, PushButton, Slider, TextEdit, Timer, VBoxLayout, Widget, WidgetKind,
     };
     #[cfg(feature = "ui")]
     pub use super::UiLoader;

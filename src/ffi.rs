@@ -135,6 +135,13 @@ pub mod ffi_inner {
         );
         unsafe fn QGridLayout_delete(layout: *mut QGridLayout);
 
+        // --- findChild helpers (for widgets loaded from .ui files) ---
+        unsafe fn QWidget_findWidget(parent: *mut QWidget, name: &CxxString) -> *mut QWidget;
+        unsafe fn QWidget_findPushButton(parent: *mut QWidget, name: &CxxString) -> *mut QPushButton;
+        unsafe fn QWidget_findLineEdit(parent: *mut QWidget, name: &CxxString) -> *mut QLineEdit;
+        unsafe fn QWidget_findCheckBox(parent: *mut QWidget, name: &CxxString) -> *mut QCheckBox;
+        unsafe fn QWidget_findLabel(parent: *mut QWidget, name: &CxxString) -> *mut QLabel;
+
         // --- QTimer ---
         unsafe fn QTimer_new() -> *mut QTimer;
         unsafe fn QTimer_start(timer: *mut QTimer, interval_ms: i32);

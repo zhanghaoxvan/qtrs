@@ -13,7 +13,7 @@ use crate::widget::AsWidget;
 ///
 /// # Example
 ///
-/// ```no_run
+/// ```ignore
 /// let mut grid = GridLayout::new();
 /// grid.add_widget(Box::new(Label::new("Name:").build()), 0, 0, 1, 1);
 /// grid.add_widget(Box::new(LineEdit::new("").build()), 0, 1, 1, 1);

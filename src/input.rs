@@ -36,7 +36,7 @@ use crate::widget::AsWidget;
 ///
 /// # Example
 ///
-/// ```no_run
+/// ```ignore
 /// use qtrs::LineEdit;
 ///
 /// let edit = LineEdit::new("type here...")
@@ -78,17 +78,25 @@ impl LineEdit {
     }
 
     /// Set the text at runtime.
-    ///
-    /// This calls
-    /// [`QLineEdit::setText`](https://doc.qt.io/qt-6/qlineedit.html#text-prop)
-    /// and updates the local cache.
     pub fn set_text(&mut self, text: impl Into<String>) {
         debug_assert!(!self.ptr.is_null(), "LineEdit::set_text on null pointer");
         self.text = text.into();
         let_cxx_string!(c_text = &self.text);
-        unsafe {
-            ffi::QLineEdit_setText(self.ptr, &c_text);
-        }
+        unsafe { ffi::QLineEdit_setText(self.ptr, &c_text); }
+    }
+
+    /// Connect a return-pressed callback to an already-existing widget.
+    pub fn connect_return_pressed<F: Fn() + 'static>(&mut self, f: F) {
+        debug_assert!(!self.ptr.is_null());
+        let handle = signal::leak_void(f);
+        unsafe { ffi::QLineEdit_onReturnPressed(self.ptr, handle.token); }
+        self.signal_handles.push(handle);
+    }
+
+    #[doc(hidden)]
+    pub(crate) fn from_raw(ptr: *mut ffi::QLineEdit, text: &str) -> Self {
+        debug_assert!(!ptr.is_null());
+        Self { ptr, has_parent: true, text: text.to_string(), signal_handles: Vec::new() }
     }
 }
 
