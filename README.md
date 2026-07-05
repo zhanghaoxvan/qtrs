@@ -14,7 +14,6 @@ management and signal/callback bridging.
 - RAII cleanup — automatic C++ deletion, parent-child aware (no double-free)
 - Signal bridging — Qt signals invoke Rust closures via a global trampoline
 - Layout ownership — adding a widget to a layout transfers ownership
-- QML / Qt Quick support — load `.qml` files with Rust backend (`feature = "qml"`)
 - .ui file loading — load Qt Designer `.ui` files at runtime (`feature = "ui"`)
 - Zero unsafe in public API — all FFI is encapsulated
 
@@ -66,52 +65,6 @@ fn main() {
 | `HBoxLayout` | `QHBoxLayout` | — |
 | `GridLayout` | `QGridLayout` | — |
 
-## QML Example
-
-```rust
-use qtrs::prelude::*;
-
-fn main() {
-    let app = Application::new();
-    let engine = QmlEngine::new();
-    engine.load("main.qml");
-    app.exec();
-}
-```
-
-With `main.qml`:
-
-```qml
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-
-Window {
-    width: 400
-    height: 300
-    title: "QML with qtrs"
-    visible: true
-
-    Button {
-        text: "Click me"
-        anchors.centerIn: parent
-        onClicked: backend.onButtonClicked()
-    }
-
-    Connections {
-        target: backend
-        function onButtonClicked() {
-            console.log("Button clicked from Rust!")
-        }
-    }
-}
-```
-
-Run with:
-
-```bash
-cargo run --features qml
-```
-
 ## Prerequisites
 
 Qt6 with development headers:
@@ -161,26 +114,11 @@ Add to your `Cargo.toml`:
 [dependencies]
 qtrs = "0.1.0"
 ```
-
-Enable QML support:
-
-```toml
-[dependencies]
-qtrs = { version = "0.1.0", features = ["qml"] }
-```
-
 Enable .ui file loading:
 
 ```toml
 [dependencies]
 qtrs = { version = "0.1.0", features = ["ui"] }
-```
-
-Enable both:
-
-```toml
-[dependencies]
-qtrs = { version = "0.1.0", features = ["qml", "ui"] }
 ```
 
 ## Memory management

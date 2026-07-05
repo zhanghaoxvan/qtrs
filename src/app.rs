@@ -20,7 +20,7 @@ use crate::ffi;
 ///
 /// # Example
 ///
-/// ```ignore
+/// ```no_run
 /// use qtrs::Application;
 ///
 /// let app = Application::new();
@@ -51,7 +51,7 @@ impl Application {
     ///
     /// Unlike [`Widget::set_icon`], this sets the fallback icon for
     /// **all** windows in the application. This is required for the
-    /// icon to appear on **Wayland** — Wayland compositors ignore
+    /// icon to appear on **Wayland** — Wayland compositors no_run
     /// per-widget icons and instead use the application-level icon
     /// set here (or the one from the `.desktop` file — see
     /// [`set_desktop_file_name`]).

@@ -14,5 +14,7 @@
 #include "timer.h"
 #include "layout.h"
 #include "dialog.h"
-#include "qml.h"
-#include "uiloader.h"
+
+#ifdef QTRS_HAS_UI
+#    include "uiloader.h"
+#endif

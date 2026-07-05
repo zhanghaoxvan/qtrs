@@ -21,7 +21,7 @@ use crate::widget::AsWidget;
 ///
 /// # Example
 ///
-/// ```ignore
+/// ```no_run
 /// let cb = CheckBox::new("Enable feature")
 ///     .on_toggled(|checked| println!("toggled: {}", checked))
 ///     .build();

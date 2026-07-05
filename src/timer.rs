@@ -19,7 +19,7 @@ use crate::signal::{self, SignalHandle};
 ///
 /// # Example
 ///
-/// ```ignore
+/// ```no_run
 /// let timer = Timer::new(1000)
 ///     .on_timeout(|| println!("tick"))
 ///     .build();

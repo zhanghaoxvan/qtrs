@@ -15,9 +15,6 @@
 //!
 //! ## Features
 //!
-//! - **`qml`** — enables QML / Qt Quick support.
-//!   Requires `qt6-declarative-dev` (Debian) or equivalent.
-//!
 //! - **`ui`** — enables `.ui` file loading via `QUiLoader`.
 //!   Requires `qt6-tools-dev` (Debian) or equivalent.
 //!
@@ -25,7 +22,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! qtrs = { version = "0.1.0", features = ["qml"] }
+//! qtrs = { version = "0.1.0", features = ["ui"] }
 //! ```
 //!
 //! ## Design principles
@@ -65,19 +62,6 @@
 //! | [`VBoxLayout`] | `QVBoxLayout` | — |
 //! | [`HBoxLayout`] | `QHBoxLayout` | — |
 //! | [`GridLayout`] | `QGridLayout` | — |
-//!
-//! ## QML Support
-//!
-//! With the `qml` feature enabled, you can load QML files:
-//!
-//! ```ignore
-//! use qtrs::prelude::*;
-//!
-//! let app = Application::new();
-//! let engine = QmlEngine::new();
-//! engine.load("main.qml");
-//! app.exec();
-//! ```
 //!
 //! ## Quick example
 //!
@@ -139,8 +123,6 @@ pub mod timer;
 mod signal;
 pub mod widget;
 
-#[cfg(feature = "qml")]
-pub mod qml;
 #[cfg(feature = "ui")]
 pub mod loader;
 
@@ -157,8 +139,7 @@ pub use textedit::TextEdit;
 pub use timer::Timer;
 pub use widget::{AsWidget, Widget};
 
-#[cfg(feature = "qml")]
-pub use qml::QmlEngine;
+
 #[cfg(feature = "ui")]
 pub use loader::UiLoader;
 
@@ -168,8 +149,6 @@ pub mod prelude {
         Application, AsLayout, AsWidget, CheckBox, ComboBox, GridLayout, HBoxLayout, Label, LineEdit,
         PushButton, Slider, TextEdit, Timer, VBoxLayout, Widget,
     };
-    #[cfg(feature = "qml")]
-    pub use super::QmlEngine;
     #[cfg(feature = "ui")]
     pub use super::UiLoader;
 }

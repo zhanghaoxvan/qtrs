@@ -34,7 +34,7 @@ use crate::widget::AsWidget;
 ///
 /// # Example
 ///
-/// ```ignore
+/// ```no_run
 /// use qtrs::PushButton;
 ///
 /// let btn = PushButton::new("Click me")

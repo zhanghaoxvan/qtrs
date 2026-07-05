@@ -69,7 +69,7 @@ pub trait AsWidget {
 ///
 /// # Example
 ///
-/// ```ignore
+/// ```no_run
 /// use qtrs::Widget;
 ///
 /// let window = Widget::new()
@@ -286,7 +286,7 @@ impl Drop for Widget {
 ///
 /// # Example
 ///
-/// ```ignore
+/// ```no_run
 /// let window = Widget::new()
 ///     .title("Demo")
 ///     .size(640, 480)

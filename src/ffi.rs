@@ -5,6 +5,11 @@
 
 #[cxx::bridge]
 pub mod ffi_inner {
+
+    // ========================================================================
+    // Qt Core
+    // ========================================================================
+
     unsafe extern "C++" {
         include!("src/cpp/qt_widget.h");
 
@@ -151,37 +156,15 @@ pub mod ffi_inner {
         unsafe fn QMessageBox_question(
             parent: *mut QWidget, title: &CxxString, text: &CxxString,
         ) -> i32;
+    }
 
-        // --- QML (feature = "qml") ---
-        #[cfg(feature = "qml")]
-        type QQmlApplicationEngine;
-        #[cfg(feature = "qml")]
-        unsafe fn QQmlApplicationEngine_new() -> *mut QQmlApplicationEngine;
-        #[cfg(feature = "qml")]
-        unsafe fn QQmlApplicationEngine_load(engine: *mut QQmlApplicationEngine, qml_path: &CxxString);
-        #[cfg(feature = "qml")]
-        unsafe fn QQmlApplicationEngine_delete(engine: *mut QQmlApplicationEngine);
-        #[cfg(feature = "qml")]
-        unsafe fn QQmlApplicationEngine_rootObject(engine: *mut QQmlApplicationEngine) -> u64;
-        #[cfg(feature = "qml")]
-        unsafe fn QObject_findChild(parent: u64, name: &CxxString) -> u64;
-        #[cfg(feature = "qml")]
-        unsafe fn QObject_property_str(obj: u64, prop: &CxxString) -> String;
-        #[cfg(feature = "qml")]
-        unsafe fn QObject_setProperty_str(obj: u64, prop: &CxxString, value: &CxxString);
-        #[cfg(feature = "qml")]
-        unsafe fn QObject_connectSignal(sender: u64, signal: &CxxString, ctx: u64);
-        #[cfg(feature = "qml")]
-        unsafe fn QObject_invokeMethod1Bool1Str(obj: u64, method: &CxxString, arg1: bool, arg2: &CxxString);
+    #[cfg(feature = "ui")]
+    unsafe extern "C++" {
+        include!("src/cpp/uiloader.h");
 
-        // --- .ui loading (feature = "ui") ---
-        #[cfg(feature = "ui")]
         type QUiLoader;
-        #[cfg(feature = "ui")]
         unsafe fn QUiLoader_new() -> *mut QUiLoader;
-        #[cfg(feature = "ui")]
         unsafe fn QUiLoader_load(loader: *mut QUiLoader, ui_path: &CxxString, parent: *mut QWidget) -> *mut QWidget;
-        #[cfg(feature = "ui")]
         unsafe fn QUiLoader_delete(loader: *mut QUiLoader);
     }
 }
