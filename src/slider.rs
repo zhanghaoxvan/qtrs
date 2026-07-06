@@ -52,6 +52,12 @@ impl Slider {
         debug_assert!(!self.ptr.is_null());
         unsafe { ffi::QSlider_setRange(self.ptr, min, max); }
     }
+
+    #[doc(hidden)]
+    pub(crate) fn from_raw(ptr: *mut ffi::QSlider, _name: &str) -> Self {
+        debug_assert!(!ptr.is_null());
+        Self { ptr, has_parent: true, signal_handles: Vec::new() }
+    }
 }
 
 impl AsWidget for Slider {

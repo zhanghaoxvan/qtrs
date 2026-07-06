@@ -49,21 +49,25 @@ fn main() {
 
 ## Widgets
 
-| Type | Qt class | Signals |
-|---|---|---|
+| Type | Qt Class | Signals |
+|------|----------|---------|
 | `Application` | `QApplication` | — |
 | `Widget` | `QWidget` | — |
 | `PushButton` | `QPushButton` | `on_clicked` |
 | `Label` | `QLabel` | — |
 | `LineEdit` | `QLineEdit` | `on_return_pressed` |
 | `CheckBox` | `QCheckBox` | `on_toggled(bool)` |
-| `ComboBox` | `QComboBox` | `on_current_text_changed` |
+| `ComboBox` | `QComboBox` | `on_current_text_changed`<br>`on_current_index_changed(i32)` |
 | `TextEdit` | `QTextEdit` | `on_text_changed` |
 | `Slider` | `QSlider` | `on_value_changed(i32)` |
-| `Timer` | `QTimer` | `on_timeout` |
+| `Timer` | `QTimer` | `on_timeout`<br>`single_shot(ms, fn)` |
 | `VBoxLayout` | `QVBoxLayout` | — |
 | `HBoxLayout` | `QHBoxLayout` | — |
 | `GridLayout` | `QGridLayout` | — |
+
+---
+
+This matches the current codebase. Remove `Status` column as requested.
 
 ## Prerequisites
 

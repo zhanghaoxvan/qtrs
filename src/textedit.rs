@@ -47,6 +47,19 @@ impl TextEdit {
         let_cxx_string!(c_text = text);
         unsafe { ffi::QTextEdit_setPlainText(self.ptr, &c_text); }
     }
+
+    /// Set placeholder text shown when the editor is empty.
+    pub fn set_placeholder(&self, text: &str) {
+        debug_assert!(!self.ptr.is_null());
+        let_cxx_string!(c_text = text);
+        unsafe { ffi::QTextEdit_setPlaceholderText(self.ptr, &c_text); }
+    }
+
+    #[doc(hidden)]
+    pub(crate) fn from_raw(ptr: *mut ffi::QTextEdit, _name: &str) -> Self {
+        debug_assert!(!ptr.is_null());
+        Self { ptr, has_parent: true, signal_handles: Vec::new() }
+    }
 }
 
 impl AsWidget for TextEdit {

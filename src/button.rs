@@ -120,7 +120,12 @@ impl Drop for PushButton {
     fn drop(&mut self) {
         if self.ptr.is_null() { return; }
         if self.has_parent {
-            self.signal_handles.clear();
+            // Disconnect all Qt signals so no more callbacks fire,
+            // then reclaim closures safely (no use-after-free).
+            unsafe { ffi::QWidget_disconnectAll(self.ptr as *mut _); }
+            for h in self.signal_handles.drain(..) {
+                unsafe { h.reclaim(); }
+            }
         } else {
             for h in self.signal_handles.drain(..) {
                 unsafe { h.reclaim(); }

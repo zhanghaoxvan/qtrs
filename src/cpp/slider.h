@@ -21,5 +21,7 @@ inline void QSlider_delete(QSlider *s) { delete s; }
 
 inline void QSlider_onValueChanged(QSlider *s, uint64_t ctx) {
     QObject::connect(s, &QSlider::valueChanged,
-                     [ctx](int value) { g_intTrampoline(ctx, value); });
+                     [ctx](int value) {
+                         if (g_hasIntTrampoline) g_intTrampoline(ctx, value);
+                     });
 }

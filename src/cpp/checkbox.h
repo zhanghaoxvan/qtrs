@@ -17,5 +17,7 @@ inline void QCheckBox_delete(QCheckBox *cb) { delete cb; }
 
 inline void QCheckBox_onToggled(QCheckBox *cb, uint64_t ctx) {
     QObject::connect(cb, &QCheckBox::toggled,
-                     [ctx](bool checked) { g_boolTrampoline(ctx, checked); });
+                     [ctx](bool checked) {
+                         if (g_hasBoolTrampoline) g_boolTrampoline(ctx, checked);
+                     });
 }

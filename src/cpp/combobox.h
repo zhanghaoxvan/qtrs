@@ -25,5 +25,14 @@ inline void QComboBox_delete(QComboBox *cb) { delete cb; }
 
 inline void QComboBox_onCurrentTextChanged(QComboBox *cb, uint64_t ctx) {
     QObject::connect(cb, &QComboBox::currentTextChanged,
-                     [ctx](const QString &) { g_voidTrampoline(ctx); });
+                     [ctx](const QString &) {
+                         if (g_hasVoidTrampoline) g_voidTrampoline(ctx);
+                     });
+}
+
+inline void QComboBox_onCurrentIndexChanged(QComboBox *cb, uint64_t ctx) {
+    QObject::connect(cb, QOverload<int>::of(&QComboBox::currentIndexChanged),
+                     [ctx](int index) {
+                         if (g_hasIntTrampoline) g_intTrampoline(ctx, index);
+                     });
 }

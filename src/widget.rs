@@ -246,7 +246,16 @@ impl Widget {
         unsafe { ffi::QWidget_setFixedSize(self.ptr, w, h); }
     }
 
-    /// Find a named child widget by its [`objectName`].
+    /// Apply a CSS stylesheet to this widget (cascades to children).
+    ///
+    /// Uses [`QWidget::setStyleSheet`](https://doc.qt.io/qt-6/stylesheet.html).
+    pub fn set_style_sheet(&self, css: &str) {
+        debug_assert!(!self.ptr.is_null());
+        let_cxx_string!(c_css = css);
+        unsafe { ffi::QWidget_setStyleSheet(self.ptr, &c_css); }
+    }
+
+    /// Find a named child widget by its `objectName`.
     ///
     /// `kind` selects the widget type to find. Returns the wrapped widget
     /// on success, or `None` if no child with that name and type exists.
@@ -279,6 +288,21 @@ impl Widget {
                 if ptr.is_null() { None }
                 else { Some(FoundWidget::CheckBox(crate::CheckBox::from_raw(ptr, name))) }
             }
+            WidgetKind::ComboBox => {
+                let ptr = unsafe { ffi::QWidget_findComboBox(self.ptr, &c_name) };
+                if ptr.is_null() { None }
+                else { Some(FoundWidget::ComboBox(crate::ComboBox::from_raw(ptr, name))) }
+            }
+            WidgetKind::Slider => {
+                let ptr = unsafe { ffi::QWidget_findSlider(self.ptr, &c_name) };
+                if ptr.is_null() { None }
+                else { Some(FoundWidget::Slider(crate::Slider::from_raw(ptr, name))) }
+            }
+            WidgetKind::TextEdit => {
+                let ptr = unsafe { ffi::QWidget_findTextEdit(self.ptr, &c_name) };
+                if ptr.is_null() { None }
+                else { Some(FoundWidget::TextEdit(crate::TextEdit::from_raw(ptr, name))) }
+            }
             WidgetKind::Label => {
                 let ptr = unsafe { ffi::QWidget_findLabel(self.ptr, &c_name) };
                 if ptr.is_null() { None }
@@ -303,6 +327,9 @@ pub enum WidgetKind {
     PushButton,
     LineEdit,
     CheckBox,
+    ComboBox,
+    Slider,
+    TextEdit,
     Label,
     /// Any `QWidget` (no signal support).
     Any,
@@ -313,6 +340,9 @@ pub enum FoundWidget {
     PushButton(crate::PushButton),
     LineEdit(crate::LineEdit),
     CheckBox(crate::CheckBox),
+    ComboBox(crate::ComboBox),
+    Slider(crate::Slider),
+    TextEdit(crate::TextEdit),
     Label(crate::Label),
     Widget(Widget),
 }
@@ -332,7 +362,10 @@ impl Drop for Widget {
     fn drop(&mut self) {
         if self.ptr.is_null() { return; }
         if self.has_parent {
-            self.signal_handles.clear(); // leak intentionally (safety)
+            unsafe { ffi::QWidget_disconnectAll(self.ptr); }
+            for h in self.signal_handles.drain(..) {
+                unsafe { h.reclaim(); }
+            }
         } else {
             for h in self.signal_handles.drain(..) {
                 unsafe { h.reclaim(); }

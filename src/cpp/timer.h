@@ -13,6 +13,14 @@ inline bool QTimer_isActive(QTimer *t) { return t->isActive(); }
 inline void QTimer_delete(QTimer *t) { delete t; }
 
 inline void QTimer_onTimeout(QTimer *t, uint64_t ctx) {
-    QObject::connect(t, &QTimer::timeout,
-                     [ctx]() { g_voidTrampoline(ctx); });
+    QObject::connect(t, &QTimer::timeout, [ctx]() {
+        if (g_hasVoidTrampoline) g_voidTrampoline(ctx);
+    });
+}
+
+/// Qt-style one-shot: fires once after `ms`, then self-destructs.
+inline void QTimer_singleShot(int ms, uint64_t ctx) {
+    QTimer::singleShot(ms, [ctx]() {
+        if (g_hasVoidTrampoline) g_voidTrampoline(ctx);
+    });
 }

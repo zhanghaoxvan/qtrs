@@ -21,6 +21,11 @@ inline void QVBoxLayout_addWidget(QVBoxLayout *layout, QWidget *widget) {
     layout->addWidget(widget);
 }
 inline void QVBoxLayout_delete(QVBoxLayout *layout) { delete layout; }
+inline void QVBoxLayout_setSpacing(QVBoxLayout *l, int s) { l->setSpacing(s); }
+inline void QVBoxLayout_setContentsMargins(QVBoxLayout *l, int lft, int top,
+                                            int rgt, int bot) {
+    l->setContentsMargins(lft, top, rgt, bot);
+}
 
 // --- QHBoxLayout ---
 inline QHBoxLayout *QHBoxLayout_new(QWidget *parent) {
@@ -30,6 +35,11 @@ inline void QHBoxLayout_addWidget(QHBoxLayout *layout, QWidget *widget) {
     layout->addWidget(widget);
 }
 inline void QHBoxLayout_delete(QHBoxLayout *layout) { delete layout; }
+inline void QHBoxLayout_setSpacing(QHBoxLayout *l, int s) { l->setSpacing(s); }
+inline void QHBoxLayout_setContentsMargins(QHBoxLayout *l, int lft, int top,
+                                            int rgt, int bot) {
+    l->setContentsMargins(lft, top, rgt, bot);
+}
 
 // --- QGridLayout ---
 inline QGridLayout *QGridLayout_new(QWidget *parent) {
@@ -81,4 +91,13 @@ inline QLabel *QWidget_findLabel(QWidget *parent, const std::string &name) {
 }
 inline QWidget *QWidget_findWidget(QWidget *parent, const std::string &name) {
     return parent->findChild<QWidget *>(QString::fromStdString(name));
+}
+inline QComboBox *QWidget_findComboBox(QWidget *parent, const std::string &name) {
+    return parent->findChild<QComboBox *>(QString::fromStdString(name));
+}
+inline QSlider *QWidget_findSlider(QWidget *parent, const std::string &name) {
+    return parent->findChild<QSlider *>(QString::fromStdString(name));
+}
+inline QTextEdit *QWidget_findTextEdit(QWidget *parent, const std::string &name) {
+    return parent->findChild<QTextEdit *>(QString::fromStdString(name));
 }

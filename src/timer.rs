@@ -39,16 +39,20 @@ impl Timer {
         Builder::new(interval_ms)
     }
 
-    /// Create a timer that fires once after `interval_ms`, then stops.
+    /// Create a one-shot timer using Qt's `QTimer::singleShot` static.
     ///
-    /// Convenience wrapper over Qt's single-shot behaviour.
-    pub fn single_shot<F: Fn() + 'static>(interval_ms: i32, f: F) -> Timer {
-        let timer = Timer::new(interval_ms).on_timeout(f).build();
-        // Single-shot: the callback stops the timer after the first fire.
-        // We can't express this cleanly with QTimer::singleShot static
-        // from C++, so the user should stop() in the callback if they
-        // only want one fire.
-        timer
+    /// Fires `f` once after `interval_ms` milliseconds, then automatically
+    /// cleans up. No `Timer` object is returned — the callback owns itself.
+    ///
+    /// ```ignore
+    /// Timer::single_shot(500, || println!("fired once!"));
+    /// ```
+    pub fn single_shot<F: Fn() + 'static>(interval_ms: i32, f: F) {
+        let handle = signal::leak_void(f);
+        // QTimer::singleShot takes ownership — the closure leaks intentionally.
+        // In a one-shot, the signal fires once and never again, so the leak
+        // is bounded (one allocation total).
+        unsafe { ffi::QTimer_singleShot(interval_ms, handle.token); }
     }
 
     /// Start (or restart) the timer.

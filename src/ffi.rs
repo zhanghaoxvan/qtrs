@@ -57,6 +57,8 @@ pub mod ffi_inner {
         unsafe fn QWidget_setMinimumSize(widget: *mut QWidget, width: i32, height: i32);
         unsafe fn QWidget_setMaximumSize(widget: *mut QWidget, width: i32, height: i32);
         unsafe fn QWidget_setFixedSize(widget: *mut QWidget, width: i32, height: i32);
+        unsafe fn QWidget_setStyleSheet(widget: *mut QWidget, css: &CxxString);
+        unsafe fn QWidget_disconnectAll(widget: *mut QWidget);
 
         // --- toQWidget upcasts ---
         unsafe fn toQWidget_QWidget(w: *mut QWidget) -> *mut QWidget;
@@ -101,11 +103,13 @@ pub mod ffi_inner {
         unsafe fn QComboBox_setCurrentIndex(cb: *mut QComboBox, index: i32);
         unsafe fn QComboBox_delete(cb: *mut QComboBox);
         unsafe fn QComboBox_onCurrentTextChanged(cb: *mut QComboBox, ctx: u64);
+        unsafe fn QComboBox_onCurrentIndexChanged(cb: *mut QComboBox, ctx: u64);
 
         // --- QTextEdit ---
         unsafe fn QTextEdit_new(parent: *mut QWidget) -> *mut QTextEdit;
         unsafe fn QTextEdit_toPlainText(edit: *mut QTextEdit) -> String;
         unsafe fn QTextEdit_setPlainText(edit: *mut QTextEdit, text: &CxxString);
+        unsafe fn QTextEdit_setPlaceholderText(edit: *mut QTextEdit, text: &CxxString);
         unsafe fn QTextEdit_delete(edit: *mut QTextEdit);
         unsafe fn QTextEdit_onTextChanged(edit: *mut QTextEdit, ctx: u64);
 
@@ -121,11 +125,15 @@ pub mod ffi_inner {
         unsafe fn QVBoxLayout_new(parent: *mut QWidget) -> *mut QVBoxLayout;
         unsafe fn QVBoxLayout_addWidget(layout: *mut QVBoxLayout, widget: *mut QWidget);
         unsafe fn QVBoxLayout_delete(layout: *mut QVBoxLayout);
+        unsafe fn QVBoxLayout_setSpacing(layout: *mut QVBoxLayout, spacing: i32);
+        unsafe fn QVBoxLayout_setContentsMargins(layout: *mut QVBoxLayout, left: i32, top: i32, right: i32, bottom: i32);
 
         // --- QHBoxLayout ---
         unsafe fn QHBoxLayout_new(parent: *mut QWidget) -> *mut QHBoxLayout;
         unsafe fn QHBoxLayout_addWidget(layout: *mut QHBoxLayout, widget: *mut QWidget);
         unsafe fn QHBoxLayout_delete(layout: *mut QHBoxLayout);
+        unsafe fn QHBoxLayout_setSpacing(layout: *mut QHBoxLayout, spacing: i32);
+        unsafe fn QHBoxLayout_setContentsMargins(layout: *mut QHBoxLayout, left: i32, top: i32, right: i32, bottom: i32);
 
         // --- QGridLayout ---
         unsafe fn QGridLayout_new(parent: *mut QWidget) -> *mut QGridLayout;
@@ -141,6 +149,9 @@ pub mod ffi_inner {
         unsafe fn QWidget_findLineEdit(parent: *mut QWidget, name: &CxxString) -> *mut QLineEdit;
         unsafe fn QWidget_findCheckBox(parent: *mut QWidget, name: &CxxString) -> *mut QCheckBox;
         unsafe fn QWidget_findLabel(parent: *mut QWidget, name: &CxxString) -> *mut QLabel;
+        unsafe fn QWidget_findComboBox(parent: *mut QWidget, name: &CxxString) -> *mut QComboBox;
+        unsafe fn QWidget_findSlider(parent: *mut QWidget, name: &CxxString) -> *mut QSlider;
+        unsafe fn QWidget_findTextEdit(parent: *mut QWidget, name: &CxxString) -> *mut QTextEdit;
 
         // --- QTimer ---
         unsafe fn QTimer_new() -> *mut QTimer;
@@ -149,6 +160,7 @@ pub mod ffi_inner {
         unsafe fn QTimer_isActive(timer: *mut QTimer) -> bool;
         unsafe fn QTimer_delete(timer: *mut QTimer);
         unsafe fn QTimer_onTimeout(timer: *mut QTimer, ctx: u64);
+        unsafe fn QTimer_singleShot(interval_ms: i32, ctx: u64);
 
         // --- QMessageBox ---
         unsafe fn QMessageBox_information(

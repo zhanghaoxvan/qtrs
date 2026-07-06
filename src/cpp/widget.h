@@ -41,3 +41,9 @@ inline void QWidget_setMaximumSize(QWidget *w, int width, int height) {
 inline void QWidget_setFixedSize(QWidget *w, int width, int height) {
     w->setFixedSize(width, height);
 }
+inline void QWidget_setStyleSheet(QWidget *w, const std::string &css) {
+    w->setStyleSheet(QString::fromStdString(css));
+}
+inline void QWidget_disconnectAll(QWidget *w) {
+    QObject::disconnect(w, nullptr, nullptr, nullptr);
+}

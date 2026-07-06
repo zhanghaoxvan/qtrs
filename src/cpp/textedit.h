@@ -18,9 +18,14 @@ inline rust::String QTextEdit_toPlainText(QTextEdit *edit) {
 inline void QTextEdit_setPlainText(QTextEdit *edit, const std::string &text) {
     edit->setPlainText(QString::fromStdString(text));
 }
+inline void QTextEdit_setPlaceholderText(QTextEdit *edit,
+                                          const std::string &text) {
+    edit->setPlaceholderText(QString::fromStdString(text));
+}
 inline void QTextEdit_delete(QTextEdit *edit) { delete edit; }
 
 inline void QTextEdit_onTextChanged(QTextEdit *edit, uint64_t ctx) {
-    QObject::connect(edit, &QTextEdit::textChanged,
-                     [ctx]() { g_voidTrampoline(ctx); });
+    QObject::connect(edit, &QTextEdit::textChanged, [ctx]() {
+        if (g_hasVoidTrampoline) g_voidTrampoline(ctx);
+    });
 }

@@ -101,12 +101,20 @@ impl VBoxLayout {
     }
 
     /// Get the raw `QVBoxLayout*` pointer.
-    ///
-    /// Pass this to [`Widget::set_vlayout`].
-    ///
-    /// [`Widget::set_vlayout`]: crate::Widget::set_vlayout
     pub fn layout_ptr(&self) -> *mut ffi::QVBoxLayout {
         self.ptr
+    }
+
+    /// Set spacing between items (pixels). Default is platform-dependent (~6px).
+    pub fn set_spacing(&self, spacing: i32) {
+        debug_assert!(!self.ptr.is_null());
+        unsafe { ffi::QVBoxLayout_setSpacing(self.ptr, spacing); }
+    }
+
+    /// Set margins around the layout in pixels (left, top, right, bottom).
+    pub fn set_contents_margins(&self, left: i32, top: i32, right: i32, bottom: i32) {
+        debug_assert!(!self.ptr.is_null());
+        unsafe { ffi::QVBoxLayout_setContentsMargins(self.ptr, left, top, right, bottom); }
     }
 }
 
@@ -192,12 +200,20 @@ impl HBoxLayout {
     }
 
     /// Get the raw `QHBoxLayout*` pointer.
-    ///
-    /// Pass this to [`Widget::set_hlayout`].
-    ///
-    /// [`Widget::set_hlayout`]: crate::Widget::set_hlayout
     pub fn layout_ptr(&self) -> *mut ffi::QHBoxLayout {
         self.ptr
+    }
+
+    /// Set spacing between items (pixels).
+    pub fn set_spacing(&self, spacing: i32) {
+        debug_assert!(!self.ptr.is_null());
+        unsafe { ffi::QHBoxLayout_setSpacing(self.ptr, spacing); }
+    }
+
+    /// Set margins around the layout in pixels.
+    pub fn set_contents_margins(&self, left: i32, top: i32, right: i32, bottom: i32) {
+        debug_assert!(!self.ptr.is_null());
+        unsafe { ffi::QHBoxLayout_setContentsMargins(self.ptr, left, top, right, bottom); }
     }
 }
 
