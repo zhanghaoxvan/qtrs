@@ -222,7 +222,7 @@ use crate::widget::AsWidget;
 ///
 /// # Example
 ///
-/// ```ignore
+/// ```no_run
 /// use qtrs::Picture;
 ///
 /// let image = Picture::new()

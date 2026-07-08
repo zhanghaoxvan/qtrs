@@ -69,7 +69,7 @@ pub trait AsWidget {
 ///
 /// # Example
 ///
-/// ```ignore
+/// ```no_run
 /// use qtrs::Widget;
 ///
 /// let window = Widget::new()
@@ -260,7 +260,7 @@ impl Widget {
     /// `kind` selects the widget type to find. Returns the wrapped widget
     /// on success, or `None` if no child with that name and type exists.
     ///
-    /// ```ignore
+    /// ```no_run
     /// # use qtrs::*;
     /// let window = Widget::new().title("demo").build();
     /// if let Some(FoundWidget::PushButton(mut btn)) =
@@ -308,6 +308,31 @@ impl Widget {
                 if ptr.is_null() { None }
                 else { Some(FoundWidget::Label(crate::Label::from_raw(ptr, name))) }
             }
+            WidgetKind::ProgressBar => {
+                let ptr = unsafe { ffi::QWidget_findProgressBar(self.ptr, &c_name) };
+                if ptr.is_null() { None }
+                else { Some(FoundWidget::ProgressBar(crate::ProgressBar::from_raw(ptr))) }
+            }
+            WidgetKind::RadioButton => {
+                let ptr = unsafe { ffi::QWidget_findRadioButton(self.ptr, &c_name) };
+                if ptr.is_null() { None }
+                else { Some(FoundWidget::RadioButton(crate::RadioButton::from_raw(ptr))) }
+            }
+            WidgetKind::GroupBox => {
+                let ptr = unsafe { ffi::QWidget_findGroupBox(self.ptr, &c_name) };
+                if ptr.is_null() { None }
+                else { Some(FoundWidget::GroupBox(crate::GroupBox::from_raw(ptr))) }
+            }
+            WidgetKind::TabWidget => {
+                let ptr = unsafe { ffi::QWidget_findTabWidget(self.ptr, &c_name) };
+                if ptr.is_null() { None }
+                else { Some(FoundWidget::TabWidget(crate::TabWidget::from_raw(ptr))) }
+            }
+            WidgetKind::SpinBox => {
+                let ptr = unsafe { ffi::QWidget_findSpinBox(self.ptr, &c_name) };
+                if ptr.is_null() { None }
+                else { Some(FoundWidget::SpinBox(crate::SpinBox::from_raw(ptr))) }
+            }
             WidgetKind::Any => {
                 let ptr = unsafe { ffi::QWidget_findWidget(self.ptr, &c_name) };
                 if ptr.is_null() { None }
@@ -331,6 +356,11 @@ pub enum WidgetKind {
     Slider,
     TextEdit,
     Label,
+    ProgressBar,
+    RadioButton,
+    GroupBox,
+    TabWidget,
+    SpinBox,
     /// Any `QWidget` (no signal support).
     Any,
 }
@@ -344,6 +374,11 @@ pub enum FoundWidget {
     Slider(crate::Slider),
     TextEdit(crate::TextEdit),
     Label(crate::Label),
+    ProgressBar(crate::ProgressBar),
+    RadioButton(crate::RadioButton),
+    GroupBox(crate::GroupBox),
+    TabWidget(crate::TabWidget),
+    SpinBox(crate::SpinBox),
     Widget(Widget),
 }
 
@@ -387,7 +422,7 @@ impl Drop for Widget {
 ///
 /// # Example
 ///
-/// ```ignore
+/// ```no_run
 /// let window = Widget::new()
 ///     .title("Demo")
 ///     .size(640, 480)

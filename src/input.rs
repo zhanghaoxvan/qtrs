@@ -36,7 +36,7 @@ use crate::widget::AsWidget;
 ///
 /// # Example
 ///
-/// ```ignore
+/// ```no_run
 /// use qtrs::LineEdit;
 ///
 /// let edit = LineEdit::new("type here...")

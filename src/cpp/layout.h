@@ -1,6 +1,7 @@
 // src/cpp/layout.h — QVBoxLayout / QHBoxLayout / QGridLayout + toQWidget upcasts
 #pragma once
 
+#include "qwidget.h"
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QLabel>
@@ -12,6 +13,12 @@
 #include <QTextEdit>
 #include <QVBoxLayout>
 #include <QWidget>
+#include <QProgressBar>
+#include <QRadioButton>
+#include <QGroupBox>
+#include <QSpinBox>
+#include <QMenu>
+#include <QMenuBar>
 
 // --- QVBoxLayout ---
 inline QVBoxLayout *QVBoxLayout_new(QWidget *parent) {
@@ -75,6 +82,27 @@ inline QWidget *toQWidget_QTextEdit(QTextEdit *w) {
 inline QWidget *toQWidget_QSlider(QSlider *w) {
     return static_cast<QWidget *>(w);
 }
+inline QWidget *toQWidget_QProgressBar(QProgressBar *w) {
+    return static_cast<QWidget *>(w);
+}
+inline QWidget *toQWidget_QRadioButton(QRadioButton *w) {
+    return static_cast<QWidget *>(w);
+}
+inline QWidget *toQWidget_QGroupBox(QGroupBox *w) {
+    return static_cast<QWidget *>(w);
+}
+inline QWidget *toQWidget_QTabWidget(QTabWidget *w) {
+    return static_cast<QWidget *>(w);
+}
+inline QWidget *toQWidget_QSpinBox(QSpinBox *w) {
+    return static_cast<QWidget *>(w);
+}
+inline QWidget *toQWidget_QMenu(QMenu *w) {
+    return static_cast<QWidget *>(w);
+}
+inline QWidget *toQWidget_QMenuBar(QMenuBar *w) {
+    return static_cast<QWidget *>(w);
+}
 
 // --- findChild by objectName (for widgets loaded from .ui files) ---
 inline QPushButton *QWidget_findPushButton(QWidget *parent, const std::string &name) {
@@ -100,4 +128,19 @@ inline QSlider *QWidget_findSlider(QWidget *parent, const std::string &name) {
 }
 inline QTextEdit *QWidget_findTextEdit(QWidget *parent, const std::string &name) {
     return parent->findChild<QTextEdit *>(QString::fromStdString(name));
+}
+inline QProgressBar *QWidget_findProgressBar(QWidget *parent, const std::string &name) {
+    return parent->findChild<QProgressBar *>(QString::fromStdString(name));
+}
+inline QRadioButton *QWidget_findRadioButton(QWidget *parent, const std::string &name) {
+    return parent->findChild<QRadioButton *>(QString::fromStdString(name));
+}
+inline QGroupBox *QWidget_findGroupBox(QWidget *parent, const std::string &name) {
+    return parent->findChild<QGroupBox *>(QString::fromStdString(name));
+}
+inline QTabWidget *QWidget_findTabWidget(QWidget *parent, const std::string &name) {
+    return parent->findChild<QTabWidget *>(QString::fromStdString(name));
+}
+inline QSpinBox *QWidget_findSpinBox(QWidget *parent, const std::string &name) {
+    return parent->findChild<QSpinBox *>(QString::fromStdString(name));
 }

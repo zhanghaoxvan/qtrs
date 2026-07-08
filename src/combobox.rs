@@ -20,7 +20,7 @@ use crate::widget::AsWidget;
 ///
 /// # Example
 ///
-/// ```ignore
+/// ```no_run
 /// let combo = ComboBox::new()
 ///     .items(&["Red", "Green", "Blue"])
 ///     .on_current_text_changed(|| println!("selection changed"))

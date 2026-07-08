@@ -1,6 +1,6 @@
 [package]
 name = "qtrs"
-version = "0.2.2"
+version = "0.2.3"
 edition = "2021"
 authors = ["zhanghaoxvan <3592114583@qq.com>"]
 license = "MIT OR Apache-2.0"
@@ -31,7 +31,9 @@ name = "ui"
 path = "examples/ui/ui.rs"
 required-features = ["ui"]
 
-
+[[example]]
+name = "demo"
+path = "examples/demo/demo.rs"
 
 [package.metadata.system-deps]
 qt6-core = { name = "Qt6Core", version = "6.0" }

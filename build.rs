@@ -46,9 +46,9 @@ fn main() {
     println!("cargo:rerun-if-changed=build.rs");
     println!("cargo:rerun-if-changed=src/ffi.rs");
     println!("cargo:rerun-if-changed=src/cpp/qt_widget.cpp");
-    for h in &["signal", "app", "widget", "button", "label", "input",
-               "checkbox", "combobox", "textedit", "slider", "timer",
-               "layout", "dialog", "uiloader"] {
-        println!("cargo:rerun-if-changed=src/cpp/{}.h", h);
+    for name in &["signal", "app", "widget", "button", "label", "input",
+        "checkbox", "combobox", "textedit", "slider", "timer",
+        "layout", "dialog", "uiloader", "progress"] {
+        println!("cargo:rerun-if-changed=src/cpp/{}.h", name);
     }
 }

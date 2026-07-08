@@ -15,7 +15,7 @@ use crate::widget::AsWidget;
 ///
 /// # Example
 ///
-/// ```ignore
+/// ```no_run
 /// use qtrs::Label;
 ///
 /// let label = Label::new("Hello, world!").build();

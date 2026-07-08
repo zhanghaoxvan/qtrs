@@ -19,7 +19,7 @@ use crate::signal::{self, SignalHandle};
 ///
 /// # Example
 ///
-/// ```ignore
+/// ```no_run
 /// let timer = Timer::new(1000)
 ///     .on_timeout(|| println!("tick"))
 ///     .build();
@@ -44,7 +44,7 @@ impl Timer {
     /// Fires `f` once after `interval_ms` milliseconds, then automatically
     /// cleans up. No `Timer` object is returned — the callback owns itself.
     ///
-    /// ```ignore
+    /// ```no_run
     /// Timer::single_shot(500, || println!("fired once!"));
     /// ```
     pub fn single_shot<F: Fn() + 'static>(interval_ms: i32, f: F) {

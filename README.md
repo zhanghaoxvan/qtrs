@@ -4,6 +4,8 @@
 [![Docs.rs](https://docs.rs/qtrs/badge.svg)](https://docs.rs/qtrs)
 [![License: MIT OR Apache-2.0](https://img.shields.io/badge/license-MIT%2FApache--2.0-blue.svg)](LICENSE)
 
+![Demo](assets/demo.png)
+
 A type-safe, builder-pattern-driven Qt6 GUI library for Rust. Built on
 [`cxx`](https://cxx.rs) for zero-cost C++ interop, with RAII memory
 management and signal/callback bridging.
@@ -57,9 +59,16 @@ fn main() {
 | `Label` | `QLabel` | — |
 | `LineEdit` | `QLineEdit` | `on_return_pressed` |
 | `CheckBox` | `QCheckBox` | `on_toggled(bool)` |
+| `RadioButton` | `QRadioButton` | `on_toggled(bool)` |
 | `ComboBox` | `QComboBox` | `on_current_text_changed`<br>`on_current_index_changed(i32)` |
 | `TextEdit` | `QTextEdit` | `on_text_changed` |
 | `Slider` | `QSlider` | `on_value_changed(i32)` |
+| `SpinBox` | `QSpinBox` | `on_value_changed(i32)` |
+| `ProgressBar` | `QProgressBar` | — |
+| `GroupBox` | `QGroupBox` | — |
+| `TabWidget` | `QTabWidget` | `on_current_changed(i32)` |
+| `Menu` | `QMenu` | — |
+| `MenuBar` | `QMenuBar` | — |
 | `Timer` | `QTimer` | `on_timeout`<br>`single_shot(ms, fn)` |
 | `VBoxLayout` | `QVBoxLayout` | — |
 | `HBoxLayout` | `QHBoxLayout` | — |

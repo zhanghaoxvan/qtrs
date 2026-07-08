@@ -23,11 +23,18 @@ pub mod ffi_inner {
         type QComboBox;
         type QTextEdit;
         type QSlider;
+        type QProgressBar;
         type QTimer;
         type QVBoxLayout;
         type QHBoxLayout;
         type QGridLayout;
         type QLayout;
+        type QRadioButton;
+        type QGroupBox;
+        type QTabWidget;
+        type QSpinBox;
+        type QMenu;
+        type QMenuBar;
 
         // --- Trampolines ---
         unsafe fn qtrs_setVoidTrampoline(trampoline: unsafe extern "C" fn(u64));
@@ -69,6 +76,13 @@ pub mod ffi_inner {
         unsafe fn toQWidget_QComboBox(cb: *mut QComboBox) -> *mut QWidget;
         unsafe fn toQWidget_QTextEdit(edit: *mut QTextEdit) -> *mut QWidget;
         unsafe fn toQWidget_QSlider(s: *mut QSlider) -> *mut QWidget;
+        unsafe fn toQWidget_QProgressBar(bar: *mut QProgressBar) -> *mut QWidget;
+        unsafe fn toQWidget_QRadioButton(rb: *mut QRadioButton) -> *mut QWidget;
+        unsafe fn toQWidget_QGroupBox(gb: *mut QGroupBox) -> *mut QWidget;
+        unsafe fn toQWidget_QTabWidget(tw: *mut QTabWidget) -> *mut QWidget;
+        unsafe fn toQWidget_QSpinBox(sb: *mut QSpinBox) -> *mut QWidget;
+        unsafe fn toQWidget_QMenu(menu: *mut QMenu) -> *mut QWidget;
+        unsafe fn toQWidget_QMenuBar(mb: *mut QMenuBar) -> *mut QWidget;
 
         // --- QPushButton ---
         unsafe fn QPushButton_new(text: &CxxString, parent: *mut QWidget) -> *mut QPushButton;
@@ -121,28 +135,55 @@ pub mod ffi_inner {
         unsafe fn QSlider_delete(s: *mut QSlider);
         unsafe fn QSlider_onValueChanged(s: *mut QSlider, ctx: u64);
 
+        // --- QProgressBar ---
+        unsafe fn QProgressBar_new(parent: *mut QWidget) -> *mut QProgressBar;
+        unsafe fn QProgressBar_setValue(bar: *mut QProgressBar, value: i32);
+        unsafe fn QProgressBar_value(bar: *mut QProgressBar) -> i32;
+        unsafe fn QProgressBar_setRange(bar: *mut QProgressBar, min: i32, max: i32);
+        unsafe fn QProgressBar_setMinimum(bar: *mut QProgressBar, min: i32);
+        unsafe fn QProgressBar_setMaximum(bar: *mut QProgressBar, max: i32);
+        unsafe fn QProgressBar_setFormat(bar: *mut QProgressBar, format: &CxxString);
+        unsafe fn QProgressBar_delete(bar: *mut QProgressBar);
+
+        
         // --- QVBoxLayout ---
         unsafe fn QVBoxLayout_new(parent: *mut QWidget) -> *mut QVBoxLayout;
         unsafe fn QVBoxLayout_addWidget(layout: *mut QVBoxLayout, widget: *mut QWidget);
         unsafe fn QVBoxLayout_delete(layout: *mut QVBoxLayout);
         unsafe fn QVBoxLayout_setSpacing(layout: *mut QVBoxLayout, spacing: i32);
-        unsafe fn QVBoxLayout_setContentsMargins(layout: *mut QVBoxLayout, left: i32, top: i32, right: i32, bottom: i32);
-
+        unsafe fn QVBoxLayout_setContentsMargins(
+            layout: *mut QVBoxLayout,
+            left: i32,
+            top: i32,
+            right: i32,
+            bottom: i32,
+        );
+        
         // --- QHBoxLayout ---
         unsafe fn QHBoxLayout_new(parent: *mut QWidget) -> *mut QHBoxLayout;
         unsafe fn QHBoxLayout_addWidget(layout: *mut QHBoxLayout, widget: *mut QWidget);
         unsafe fn QHBoxLayout_delete(layout: *mut QHBoxLayout);
         unsafe fn QHBoxLayout_setSpacing(layout: *mut QHBoxLayout, spacing: i32);
-        unsafe fn QHBoxLayout_setContentsMargins(layout: *mut QHBoxLayout, left: i32, top: i32, right: i32, bottom: i32);
-
+        unsafe fn QHBoxLayout_setContentsMargins(
+            layout: *mut QHBoxLayout,
+            left: i32,
+            top: i32,
+            right: i32,
+            bottom: i32,
+        );
+        
         // --- QGridLayout ---
         unsafe fn QGridLayout_new(parent: *mut QWidget) -> *mut QGridLayout;
         unsafe fn QGridLayout_addWidget(
-            layout: *mut QGridLayout, widget: *mut QWidget,
-            row: i32, col: i32, rowSpan: i32, colSpan: i32,
+            layout: *mut QGridLayout,
+            widget: *mut QWidget,
+            row: i32,
+            col: i32,
+            rowSpan: i32,
+            colSpan: i32,
         );
         unsafe fn QGridLayout_delete(layout: *mut QGridLayout);
-
+        
         // --- findChild helpers (for widgets loaded from .ui files) ---
         unsafe fn QWidget_findWidget(parent: *mut QWidget, name: &CxxString) -> *mut QWidget;
         unsafe fn QWidget_findPushButton(parent: *mut QWidget, name: &CxxString) -> *mut QPushButton;
@@ -152,7 +193,12 @@ pub mod ffi_inner {
         unsafe fn QWidget_findComboBox(parent: *mut QWidget, name: &CxxString) -> *mut QComboBox;
         unsafe fn QWidget_findSlider(parent: *mut QWidget, name: &CxxString) -> *mut QSlider;
         unsafe fn QWidget_findTextEdit(parent: *mut QWidget, name: &CxxString) -> *mut QTextEdit;
-
+        unsafe fn QWidget_findProgressBar(parent: *mut QWidget, name: &CxxString) -> *mut QProgressBar;
+        unsafe fn QWidget_findRadioButton(parent: *mut QWidget, name: &CxxString) -> *mut QRadioButton;
+        unsafe fn QWidget_findGroupBox(parent: *mut QWidget, name: &CxxString) -> *mut QGroupBox;
+        unsafe fn QWidget_findTabWidget(parent: *mut QWidget, name: &CxxString) -> *mut QTabWidget;
+        unsafe fn QWidget_findSpinBox(parent: *mut QWidget, name: &CxxString) -> *mut QSpinBox;
+        
         // --- QTimer ---
         unsafe fn QTimer_new() -> *mut QTimer;
         unsafe fn QTimer_start(timer: *mut QTimer, interval_ms: i32);
@@ -161,29 +207,81 @@ pub mod ffi_inner {
         unsafe fn QTimer_delete(timer: *mut QTimer);
         unsafe fn QTimer_onTimeout(timer: *mut QTimer, ctx: u64);
         unsafe fn QTimer_singleShot(interval_ms: i32, ctx: u64);
-
+        
         // --- QMessageBox ---
         unsafe fn QMessageBox_information(
-            parent: *mut QWidget, title: &CxxString, text: &CxxString,
+            parent: *mut QWidget,
+            title: &CxxString,
+            text: &CxxString,
         );
         unsafe fn QMessageBox_warning(
-            parent: *mut QWidget, title: &CxxString, text: &CxxString,
+            parent: *mut QWidget,
+            title: &CxxString,
+            text: &CxxString,
         );
         unsafe fn QMessageBox_critical(
-            parent: *mut QWidget, title: &CxxString, text: &CxxString,
+            parent: *mut QWidget,
+            title: &CxxString,
+            text: &CxxString,
         );
         unsafe fn QMessageBox_question(
-            parent: *mut QWidget, title: &CxxString, text: &CxxString,
+            parent: *mut QWidget,
+            title: &CxxString,
+            text: &CxxString,
         ) -> i32;
-    }
 
+        // --- QRadioButton ---
+        unsafe fn QRadioButton_new(text: &CxxString, parent: *mut QWidget) -> *mut QRadioButton;
+        unsafe fn QRadioButton_isChecked(rb: *mut QRadioButton) -> bool;
+        unsafe fn QRadioButton_setChecked(rb: *mut QRadioButton, checked: bool);
+        unsafe fn QRadioButton_delete(rb: *mut QRadioButton);
+        unsafe fn QRadioButton_onToggled(rb: *mut QRadioButton, ctx: u64);
+
+        // --- QGroupBox ---
+        unsafe fn QGroupBox_new(title: &CxxString, parent: *mut QWidget) -> *mut QGroupBox;
+        unsafe fn QGroupBox_setTitle(gb: *mut QGroupBox, title: &CxxString);
+        unsafe fn QGroupBox_delete(gb: *mut QGroupBox);
+
+        // --- QTabWidget ---
+        unsafe fn QTabWidget_new(parent: *mut QWidget) -> *mut QTabWidget;
+        unsafe fn QTabWidget_addTab(tw: *mut QTabWidget, page: *mut QWidget, label: &CxxString);
+        unsafe fn QTabWidget_currentIndex(tw: *mut QTabWidget) -> i32;
+        unsafe fn QTabWidget_setCurrentIndex(tw: *mut QTabWidget, index: i32);
+        unsafe fn QTabWidget_delete(tw: *mut QTabWidget);
+        unsafe fn QTabWidget_onCurrentChanged(tw: *mut QTabWidget, ctx: u64);
+
+        // --- QSpinBox ---
+        unsafe fn QSpinBox_new(parent: *mut QWidget) -> *mut QSpinBox;
+        unsafe fn QSpinBox_setValue(sb: *mut QSpinBox, value: i32);
+        unsafe fn QSpinBox_value(sb: *mut QSpinBox) -> i32;
+        unsafe fn QSpinBox_setRange(sb: *mut QSpinBox, min: i32, max: i32);
+        unsafe fn QSpinBox_setSuffix(sb: *mut QSpinBox, suffix: &CxxString);
+        unsafe fn QSpinBox_delete(sb: *mut QSpinBox);
+        unsafe fn QSpinBox_onValueChanged(sb: *mut QSpinBox, ctx: u64);
+
+        // --- QMenu ---
+        unsafe fn QMenu_new(title: &CxxString, parent: *mut QWidget) -> *mut QMenu;
+        unsafe fn QMenu_addAction(menu: *mut QMenu, text: &CxxString, ctx: u64);
+        unsafe fn QMenu_delete(menu: *mut QMenu);
+
+        // --- QMenuBar ---
+        unsafe fn QMenuBar_new(parent: *mut QWidget) -> *mut QMenuBar;
+        unsafe fn QMenuBar_addMenu(mb: *mut QMenuBar, menu: *mut QMenu);
+        unsafe fn QMenuBar_delete(mb: *mut QMenuBar);
+        
+    }
+    
     #[cfg(feature = "ui")]
     unsafe extern "C++" {
         include!("src/cpp/uiloader.h");
 
         type QUiLoader;
         unsafe fn QUiLoader_new() -> *mut QUiLoader;
-        unsafe fn QUiLoader_load(loader: *mut QUiLoader, ui_path: &CxxString, parent: *mut QWidget) -> *mut QWidget;
+        unsafe fn QUiLoader_load(
+            loader: *mut QUiLoader,
+            ui_path: &CxxString,
+            parent: *mut QWidget,
+        ) -> *mut QWidget;
         unsafe fn QUiLoader_delete(loader: *mut QUiLoader);
     }
 }

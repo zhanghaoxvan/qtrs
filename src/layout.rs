@@ -44,7 +44,7 @@ pub trait AsLayout {
 ///
 /// # Example
 ///
-/// ```ignore
+/// ```no_run
 /// use qtrs::{VBoxLayout, PushButton};
 ///
 /// let mut layout = VBoxLayout::new();
@@ -150,7 +150,7 @@ impl Drop for VBoxLayout {
 ///
 /// # Example
 ///
-/// ```ignore
+/// ```no_run
 /// use qtrs::{HBoxLayout, Label, PushButton};
 ///
 /// let mut layout = HBoxLayout::new();

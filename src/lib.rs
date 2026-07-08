@@ -44,6 +44,7 @@
 //! | cxx bridge | [`ffi`] | Opaque C++ types + `extern "C++"` signatures |
 //! | Safe wrappers | [`app`], [`widget`], [`button`], [`label`], [`input`], [`layout`] | Builder patterns, RAII, signals |
 //! | Public API | *(this module)* | Re-exports of all safe types |
+//! 
 //! ## Widget gallery
 //!
 //! | Type | Qt class | Signals |
@@ -57,15 +58,22 @@
 //! | [`ComboBox`] | `QComboBox` | `on_current_text_changed`<br>`on_current_index_changed(i32)` |
 //! | [`TextEdit`] | `QTextEdit` | `on_text_changed` |
 //! | [`Slider`] | `QSlider` | `on_value_changed(i32)` |
+//! | [`ProgressBar`] | `QProgressBar` | — |
+//! | [`RadioButton`] | `QRadioButton` | `on_toggled(bool)` |
+//! | [`GroupBox`] | `QGroupBox` | — |
+//! | [`TabWidget`] | `QTabWidget` | `on_current_changed(i32)` |
+//! | [`SpinBox`] | `QSpinBox` | `on_value_changed(i32)` |
+//! | [`Menu`] | `QMenu` | — |
+//! | [`MenuBar`] | `QMenuBar` | — |
 //! | [`Timer`] | `QTimer` | `on_timeout`<br>`single_shot(ms, fn)` |
 //! | [`VBoxLayout`] | `QVBoxLayout` | — |
 //! | [`HBoxLayout`] | `QHBoxLayout` | — |
 //! | [`GridLayout`] | `QGridLayout` | — |
-//! | [`Dialog`] | `QMessageBox` | `information`, `warning`, `critical`, `question` |
+//! | `dialog` | `QMessageBox` | `information`, `warning`, `critical`, `question` |
 //!
 //! ## Quick example
 //!
-//! ```ignore
+//! ```no_run
 //! use qtrs::prelude::*;
 //!
 //! fn main() {
@@ -122,6 +130,12 @@ pub mod textedit;
 pub mod timer;
 mod signal;
 pub mod widget;
+pub mod progressbar;
+pub mod radiobutton;
+pub mod groupbox;
+pub mod tabwidget;
+pub mod spinbox;
+pub mod menu;
 
 #[cfg(feature = "ui")]
 pub mod loader;
@@ -138,6 +152,12 @@ pub use slider::Slider;
 pub use textedit::TextEdit;
 pub use timer::Timer;
 pub use widget::{AsWidget, FoundWidget, Widget, WidgetKind};
+pub use progressbar::ProgressBar;
+pub use radiobutton::RadioButton;
+pub use groupbox::GroupBox;
+pub use tabwidget::TabWidget;
+pub use spinbox::SpinBox;
+pub use menu::{Menu, MenuBar};
 
 
 #[cfg(feature = "ui")]
@@ -147,7 +167,8 @@ pub use loader::UiLoader;
 pub mod prelude {
     pub use super::{
         Application, AsLayout, AsWidget, CheckBox, ComboBox, FoundWidget, GridLayout, HBoxLayout,
-        Label, LineEdit, PushButton, Slider, TextEdit, Timer, VBoxLayout, Widget, WidgetKind,
+        Label, LineEdit, PushButton, Slider, TextEdit, Timer, VBoxLayout, Widget, WidgetKind, ProgressBar,
+        RadioButton, GroupBox, TabWidget, SpinBox, Menu, MenuBar
     };
     #[cfg(feature = "ui")]
     pub use super::UiLoader;

@@ -14,6 +14,12 @@
 #include "timer.h"
 #include "layout.h"
 #include "dialog.h"
+#include "progressbar.h"
+#include "radiobutton.h"
+#include "groupbox.h"
+#include "tabwidget.h"
+#include "spinbox.h"
+#include "menu.h"
 
 #ifdef QTRS_HAS_UI
 #    include "uiloader.h"
