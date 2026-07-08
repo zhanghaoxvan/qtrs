@@ -20,6 +20,7 @@
 #include "tabwidget.h"
 #include "spinbox.h"
 #include "menu.h"
+#include "thread.h"
 
 #ifdef QTRS_HAS_UI
 #    include "uiloader.h"

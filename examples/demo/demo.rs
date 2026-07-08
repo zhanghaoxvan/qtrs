@@ -4,6 +4,9 @@
 
 use qtrs::prelude::*;
 use qtrs::dialog;
+use qtrs::signals::slider_signals::VALUE_CHANGED;
+use qtrs::signals::spin_box_slots::SET_VALUE;
+
 fn main() {
     let app = Application::new();
 
@@ -12,6 +15,7 @@ fn main() {
     // ============================================================
     let window = Widget::new()
         .title("qtrs Widget Gallery")
+        .icon("assets/icon.png")
         .size(900, 700)
         .build();
 
@@ -131,7 +135,7 @@ fn main() {
     main_layout.add_widget(Box::new(group2));
 
     // ============================================================
-    // Section 3: Value widgets (Slider + ProgressBar + SpinBox)
+    // Section 3: Full Bidirectional Sync (Slider ↔ SpinBox → ProgressBar)
     // ============================================================
     let group3 = GroupBox::new("Values")
         .parent(&window)
@@ -139,36 +143,68 @@ fn main() {
     let mut g3_layout = VBoxLayout::with_parent(&group3);
     g3_layout.set_spacing(8);
 
-    // ProgressBar
+    // Build all widgets first (before adding to layout)
     let bar = ProgressBar::new()
         .range(0, 100)
         .value(50)
         .format("%p%")
         .parent(&group3)
         .build();
-    g3_layout.add_widget(Box::new(bar));
 
-    // Slider
     let slider = Slider::horizontal()
         .range(0, 100)
-        .on_value_changed(|v| {
-            println!("[LOG] Slider value: {}", v);
-        })
         .parent(&group3)
         .build();
     slider.set_value(50);
-    g3_layout.add_widget(Box::new(slider));
 
-    // SpinBox
     let spin = SpinBox::new()
         .range(0, 100)
         .value(50)
         .suffix(" units")
-        .on_value_changed(|v| {
-            println!("[LOG] SpinBox value: {}", v);
-        })
         .parent(&group3)
         .build();
+
+    // ============================================================
+    // ALL connections BEFORE adding to layout
+    // ============================================================
+
+    // Slider → SpinBox (bidirectional)
+    slider.connect(
+        VALUE_CHANGED,
+        &spin,
+        SET_VALUE,
+        ConnType::Queued,
+    );
+
+    // SpinBox → Slider (bidirectional)
+    spin.connect(
+        VALUE_CHANGED,
+        &slider,
+        SET_VALUE,
+        ConnType::Queued,
+    );
+
+    // Slider → ProgressBar
+    slider.connect(
+        VALUE_CHANGED,
+        &bar,
+        SET_VALUE,
+        ConnType::Auto,
+    );
+
+    // SpinBox → ProgressBar
+    spin.connect(
+        VALUE_CHANGED,
+        &bar,
+        SET_VALUE,
+        ConnType::Auto,
+    );
+
+    // ============================================================
+    // NOW add widgets to layout (after all connections)
+    // ============================================================
+    g3_layout.add_widget(Box::new(bar));
+    g3_layout.add_widget(Box::new(slider));
     g3_layout.add_widget(Box::new(spin));
 
     main_layout.add_widget(Box::new(group3));
@@ -230,17 +266,13 @@ fn main() {
         .parent(&window)
         .build();
 
-    // Help menu: use a raw pointer to avoid move semantics
-    // We need to pass &window to dialog::information, but we can't move it.
-    // Use a reference counted wrapper, or just pass None as parent.
-    // For simplicity, we pass None (dialog will be centered on screen).
     let help_menu = Menu::new("Help")
         .action("About", || {
             println!("[LOG] Menu: About");
             dialog::information(
-                None,  // No parent window, dialog appears centered on screen
+                None,
                 "About",
-                "qtrs Widget Gallery\nVersion 0.2.2\n\nAll widgets test",
+                "qtrs Widget Gallery\nVersion 0.2.4\n\nAll widgets test",
             );
         })
         .parent(&window)

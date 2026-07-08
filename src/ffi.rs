@@ -35,6 +35,30 @@ pub mod ffi_inner {
         type QSpinBox;
         type QMenu;
         type QMenuBar;
+        type QIcon;
+        type QPoint;
+
+        // --- QObject (base class for signal-slot connections) ---
+        type QObject;
+
+        // --- Generic signal-slot connection ---
+        unsafe fn QObject_connect(
+            sender: *mut QObject,
+            sig: &CxxString,
+            receiver: *mut QObject,
+            slt: &CxxString,
+            conn_type: i32,
+        ) -> bool;
+
+        unsafe fn QObject_disconnect(
+            sender: *mut QObject,
+            sig: &CxxString,
+            receiver: *mut QObject,
+            slt: &CxxString,
+        ) -> bool;
+
+        // --- Thread safety ---
+        unsafe fn QObject_isInGuiThread() -> bool;
 
         // --- Trampolines ---
         unsafe fn qtrs_setVoidTrampoline(trampoline: unsafe extern "C" fn(u64));
@@ -145,7 +169,6 @@ pub mod ffi_inner {
         unsafe fn QProgressBar_setFormat(bar: *mut QProgressBar, format: &CxxString);
         unsafe fn QProgressBar_delete(bar: *mut QProgressBar);
 
-        
         // --- QVBoxLayout ---
         unsafe fn QVBoxLayout_new(parent: *mut QWidget) -> *mut QVBoxLayout;
         unsafe fn QVBoxLayout_addWidget(layout: *mut QVBoxLayout, widget: *mut QWidget);
@@ -158,7 +181,7 @@ pub mod ffi_inner {
             right: i32,
             bottom: i32,
         );
-        
+
         // --- QHBoxLayout ---
         unsafe fn QHBoxLayout_new(parent: *mut QWidget) -> *mut QHBoxLayout;
         unsafe fn QHBoxLayout_addWidget(layout: *mut QHBoxLayout, widget: *mut QWidget);
@@ -171,7 +194,7 @@ pub mod ffi_inner {
             right: i32,
             bottom: i32,
         );
-        
+
         // --- QGridLayout ---
         unsafe fn QGridLayout_new(parent: *mut QWidget) -> *mut QGridLayout;
         unsafe fn QGridLayout_addWidget(
@@ -183,7 +206,7 @@ pub mod ffi_inner {
             colSpan: i32,
         );
         unsafe fn QGridLayout_delete(layout: *mut QGridLayout);
-        
+
         // --- findChild helpers (for widgets loaded from .ui files) ---
         unsafe fn QWidget_findWidget(parent: *mut QWidget, name: &CxxString) -> *mut QWidget;
         unsafe fn QWidget_findPushButton(parent: *mut QWidget, name: &CxxString) -> *mut QPushButton;
@@ -198,7 +221,7 @@ pub mod ffi_inner {
         unsafe fn QWidget_findGroupBox(parent: *mut QWidget, name: &CxxString) -> *mut QGroupBox;
         unsafe fn QWidget_findTabWidget(parent: *mut QWidget, name: &CxxString) -> *mut QTabWidget;
         unsafe fn QWidget_findSpinBox(parent: *mut QWidget, name: &CxxString) -> *mut QSpinBox;
-        
+
         // --- QTimer ---
         unsafe fn QTimer_new() -> *mut QTimer;
         unsafe fn QTimer_start(timer: *mut QTimer, interval_ms: i32);
@@ -207,7 +230,7 @@ pub mod ffi_inner {
         unsafe fn QTimer_delete(timer: *mut QTimer);
         unsafe fn QTimer_onTimeout(timer: *mut QTimer, ctx: u64);
         unsafe fn QTimer_singleShot(interval_ms: i32, ctx: u64);
-        
+
         // --- QMessageBox ---
         unsafe fn QMessageBox_information(
             parent: *mut QWidget,
@@ -268,9 +291,8 @@ pub mod ffi_inner {
         unsafe fn QMenuBar_new(parent: *mut QWidget) -> *mut QMenuBar;
         unsafe fn QMenuBar_addMenu(mb: *mut QMenuBar, menu: *mut QMenu);
         unsafe fn QMenuBar_delete(mb: *mut QMenuBar);
-        
     }
-    
+
     #[cfg(feature = "ui")]
     unsafe extern "C++" {
         include!("src/cpp/uiloader.h");

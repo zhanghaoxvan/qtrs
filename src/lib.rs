@@ -10,7 +10,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! qtrs = "0.1.0"
+//! qtrs = "0.2.4"
 //! ```
 //!
 //! ## Features
@@ -22,7 +22,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! qtrs = { version = "0.1.0", features = ["ui"] }
+//! qtrs = { version = "0.2.4", features = ["ui"] }
 //! ```
 //!
 //! ## Design principles
@@ -44,7 +44,7 @@
 //! | cxx bridge | [`ffi`] | Opaque C++ types + `extern "C++"` signatures |
 //! | Safe wrappers | [`app`], [`widget`], [`button`], [`label`], [`input`], [`layout`] | Builder patterns, RAII, signals |
 //! | Public API | *(this module)* | Re-exports of all safe types |
-//! 
+//!
 //! ## Widget gallery
 //!
 //! | Type | Qt class | Signals |
@@ -119,27 +119,32 @@ pub mod app;
 pub mod button;
 pub mod checkbox;
 pub mod combobox;
+pub mod conn;
 pub mod dialog;
 pub mod ffi;
 pub mod grid;
+pub mod groupbox;
 pub mod input;
 pub mod label;
 pub mod layout;
+pub mod menu;
+pub mod progressbar;
+pub mod radiobutton;
+pub mod signals;
 pub mod slider;
+pub mod spinbox;
+pub mod tabwidget;
 pub mod textedit;
 pub mod timer;
 mod signal;
 pub mod widget;
-pub mod progressbar;
-pub mod radiobutton;
-pub mod groupbox;
-pub mod tabwidget;
-pub mod spinbox;
-pub mod menu;
 
 #[cfg(feature = "ui")]
 pub mod loader;
 
+// ============================================================
+// 原有导出
+// ============================================================
 pub use app::Application;
 pub use button::PushButton;
 pub use checkbox::CheckBox;
@@ -158,17 +163,23 @@ pub use groupbox::GroupBox;
 pub use tabwidget::TabWidget;
 pub use spinbox::SpinBox;
 pub use menu::{Menu, MenuBar};
-
-
+pub use conn::{ConnectExt, ConnType, SignalMeta, SlotMeta};
 #[cfg(feature = "ui")]
 pub use loader::UiLoader;
+
+
+// ============================================================
+// Prelude
+// ============================================================
 
 /// Prelude: commonly used types and traits.
 pub mod prelude {
     pub use super::{
-        Application, AsLayout, AsWidget, CheckBox, ComboBox, FoundWidget, GridLayout, HBoxLayout,
-        Label, LineEdit, PushButton, Slider, TextEdit, Timer, VBoxLayout, Widget, WidgetKind, ProgressBar,
-        RadioButton, GroupBox, TabWidget, SpinBox, Menu, MenuBar
+        Application, AsLayout, AsWidget, CheckBox, ComboBox, FoundWidget,
+        GridLayout, HBoxLayout, Label, LineEdit, PushButton, Slider,
+        TextEdit, Timer, VBoxLayout, Widget, WidgetKind,
+        ProgressBar, RadioButton, GroupBox, TabWidget, SpinBox, Menu, MenuBar,
+        ConnectExt, ConnType, signals
     };
     #[cfg(feature = "ui")]
     pub use super::UiLoader;
