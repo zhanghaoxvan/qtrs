@@ -4,7 +4,7 @@
 [![Docs.rs](https://docs.rs/qtrs/badge.svg)](https://docs.rs/qtrs)
 [![License: MIT OR Apache-2.0](https://img.shields.io/badge/license-MIT%2FApache--2.0-blue.svg)](LICENSE)
 
-![Demo](assets/demo.png)
+![Demo](https://github.com/zhanghaoxvan/qtrs/blob/main/assets/demo.png)
 
 A type-safe, builder-pattern-driven Qt6 GUI library for Rust. Built on
 [`cxx`](https://cxx.rs) for zero-cost C++ interop, with RAII memory
