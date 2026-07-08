@@ -125,13 +125,13 @@ Add to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-qtrs = "0.1.0"
+qtrs = "0.2.3"
 ```
 Enable .ui file loading:
 
 ```toml
 [dependencies]
-qtrs = { version = "0.1.0", features = ["ui"] }
+qtrs = { version = "0.2.3", features = ["ui"] }
 ```
 
 ## Memory management
