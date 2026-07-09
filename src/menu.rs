@@ -47,7 +47,7 @@ impl Menu {
         Self { ptr, has_parent: true, signal_handles: Vec::new() }
     }
 
-    /// Get the raw menu pointer for use with [`MenuBar::add_menu`].
+    /// Get the raw menu pointer for use with [`MenuBarBuilder::add_menu`].
     pub fn menu_ptr(&self) -> *mut ffi::QMenu {
         self.ptr
     }

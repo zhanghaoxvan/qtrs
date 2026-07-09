@@ -291,6 +291,35 @@ pub mod ffi_inner {
         unsafe fn QMenuBar_new(parent: *mut QWidget) -> *mut QMenuBar;
         unsafe fn QMenuBar_addMenu(mb: *mut QMenuBar, menu: *mut QMenu);
         unsafe fn QMenuBar_delete(mb: *mut QMenuBar);
+
+        // --- QFileDialog ---
+        unsafe fn QFileDialog_getOpenFileName(
+            parent: *mut QWidget,
+            caption: &CxxString,
+            dir: &CxxString,
+            filter: &CxxString,
+        ) -> String;
+
+        unsafe fn QFileDialog_getOpenFileNames(
+            parent: *mut QWidget,
+            caption: &CxxString,
+            dir: &CxxString,
+            filter: &CxxString,
+        ) -> Vec<String>;
+
+        unsafe fn QFileDialog_getSaveFileName(
+            parent: *mut QWidget,
+            caption: &CxxString,
+            dir: &CxxString,
+            filter: &CxxString,
+        ) -> String;
+
+        unsafe fn QFileDialog_getExistingDirectory(
+            parent: *mut QWidget,
+            caption: &CxxString,
+            dir: &CxxString,
+        ) -> String;
+
     }
 
     #[cfg(feature = "ui")]

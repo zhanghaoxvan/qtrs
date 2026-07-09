@@ -1,44 +1,8 @@
 # qtrs Widget Addition Guide
 
-## Adding a New Qt Widget to qtrs
-
----
-
 ## Overview
 
-This guide documents the **standard 5-layer process** for adding a new Qt widget to the qtrs framework. The process is demonstrated using a `Picture` widget (based on `QLabel`) as a working example, but the pattern applies to **any Qt widget**.
-
----
-
-## Prerequisites
-
-Before adding a new widget, you should be familiar with:
-- **cxx crate**: C++/Rust interop fundamentals
-- **Qt Widgets lifecycle**: Parent-child ownership, RAII vs manual `delete`
-- **qtrs architecture**: `AsWidget` trait, Builder pattern, signal bridging
-- Required Qt version: **Qt 6.2+**
-- Required Rust version: **1.70+** (MSRV)
-
----
-
-## Project Structure Reference
-
-```
-qtrs/
-├── src/
-│   ├── cpp/                    # C++ glue layer
-│   │   ├── qt_widget.h         # Umbrella header (Layer 2)
-│   │   ├── {widget}.h          # New widget glue (Layer 1)
-│   │   ├── signal.h            # Trampoline globals
-│   │   ├── app.h
-│   │   ├── button.h
-│   │   └── ...
-│   ├── ffi.rs                  # cxx bridge (Layer 3)
-│   ├── {widget}.rs             # Rust wrapper (Layer 4)
-│   ├── lib.rs                  # Library exports (Layer 5)
-│   └── ...
-└── Cargo.toml
-```
+This document guides you through the **standard 5-layer process** for adding a new Qt widget to the qtrs framework.
 
 ---
 
@@ -67,12 +31,12 @@ Create `src/cpp/picture.h`:
 #include <QString>
 #include <string>
 
-// ─── Constructor ──────────────────────────────────────────────
+// Constructor
 inline QLabel *Picture_new(QWidget *parent) {
     return new QLabel(parent);
 }
 
-// ─── Setters ──────────────────────────────────────────────────
+// Setters
 inline void Picture_setPixmap(QLabel *pic, const std::string &path) {
     pic->setPixmap(QPixmap(QString::fromStdString(path)));
 }
@@ -86,53 +50,8 @@ inline void Picture_clear(QLabel *pic) {
     pic->clear();
 }
 
-// ─── Destructor ──────────────────────────────────────────────
+// Destructor
 inline void Picture_delete(QLabel *pic) { delete pic; }
-```
-
-### C++ Signal Support (Optional)
-
-If your widget emits signals (e.g., `clicked`), add a custom subclass:
-
-```cpp
-// src/cpp/clickablelabel.h
-#pragma once
-
-#include <QLabel>
-#include <QMouseEvent>
-#include "signal.h"
-
-class ClickableLabel : public QLabel {
-    Q_OBJECT
-public:
-    explicit ClickableLabel(QWidget *parent = nullptr) : QLabel(parent) {}
-    
-protected:
-    void mousePressEvent(QMouseEvent *event) override {
-        Q_UNUSED(event);
-        emit clicked();
-    }
-    
-signals:
-    void clicked();
-};
-
-// ─── Wrapper functions ──────────────────────────────────────
-inline ClickableLabel *ClickableLabel_new(QWidget *parent) {
-    return new ClickableLabel(parent);
-}
-
-inline void ClickableLabel_setPixmap(ClickableLabel *label, const std::string &path) {
-    label->setPixmap(QPixmap(QString::fromStdString(path)));
-}
-
-inline void ClickableLabel_onClicked(ClickableLabel *label, uint64_t ctx) {
-    QObject::connect(label, &ClickableLabel::clicked, [ctx]() {
-        g_voidTrampoline(ctx);
-    });
-}
-
-inline void ClickableLabel_delete(ClickableLabel *label) { delete label; }
 ```
 
 ---
@@ -142,7 +61,7 @@ inline void ClickableLabel_delete(ClickableLabel *label) { delete label; }
 Add the include to `src/cpp/qt_widget.h`:
 
 ```cpp
-// src/cpp/qt_widget.h — umbrella header for all C++ glue modules
+// src/cpp/qt_widget.h
 #pragma once
 
 #include "signal.h"
@@ -155,10 +74,18 @@ Add the include to `src/cpp/qt_widget.h`:
 #include "combobox.h"
 #include "textedit.h"
 #include "slider.h"
+#include "progress.h"
+#include "radiobutton.h"
+#include "groupbox.h"
+#include "tabwidget.h"
+#include "spinbox.h"
+#include "menu.h"
 #include "timer.h"
 #include "layout.h"
 #include "dialog.h"
-#include "picture.h"      // <── ADD THIS LINE
+#include "thread.h"
+#include "filedialog.h"
+#include "picture.h"      // ADD THIS
 
 #ifdef QTRS_HAS_UI
 #    include "uiloader.h"
@@ -167,33 +94,46 @@ Add the include to `src/cpp/qt_widget.h`:
 
 ---
 
-## Layer 3: cxx Bridge (`src/ffi.rs`)
+## Layer 3: cxx Bridge (src/ffi.rs)
 
-Add these declarations inside the `unsafe extern "C++"` block:
+Add declarations inside the `unsafe extern "C++"` block:
 
 ```rust
 // src/ffi.rs — add inside unsafe extern "C++" block
 
-// ─── Picture (QLabel-based image widget) ────────────────────
+// Picture (QLabel-based image widget)
 unsafe fn Picture_new(parent: *mut QWidget) -> *mut QLabel;
 unsafe fn Picture_setPixmap(pic: *mut QLabel, path: &CxxString);
 unsafe fn Picture_setPixmapScaled(pic: *mut QLabel, path: &CxxString, width: i32, height: i32);
 unsafe fn Picture_clear(pic: *mut QLabel);
 unsafe fn Picture_delete(pic: *mut QLabel);
-
-// ─── Upcast (already exists, ensure available) ──────────────
-// unsafe fn toQWidget_QLabel(label: *mut QLabel) -> *mut QWidget;
 ```
 
-### For `Widget::find()` Support
+### Upcast
 
-Add to the bridge:
+The `toQWidget_QLabel` upcast already exists in `ffi.rs`. For custom widgets like `ClickableLabel`, add:
+
+```rust
+unsafe fn toQWidget_QClickableLabel(label: *mut QClickableLabel) -> *mut QWidget;
+```
+
+And in `src/cpp/layout.h`:
+
+```cpp
+inline QWidget *toQWidget_QClickableLabel(ClickableLabel *w) {
+    return static_cast<QWidget *>(w);
+}
+```
+
+### For Widget::find() Support
+
+Add to `ffi.rs`:
 
 ```rust
 unsafe fn QWidget_findPicture(parent: *mut QWidget, name: &CxxString) -> *mut QLabel;
 ```
 
-And add to `src/cpp/layout.h`:
+And to `src/cpp/layout.h`:
 
 ```cpp
 inline QLabel *QWidget_findPicture(QWidget *parent, const std::string &name) {
@@ -203,22 +143,20 @@ inline QLabel *QWidget_findPicture(QWidget *parent, const std::string &name) {
 
 ---
 
-## Layer 4: Rust Wrapper (`src/picture.rs`)
+## Layer 4: Rust Wrapper (src/picture.rs)
 
 Create the complete Rust wrapper:
 
 ```rust
-// src/picture.rs — Image display widget
+//! Image display widget.
+//!
+//! Wraps QLabel to display pixmaps from image files.
 
 use cxx::let_cxx_string;
 use crate::ffi;
 use crate::widget::AsWidget;
 
 /// An image display widget.
-///
-/// Wraps [`QLabel`](https://doc.qt.io/qt-6/qlabel.html) to display
-/// pixmaps from image files. Supports PNG, JPEG, BMP, GIF, SVG,
-/// and other formats Qt can read.
 ///
 /// # Example
 ///
@@ -288,11 +226,7 @@ impl Drop for Picture {
     }
 }
 
-// ============================================================
 // Builder
-// ============================================================
-
-/// Builder for [`Picture`].
 pub struct Builder {
     pixmap: Option<String>,
     pixmap_scaled: Option<(String, i32, i32)>,
@@ -347,19 +281,12 @@ impl Builder {
 
         pic
     }
-
-    /// Build and immediately show.
-    pub fn show(self) -> Picture {
-        let pic = self.build();
-        unsafe { ffi::QWidget_show(pic.widget_ptr()); }
-        pic
-    }
 }
 ```
 
 ---
 
-## Layer 5: Library Exports (`src/lib.rs`)
+## Layer 5: Library Exports (src/lib.rs)
 
 Add the new widget to the public API:
 
@@ -369,16 +296,389 @@ Add the new widget to the public API:
 pub mod picture;
 pub use picture::Picture;
 
-// ─── Add to prelude ──────────────────────────────────────────
+// Add to prelude
 pub mod prelude {
     pub use super::{
         Application, AsLayout, AsWidget, CheckBox, ComboBox, FoundWidget,
         GridLayout, HBoxLayout, Label, LineEdit, PushButton, Slider,
         TextEdit, Timer, VBoxLayout, Widget, WidgetKind,
-        Picture,  // <── ADD THIS
+        ProgressBar, RadioButton, GroupBox, TabWidget, SpinBox, Menu, MenuBar,
+        ConnectExt, ConnType, signals, FileDialog,
+        Picture,  // ADD THIS
     };
     #[cfg(feature = "ui")]
     pub use super::UiLoader;
+}
+```
+
+---
+
+## Signal Support (Full)
+
+If your widget emits signals (e.g., `clicked`, `valueChanged`), you need:
+
+1. Define signals in C++ (using `Q_OBJECT` macro)
+2. Connect signals to Rust trampoline (using `g_voidTrampoline` / `g_boolTrampoline` / `g_intTrampoline`)
+3. Expose `on_*` methods in Rust (using `signal::leak_*`)
+
+### Complete Example: ClickableLabel
+
+```cpp
+// src/cpp/clickablelabel.h
+#pragma once
+
+#include <QLabel>
+#include <QMouseEvent>
+#include "signal.h"
+
+// Define Qt subclass with signals
+class ClickableLabel : public QLabel {
+    Q_OBJECT
+public:
+    explicit ClickableLabel(QWidget *parent = nullptr) : QLabel(parent) {}
+
+protected:
+    void mousePressEvent(QMouseEvent *event) override {
+        Q_UNUSED(event);
+        emit clicked();              // Emit signal
+        emit clicked_with_pos(event->pos().x(), event->pos().y());
+    }
+
+signals:
+    void clicked();                  // Signal with no parameters
+    void clicked_with_pos(int x, int y);  // Signal with parameters
+};
+
+// Constructor / Destructor
+inline ClickableLabel *ClickableLabel_new(QWidget *parent) {
+    return new ClickableLabel(parent);
+}
+
+inline void ClickableLabel_delete(ClickableLabel *label) {
+    delete label;
+}
+
+// Setters
+inline void ClickableLabel_setText(ClickableLabel *label, const std::string &text) {
+    label->setText(QString::fromStdString(text));
+}
+
+inline void ClickableLabel_setPixmap(ClickableLabel *label, const std::string &path) {
+    label->setPixmap(QPixmap(QString::fromStdString(path)));
+}
+
+// Signal connection (void)
+inline void ClickableLabel_onClicked(ClickableLabel *label, uint64_t ctx) {
+    QObject::connect(label, &ClickableLabel::clicked, [ctx]() {
+        if (g_hasVoidTrampoline) {
+            g_voidTrampoline(ctx);   // Call Rust closure
+        }
+    });
+}
+
+// Signal connection (with parameters)
+inline void ClickableLabel_onClickedWithPos(ClickableLabel *label, uint64_t ctx) {
+    QObject::connect(label, &ClickableLabel::clicked_with_pos, [ctx](int x, int y) {
+        if (g_hasIntTrampoline) {
+            g_intTrampoline(ctx, x);
+        }
+    });
+}
+```
+
+### Signal Type Reference
+
+| Signal Parameters | C++ Connection | Rust Leak Function | Trampoline |
+|-------------------|----------------|-------------------|------------|
+| None (`void`) | `g_voidTrampoline(ctx)` | `signal::leak_void(f)` | `g_hasVoidTrampoline` |
+| `bool` | `g_boolTrampoline(ctx, value)` | `signal::leak_bool(f)` | `g_hasBoolTrampoline` |
+| `int` / `i32` | `g_intTrampoline(ctx, value)` | `signal::leak_int(f)` | `g_hasIntTrampoline` |
+| Multiple parameters | Need custom trampoline | N/A | N/A |
+
+### FFI Bridge (src/ffi.rs)
+
+```rust
+// ClickableLabel
+type QClickableLabel;
+
+unsafe fn QClickableLabel_new(parent: *mut QWidget) -> *mut QClickableLabel;
+unsafe fn QClickableLabel_setText(label: *mut QClickableLabel, text: &CxxString);
+unsafe fn QClickableLabel_setPixmap(label: *mut QClickableLabel, path: &CxxString);
+unsafe fn QClickableLabel_onClicked(label: *mut QClickableLabel, ctx: u64);
+unsafe fn QClickableLabel_onClickedWithPos(label: *mut QClickableLabel, ctx: u64);
+unsafe fn QClickableLabel_delete(label: *mut QClickableLabel);
+
+// Upcast
+unsafe fn toQWidget_QClickableLabel(label: *mut QClickableLabel) -> *mut QWidget;
+```
+
+### Rust Wrapper (src/clickablelabel.rs)
+
+```rust
+//! Clickable label widget with signal support.
+
+use cxx::let_cxx_string;
+use crate::ffi;
+use crate::signal::{self, SignalHandle};
+use crate::widget::AsWidget;
+
+pub struct ClickableLabel {
+    ptr: *mut ffi::QClickableLabel,
+    has_parent: bool,
+    signal_handles: Vec<SignalHandle>,
+}
+
+impl ClickableLabel {
+    pub fn new() -> Builder { Builder::new() }
+
+    pub fn set_text(&self, text: &str) {
+        debug_assert!(!self.ptr.is_null());
+        let_cxx_string!(c_text = text);
+        unsafe { ffi::QClickableLabel_setText(self.ptr, &c_text); }
+    }
+
+    pub fn set_pixmap(&self, path: &str) {
+        debug_assert!(!self.ptr.is_null());
+        let_cxx_string!(c_path = path);
+        unsafe { ffi::QClickableLabel_setPixmap(self.ptr, &c_path); }
+    }
+
+    #[doc(hidden)]
+    pub(crate) fn from_raw(ptr: *mut ffi::QClickableLabel) -> Self {
+        debug_assert!(!ptr.is_null());
+        Self { ptr, has_parent: true, signal_handles: Vec::new() }
+    }
+}
+
+impl AsWidget for ClickableLabel {
+    fn widget_ptr(&self) -> *mut ffi::QWidget {
+        debug_assert!(!self.ptr.is_null());
+        unsafe { ffi::toQWidget_QClickableLabel(self.ptr) }
+    }
+
+    fn set_has_parent(&mut self) {
+        self.has_parent = true;
+    }
+}
+
+impl Drop for ClickableLabel {
+    fn drop(&mut self) {
+        if self.ptr.is_null() { return; }
+        if self.has_parent {
+            unsafe { ffi::QWidget_disconnectAll(self.ptr as *mut _); }
+            for h in self.signal_handles.drain(..) {
+                unsafe { h.reclaim(); }
+            }
+        } else {
+            for h in self.signal_handles.drain(..) {
+                unsafe { h.reclaim(); }
+            }
+            unsafe { ffi::QClickableLabel_delete(self.ptr) };
+        }
+        self.ptr = std::ptr::null_mut();
+    }
+}
+
+// Builder
+pub struct Builder {
+    text: Option<String>,
+    pixmap: Option<String>,
+    on_clicked: Option<Box<dyn Fn()>>,
+    on_clicked_with_pos: Option<Box<dyn Fn(i32)>>,
+    parent: Option<*mut ffi::QWidget>,
+}
+
+impl Builder {
+    fn new() -> Self {
+        Self {
+            text: None,
+            pixmap: None,
+            on_clicked: None,
+            on_clicked_with_pos: None,
+            parent: None,
+        }
+    }
+
+    pub fn text(mut self, text: impl Into<String>) -> Self {
+        self.text = Some(text.into());
+        self
+    }
+
+    pub fn pixmap(mut self, path: impl Into<String>) -> Self {
+        self.pixmap = Some(path.into());
+        self
+    }
+
+    /// Callback when the label is clicked.
+    pub fn on_clicked<F: Fn() + 'static>(mut self, f: F) -> Self {
+        self.on_clicked = Some(Box::new(f));
+        self
+    }
+
+    /// Callback when clicked with position (x coordinate).
+    pub fn on_clicked_with_pos<F: Fn(i32) + 'static>(mut self, f: F) -> Self {
+        self.on_clicked_with_pos = Some(Box::new(f));
+        self
+    }
+
+    pub fn parent(mut self, parent: &dyn AsWidget) -> Self {
+        self.parent = Some(parent.widget_ptr());
+        self
+    }
+
+    pub fn build(self) -> ClickableLabel {
+        let ptr = unsafe {
+            ffi::QClickableLabel_new(self.parent.unwrap_or(std::ptr::null_mut()))
+        };
+        debug_assert!(!ptr.is_null());
+
+        let mut label = ClickableLabel {
+            ptr,
+            has_parent: self.parent.is_some(),
+            signal_handles: Vec::new(),
+        };
+
+        if let Some(ref text) = self.text {
+            label.set_text(text);
+        }
+
+        if let Some(ref path) = self.pixmap {
+            label.set_pixmap(path);
+        }
+
+        if let Some(cb) = self.on_clicked {
+            let handle = signal::leak_void(cb);
+            unsafe { ffi::QClickableLabel_onClicked(ptr, handle.token); }
+            label.signal_handles.push(handle);
+        }
+
+        if let Some(cb) = self.on_clicked_with_pos {
+            let handle = signal::leak_int(cb);
+            unsafe { ffi::QClickableLabel_onClickedWithPos(ptr, handle.token); }
+            label.signal_handles.push(handle);
+        }
+
+        label
+    }
+}
+```
+
+### Signal Connection Flow
+
+```mermaid
+flowchart TD
+    A[Qt Signal emitted] --> B[C++ lambda captures ctx u64 token]
+    B --> C{Calls trampoline with ctx}
+    C --> D[g_voidTrampoline ctx]
+    C --> E[g_boolTrampoline ctx value]
+    C --> F[g_intTrampoline ctx value]
+    D --> G[Rust trampoline receives ctx]
+    E --> G
+    F --> G
+    G --> H[Rust trampoline casts ctx to closure pointer]
+    H --> I[User's Rust closure executed]
+```
+
+### Signal Types Reference
+
+| Signal Type | C++ Connection Function | Rust Leak Helper | Trampoline Check |
+|-------------|------------------------|------------------|------------------|
+| `void()` | `g_voidTrampoline(ctx)` | `signal::leak_void(f)` | `g_hasVoidTrampoline` |
+| `bool` | `g_boolTrampoline(ctx, value)` | `signal::leak_bool(f)` | `g_hasBoolTrampoline` |
+| `int` / `i32` | `g_intTrampoline(ctx, value)` | `signal::leak_int(f)` | `g_hasIntTrampoline` |
+
+### Key Points for Signal Implementation
+
+1. `Q_OBJECT` macro is required for signals to work
+2. Signal connections are made using `QObject::connect` with lambda capturing `ctx`
+3. `g_has*Trampoline` checks ensure trampoline is registered
+4. `signal::leak_*` stores the Rust closure and returns a `u64` token
+5. `SignalHandle` manages the closure lifetime (reclaims on Drop)
+6. `has_parent` logic determines whether closures are reclaimed or leaked
+
+### Multiple Parameters
+
+Currently, the trampoline system supports single-parameter signals. For multiple parameters, you need to:
+
+1. Create a new trampoline in `signal.rs`
+2. Add a new `SignalKind` variant
+3. Add a new `leak_*` function
+4. Add a new C++ trampoline function
+
+See `src/signal.rs` for existing implementations.
+
+---
+
+## Adding Widget::find() Support (Optional)
+
+To enable runtime widget lookup by `objectName`:
+
+### 1. Update WidgetKind enum (src/widget.rs)
+
+```rust
+pub enum WidgetKind {
+    PushButton,
+    LineEdit,
+    CheckBox,
+    ComboBox,
+    Slider,
+    TextEdit,
+    Label,
+    ProgressBar,
+    RadioButton,
+    GroupBox,
+    TabWidget,
+    SpinBox,
+    Picture,   // ADD
+    Any,
+}
+```
+
+### 2. Update FoundWidget enum (src/widget.rs)
+
+```rust
+pub enum FoundWidget {
+    PushButton(crate::PushButton),
+    LineEdit(crate::LineEdit),
+    CheckBox(crate::CheckBox),
+    ComboBox(crate::ComboBox),
+    Slider(crate::Slider),
+    TextEdit(crate::TextEdit),
+    Label(crate::Label),
+    ProgressBar(crate::ProgressBar),
+    RadioButton(crate::RadioButton),
+    GroupBox(crate::GroupBox),
+    TabWidget(crate::TabWidget),
+    SpinBox(crate::SpinBox),
+    Picture(crate::Picture),   // ADD
+    Widget(Widget),
+}
+```
+
+### 3. Add match arm in Widget::find() (src/widget.rs)
+
+```rust
+WidgetKind::Picture => {
+    let ptr = unsafe { ffi::QWidget_findPicture(self.ptr, &c_name) };
+    if ptr.is_null() { None }
+    else { Some(FoundWidget::Picture(crate::Picture::from_raw(ptr))) }
+}
+```
+
+---
+
+## Update build.rs
+
+Add the new header to the rerun list:
+
+```rust
+for name in &[
+    "signal", "app", "widget", "button", "label", "input",
+    "checkbox", "combobox", "textedit", "slider", "timer",
+    "layout", "dialog", "uiloader", "progress", "filedialog",
+    "picture",  // ADD THIS
+] {
+    println!("cargo:rerun-if-changed=src/cpp/{}.h", name);
 }
 ```
 
@@ -399,7 +699,6 @@ fn main() {
 
     let mut layout = VBoxLayout::with_parent(&window);
 
-    // Display an image
     let logo = Picture::new()
         .pixmap_scaled("assets/logo.png", 400, 300)
         .build();
@@ -417,139 +716,23 @@ fn main() {
 
 ---
 
-## Adding `Widget::find()` Support (Optional)
-
-To enable runtime widget lookup by `objectName`:
-
-### 1. Update `WidgetKind` enum (`src/widget.rs`)
-
-```rust
-pub enum WidgetKind {
-    PushButton,
-    LineEdit,
-    CheckBox,
-    Label,
-    Picture,   // <── ADD
-    Any,
-}
-```
-
-### 2. Update `FoundWidget` enum (`src/widget.rs`)
-
-```rust
-pub enum FoundWidget {
-    PushButton(crate::PushButton),
-    LineEdit(crate::LineEdit),
-    CheckBox(crate::CheckBox),
-    Label(crate::Label),
-    Picture(crate::Picture),   // <── ADD
-    Widget(Widget),
-}
-```
-
-### 3. Add match arm in `Widget::find()` (`src/widget.rs`)
-
-```rust
-WidgetKind::Picture => {
-    let ptr = unsafe { ffi::QWidget_findPicture(self.ptr, &c_name) };
-    if ptr.is_null() { None }
-    else { Some(FoundWidget::Picture(crate::Picture::from_raw(ptr))) }
-}
-```
-
----
-
-## Supporting Widget Signals (Clickable Picture)
-
-For widgets that emit signals, here are two approaches:
-
-### Option A: Use `QPushButton` with Icon (Simpler)
-
-```rust
-let btn = PushButton::new("")
-    .on_clicked(|| println!("Image clicked!"))
-    .build();
-
-// Set icon via C++ helper (not shown)
-```
-
-### Option B: Custom C++ Subclass (Full Control)
-
-See the `ClickableLabel` example in Layer 1. Then follow the same 5-layer pattern:
-
-1. C++ glue with `onClicked` signal connection
-2. Include in umbrella header
-3. FFI bridge with `ClickableLabel_onClicked`
-4. Rust wrapper with `on_clicked` builder method
-5. Export in lib.rs
-
----
-
 ## Troubleshooting
-
-### cxx Compilation Errors
 
 | Error | Likely Cause | Fix |
 |-------|--------------|-----|
 | `unknown type 'QLabel'` | Missing include in C++ header | Add `#include <QLabel>` |
 | `cannot find function` | Header not included in `qt_widget.h` | Add `#include "{widget}.h"` |
-| `undefined reference` | Function declared but not defined | Check C++ function signatures match FFI |
-
-### Runtime Panics
-
-| Panic | Likely Cause | Fix |
-|-------|--------------|-----|
+| `undefined reference` | C++ function signature mismatch | Check FFI matches C++ exactly |
 | `debug_assert!(!self.ptr.is_null())` | Widget not constructed | Check `*_new` returns non-null |
-| Signal not firing | Trampoline not registered | Ensure `ensure_trampolines_registered()` called in `leak_*` functions |
-
-### Memory Leaks
-
-| Symptom | Likely Cause | Fix |
-|---------|--------------|-----|
-| Widget not destroyed on Drop | `has_parent` incorrectly set to `true` | Set `has_parent = false` for parentless widgets |
-| Closures leak | Widget has parent and is dropped early | Keep Rust wrapper alive; or review `has_parent` logic |
-
----
-
-## Summary Reference Table
-
-| Component | What to Add |
-|-----------|-------------|
-| **C++ Header** | Constructor, setters, getters, destructor, optional signal connections |
-| **Umbrella Header** | `#include "{widget}.h"` |
-| **FFI Bridge** | `unsafe fn` declarations for all C++ functions |
-| **Rust Wrapper** | Struct with `ptr` + `has_parent`, `AsWidget` impl, `Drop`, Builder |
-| **Library Export** | `pub mod` + `pub use` in `lib.rs` + prelude |
-
----
-
-## Applying the Pattern to Other Widgets
-
-This 5-layer pattern works for **any Qt widget**:
-
-| Qt Widget | C++ Type | Rust Type |
-|-----------|----------|-----------|
-| Progress bar | `QProgressBar` | `ProgressBar` |
-| Radio button | `QRadioButton` | `RadioButton` |
-| Group box | `QGroupBox` | `GroupBox` |
-| Tab widget | `QTabWidget` | `TabWidget` |
-| Stacked widget | `QStackedWidget` | `StackedWidget` |
-| Scroll area | `QScrollArea` | `ScrollArea` |
-| List widget | `QListWidget` | `ListWidget` |
-| Tree widget | `QTreeWidget` | `TreeWidget` |
-| Table widget | `QTableWidget` | `TableWidget` |
-
-Simply replace `QLabel` with the target Qt class and adapt the setter functions accordingly.
+| Signal not firing | Trampoline not registered | Ensure `ensure_trampolines_registered()` is called |
+| `g_*Trampoline` undefined | Missing `#include "signal.h"` | Add `#include "signal.h"` to C++ header |
+| Closure not called on Drop | `has_parent` logic wrong | Check `has_parent` is set correctly |
 
 ---
 
 ## Document Version
 
-- **Version:** 1.0
+- **Version:** 2.0
 - **Qt Version:** 6.2+
 - **Rust MSRV:** 1.70+
-- **Last Updated:** 2026-07-06
-
----
-
-*This document is part of the qtrs project contribution guidelines.*
+- **Last Updated:** 2026-07-09

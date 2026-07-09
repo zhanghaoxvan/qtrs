@@ -69,6 +69,7 @@
 //! | [`VBoxLayout`] | `QVBoxLayout` | — |
 //! | [`HBoxLayout`] | `QHBoxLayout` | — |
 //! | [`GridLayout`] | `QGridLayout` | — |
+//! | [`FileDialog`] | `QFileDialog` | `open_file`, `save_file`, `select_directory` (static) |
 //! | `dialog` | `QMessageBox` | `information`, `warning`, `critical`, `question` |
 //!
 //! ## Quick example
@@ -138,13 +139,15 @@ pub mod textedit;
 pub mod timer;
 mod signal;
 pub mod widget;
+pub mod filedialog;
 
 #[cfg(feature = "ui")]
 pub mod loader;
 
-// ============================================================
-// 原有导出
-// ============================================================
+// ================================================
+// Re-Exports
+// ================================================
+
 pub use app::Application;
 pub use button::PushButton;
 pub use checkbox::CheckBox;
@@ -164,6 +167,8 @@ pub use tabwidget::TabWidget;
 pub use spinbox::SpinBox;
 pub use menu::{Menu, MenuBar};
 pub use conn::{ConnectExt, ConnType, SignalMeta, SlotMeta};
+pub use filedialog::FileDialog;
+
 #[cfg(feature = "ui")]
 pub use loader::UiLoader;
 
@@ -179,7 +184,7 @@ pub mod prelude {
         GridLayout, HBoxLayout, Label, LineEdit, PushButton, Slider,
         TextEdit, Timer, VBoxLayout, Widget, WidgetKind,
         ProgressBar, RadioButton, GroupBox, TabWidget, SpinBox, Menu, MenuBar,
-        ConnectExt, ConnType, signals
+        ConnectExt, ConnType, signals, FileDialog
     };
     #[cfg(feature = "ui")]
     pub use super::UiLoader;

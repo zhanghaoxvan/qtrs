@@ -11,7 +11,6 @@ use crate::widget::AsWidget;
 /// A radio button that can be toggled on/off.
 ///
 /// Radio buttons typically belong to a group for mutual exclusivity.
-/// Use [`crate::ButtonGroup`] for that purpose (future feature).
 ///
 /// `RadioButton` uses a builder pattern: call [`RadioButton::new`] to obtain
 /// a [`Builder`], chain configuration methods, then call `.build()`.

@@ -250,8 +250,30 @@ fn main() {
     // ============================================================
     let file_menu = Menu::new("File")
         .action("New", || println!("[LOG] Menu: New"))
-        .action("Open", || println!("[LOG] Menu: Open"))
-        .action("Save", || println!("[LOG] Menu: Save"))
+        .action("Open", || {
+            println!("[LOG] Menu: Open");
+            if let Some(path) = FileDialog::open_file(
+                None,  // No parent needed
+                "Select a file",
+                "",
+                "All Files (*.*);;Text Files (*.txt);;Images (*.png *.jpg *.bmp)"
+            ) {
+                println!("[LOG] File selected: {}", path);
+            } else {
+                println!("[LOG] File dialog cancelled");
+            }
+        })
+        .action("Save", || {
+            println!("[LOG] Menu: Save");
+            if let Some(path) = FileDialog::select_directory(
+                None, "Select a directory to save", 
+                "",
+            ) {
+                println!("[LOG] Directory selected: {}", path);
+            } else {
+                println!("[LOG] File dialog cancelled");
+            }
+        })
         .action("Exit", || {
             println!("[LOG] Menu: Exit");
             std::process::exit(0);
@@ -270,7 +292,7 @@ fn main() {
         .action("About", || {
             println!("[LOG] Menu: About");
             dialog::information(
-                None,
+                None,  // No parent needed
                 "About",
                 "qtrs Widget Gallery\nVersion 0.2.4\n\nAll widgets test",
             );
@@ -278,7 +300,6 @@ fn main() {
         .parent(&window)
         .build();
 
-    // MenuBar: use builder pattern
     let _menubar = MenuBar::new()
         .add_menu(file_menu)
         .add_menu(edit_menu)

@@ -49,6 +49,8 @@ fn main() {
 }
 ```
 
+You can see [demo.rs](https://github.com/zhanghaoxvan/qtrs/blob/main/examples/demo/demo.rs) for details.
+
 ## Widgets
 
 | Type | Qt Class | Signals |
@@ -73,6 +75,7 @@ fn main() {
 | `VBoxLayout` | `QVBoxLayout` | — |
 | `HBoxLayout` | `QHBoxLayout` | — |
 | `GridLayout` | `QGridLayout` | — |
+| `FileDialog` | `QFileDialog` | — |
 
 ---
 

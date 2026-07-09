@@ -25,6 +25,10 @@
 //! # }
 //! ```
 
+// This is for the doc below
+#[allow(unused_imports)]
+use crate::conn::ConnectExt;
+
 use crate::conn::{SignalMeta, SlotMeta};
 
 // ============================================================
