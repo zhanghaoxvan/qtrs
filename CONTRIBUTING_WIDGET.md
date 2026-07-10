@@ -64,32 +64,9 @@ Add the include to `src/cpp/qt_widget.h`:
 // src/cpp/qt_widget.h
 #pragma once
 
-#include "signal.h"
-#include "app.h"
-#include "widget.h"
-#include "button.h"
-#include "label.h"
-#include "input.h"
-#include "checkbox.h"
-#include "combobox.h"
-#include "textedit.h"
-#include "slider.h"
-#include "progress.h"
-#include "radiobutton.h"
-#include "groupbox.h"
-#include "tabwidget.h"
-#include "spinbox.h"
-#include "menu.h"
-#include "timer.h"
-#include "layout.h"
-#include "dialog.h"
-#include "thread.h"
-#include "filedialog.h"
+// included headers
+// ...
 #include "picture.h"      // ADD THIS
-
-#ifdef QTRS_HAS_UI
-#    include "uiloader.h"
-#endif
 ```
 
 ---
@@ -299,14 +276,10 @@ pub use picture::Picture;
 // Add to prelude
 pub mod prelude {
     pub use super::{
-        Application, AsLayout, AsWidget, CheckBox, ComboBox, FoundWidget,
-        GridLayout, HBoxLayout, Label, LineEdit, PushButton, Slider,
-        TextEdit, Timer, VBoxLayout, Widget, WidgetKind,
-        ProgressBar, RadioButton, GroupBox, TabWidget, SpinBox, Menu, MenuBar,
-        ConnectExt, ConnType, signals, FileDialog,
+        // ...
         Picture,  // ADD THIS
     };
-    #[cfg(feature = "ui")]
+    
     pub use super::UiLoader;
 }
 ```
@@ -617,18 +590,7 @@ To enable runtime widget lookup by `objectName`:
 
 ```rust
 pub enum WidgetKind {
-    PushButton,
-    LineEdit,
-    CheckBox,
-    ComboBox,
-    Slider,
-    TextEdit,
-    Label,
-    ProgressBar,
-    RadioButton,
-    GroupBox,
-    TabWidget,
-    SpinBox,
+    // ...
     Picture,   // ADD
     Any,
 }
@@ -638,20 +600,8 @@ pub enum WidgetKind {
 
 ```rust
 pub enum FoundWidget {
-    PushButton(crate::PushButton),
-    LineEdit(crate::LineEdit),
-    CheckBox(crate::CheckBox),
-    ComboBox(crate::ComboBox),
-    Slider(crate::Slider),
-    TextEdit(crate::TextEdit),
-    Label(crate::Label),
-    ProgressBar(crate::ProgressBar),
-    RadioButton(crate::RadioButton),
-    GroupBox(crate::GroupBox),
-    TabWidget(crate::TabWidget),
-    SpinBox(crate::SpinBox),
+    // ...
     Picture(crate::Picture),   // ADD
-    Widget(Widget),
 }
 ```
 
@@ -673,9 +623,7 @@ Add the new header to the rerun list:
 
 ```rust
 for name in &[
-    "signal", "app", "widget", "button", "label", "input",
-    "checkbox", "combobox", "textedit", "slider", "timer",
-    "layout", "dialog", "uiloader", "progress", "filedialog",
+    // ...
     "picture",  // ADD THIS
 ] {
     println!("cargo:rerun-if-changed=src/cpp/{}.h", name);

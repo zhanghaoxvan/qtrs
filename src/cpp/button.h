@@ -1,9 +1,9 @@
 // src/cpp/button.h — QPushButton
 #pragma once
 
-#include <QObject>
-#include <QPushButton>
-#include <QString>
+#include <QtCore/QObject>
+#include <QtWidgets/QPushButton>
+#include <QtCore/QString>
 #include <string>
 
 #include "signal.h"

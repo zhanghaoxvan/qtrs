@@ -1,9 +1,9 @@
 // src/cpp/spinbox.h — QSpinBox
 #pragma once
 
-#include <QObject>
-#include <QSpinBox>
-#include <QString>
+#include <QtCore/QObject>
+#include <QtWidgets/QSpinBox>
+#include <QtCore/QString>
 #include <string>
 
 #include "signal.h"

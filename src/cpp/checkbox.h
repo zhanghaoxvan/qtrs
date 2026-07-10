@@ -1,9 +1,9 @@
 // src/cpp/checkbox.h — QCheckBox
 #pragma once
 
-#include <QCheckBox>
-#include <QObject>
-#include <QString>
+#include <QtWidgets/QCheckBox>
+#include <QtCore/QObject>
+#include <QtCore/QString>
 #include <string>
 
 #include "signal.h"

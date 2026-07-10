@@ -1,10 +1,10 @@
 // src/cpp/tabwidget.h — QTabWidget
 #pragma once
 
-#include <QObject>
-#include <QTabWidget>
-#include <QWidget>
-#include <QString>
+#include <QtCore/QObject>
+#include <QtWidgets/QTabWidget>
+#include <QtWidgets/QWidget>
+#include <QtCore/QString>
 #include <string>
 
 #include "signal.h"

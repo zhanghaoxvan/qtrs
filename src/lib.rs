@@ -10,7 +10,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! qtrs = "0.2.4"
+//! qtrs = "0.2.5"
 //! ```
 //!
 //! ## Features
@@ -22,7 +22,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! qtrs = { version = "0.2.4", features = ["ui"] }
+//! qtrs = { version = "0.2.5", features = ["ui"] }
 //! ```
 //!
 //! ## Design principles
@@ -112,8 +112,8 @@
 //! ## Linking
 //!
 //! Qt6 (Core, Gui, Widgets) must be installed with development headers.
-//! The build script uses `pkg-config` to locate them. If you see
-//! `Qt6 Library is not installed!`, install the `qt6-base-dev` package
+//! The build script uses `qmake` to locate them. If you see
+//! `Qt not found!`, install the `qt6-base-dev` package
 //! (or equivalent) for your distribution.
 
 pub mod app;
@@ -140,6 +140,8 @@ pub mod timer;
 mod signal;
 pub mod widget;
 pub mod filedialog;
+pub mod point;
+
 
 #[cfg(feature = "ui")]
 pub mod loader;
@@ -168,6 +170,8 @@ pub use spinbox::SpinBox;
 pub use menu::{Menu, MenuBar};
 pub use conn::{ConnectExt, ConnType, SignalMeta, SlotMeta};
 pub use filedialog::FileDialog;
+pub use point::Point;
+
 
 #[cfg(feature = "ui")]
 pub use loader::UiLoader;
@@ -184,8 +188,9 @@ pub mod prelude {
         GridLayout, HBoxLayout, Label, LineEdit, PushButton, Slider,
         TextEdit, Timer, VBoxLayout, Widget, WidgetKind,
         ProgressBar, RadioButton, GroupBox, TabWidget, SpinBox, Menu, MenuBar,
-        ConnectExt, ConnType, signals, FileDialog
+        ConnectExt, ConnType, signals, FileDialog, Point
     };
+    
     #[cfg(feature = "ui")]
     pub use super::UiLoader;
 }

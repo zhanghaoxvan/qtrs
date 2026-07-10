@@ -1,9 +1,9 @@
 // src/cpp/radiobutton.h — QRadioButton
 #pragma once
 
-#include <QObject>
-#include <QRadioButton>
-#include <QString>
+#include <QtCore/QObject>
+#include <QtWidgets/QRadioButton>
+#include <QtCore/QString>
 #include <string>
 
 #include "signal.h"

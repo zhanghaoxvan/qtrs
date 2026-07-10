@@ -1,8 +1,8 @@
 // src/cpp/groupbox.h — QGroupBox
 #pragma once
 
-#include <QGroupBox>
-#include <QString>
+#include <QtWidgets/QGroupBox>
+#include <QtCore/QString>
 #include <string>
 
 /// Create a new QGroupBox with title and optional parent.

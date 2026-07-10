@@ -4,8 +4,8 @@
 
 #include <cstdint>
 #include <string>
-#include <QObject>
-#include <Qt>
+#include <QtCore/QObject>
+#include <QtCore/Qt>
 
 #include "rust/cxx.h"
 

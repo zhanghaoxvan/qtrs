@@ -8,6 +8,7 @@
 use cxx::let_cxx_string;
 
 use crate::ffi;
+use crate::Point;
 
 /// Polymorphic access to the underlying `QWidget*` pointer.
 ///
@@ -253,6 +254,18 @@ impl Widget {
         debug_assert!(!self.ptr.is_null());
         let_cxx_string!(c_css = css);
         unsafe { ffi::QWidget_setStyleSheet(self.ptr, &c_css); }
+    }
+
+    /// Move widget to (x, y) coordinates.
+    pub fn move_to(&self, x: i32, y: i32) {
+        debug_assert!(!self.ptr.is_null(), "Widget::move_to on null pointer");
+        unsafe { ffi::QWidget_move(self.ptr, x, y); }
+    }
+
+    /// Move widget to a Point position.
+    pub fn move_to_point(&self, point: Point) {
+        debug_assert!(!self.ptr.is_null(), "Widget::move_to_point on null pointer");
+        unsafe { ffi::QWidget_moveToPoint(self.ptr, point.to_raw()); }
     }
 
     /// Find a named child widget by its `objectName`.

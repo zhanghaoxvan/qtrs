@@ -1,9 +1,9 @@
 // src/cpp/textedit.h — QTextEdit (multi-line)
 #pragma once
 
-#include <QObject>
-#include <QString>
-#include <QTextEdit>
+#include <QtCore/QObject>
+#include <QtCore/QString>
+#include <QtWidgets/QTextEdit>
 #include <string>
 
 #include "rust/cxx.h"

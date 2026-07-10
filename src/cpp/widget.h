@@ -1,9 +1,10 @@
 // src/cpp/widget.h — QWidget and common properties
 #pragma once
 
-#include <QIcon>
-#include <QString>
-#include <QWidget>
+#include "qwidget.h"
+#include <QtGui/QIcon>
+#include <QtCore/QString>
+#include <QtWidgets/QWidget>
 #include <string>
 
 inline QWidget *QWidget_new(QWidget *parent) { return new QWidget(parent); }
@@ -46,4 +47,10 @@ inline void QWidget_setStyleSheet(QWidget *w, const std::string &css) {
 }
 inline void QWidget_disconnectAll(QWidget *w) {
     QObject::disconnect(w, nullptr, nullptr, nullptr);
+}
+inline void QWidget_move(QWidget *w, int x, int y) {
+    w->move(x, y);
+}
+inline void QWidget_moveToPoint(QWidget *w, QPoint *p) {
+    w->move(*p);
 }

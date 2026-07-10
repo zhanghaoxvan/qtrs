@@ -1,8 +1,8 @@
 // src/cpp/dialog.h — QMessageBox convenience dialogs
 #pragma once
 
-#include <QMessageBox>
-#include <QString>
+#include <QtWidgets/QMessageBox>
+#include <QtCore/QString>
 #include <string>
 
 inline void QMessageBox_information(QWidget *parent, const std::string &title,

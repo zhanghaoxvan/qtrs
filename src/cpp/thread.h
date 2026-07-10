@@ -1,8 +1,8 @@
 // src/cpp/thread.h
 
 #pragma once
-#include <QThread>
-#include <QCoreApplication>
+#include <QtCore/QThread>
+#include <QtCore/QCoreApplication>
 
 /// Returns true if the current thread is the GUI (main) thread
 inline bool QObject_isInGuiThread() {

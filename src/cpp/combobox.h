@@ -1,9 +1,9 @@
 // src/cpp/combobox.h — QComboBox
 #pragma once
 
-#include <QComboBox>
-#include <QObject>
-#include <QString>
+#include <QtWidgets/QComboBox>
+#include <QtCore/QObject>
+#include <QtCore/QString>
 #include <string>
 
 #include "rust/cxx.h"

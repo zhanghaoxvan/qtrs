@@ -3,10 +3,10 @@
 
 #ifdef QTRS_HAS_UI
 
-#include <QFile>
-#include <QString>
-#include <QUiLoader>
-#include <QWidget>
+#include <QtCore/QFile>
+#include <QtCore/QString>
+#include <QtUiTools/QUiLoader>
+#include <QtWidgets/QWidget>
 #include <string>
 
 inline QUiLoader *QUiLoader_new() { return new QUiLoader(); }

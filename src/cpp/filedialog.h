@@ -1,9 +1,9 @@
 // src/cpp/filedialog.h — QFileDialog wrapper
 #pragma once
 
-#include <QFileDialog>
-#include <QString>
-#include <QWidget>
+#include <QtWidgets/QFileDialog>
+#include <QtCore/QString>
+#include <QtWidgets/QWidget>
 #include <string>
 #include <vector>
 #include "rust/cxx.h"

@@ -1,11 +1,11 @@
 // src/cpp/menu.h — QMenu + QMenuBar
 #pragma once
 
-#include <QAction>
-#include <QMenu>
-#include <QMenuBar>
-#include <QObject>
-#include <QString>
+#include <QtGui/QAction>
+#include <QtWidgets/QMenu>
+#include <QtWidgets/QMenuBar>
+#include <QtCore/QObject>
+#include <QtCore/QString>
 #include <string>
 
 #include "signal.h"

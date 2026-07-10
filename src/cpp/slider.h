@@ -1,9 +1,9 @@
 // src/cpp/slider.h — QSlider
 #pragma once
 
-#include <QObject>
-#include <QSlider>
-#include <Qt>
+#include <QtCore/QObject>
+#include <QtWidgets/QSlider>
+#include <QtCore/Qt>
 
 #include "signal.h"
 

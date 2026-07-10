@@ -22,7 +22,5 @@
 #include "menu.h"
 #include "thread.h"
 #include "filedialog.h"
-
-#ifdef QTRS_HAS_UI
-#    include "uiloader.h"
-#endif
+#include "point.h"
+#include "uiloader.h"

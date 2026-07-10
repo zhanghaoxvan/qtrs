@@ -2,23 +2,23 @@
 #pragma once
 
 #include "qwidget.h"
-#include <QGridLayout>
-#include <QHBoxLayout>
-#include <QLabel>
-#include <QLineEdit>
-#include <QPushButton>
-#include <QCheckBox>
-#include <QComboBox>
-#include <QSlider>
-#include <QTextEdit>
-#include <QVBoxLayout>
-#include <QWidget>
-#include <QProgressBar>
-#include <QRadioButton>
-#include <QGroupBox>
-#include <QSpinBox>
-#include <QMenu>
-#include <QMenuBar>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QComboBox>
+#include <QtWidgets/QSlider>
+#include <QtWidgets/QTextEdit>
+#include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QWidget>
+#include <QtWidgets/QProgressBar>
+#include <QtWidgets/QRadioButton>
+#include <QtWidgets/QGroupBox>
+#include <QtWidgets/QSpinBox>
+#include <QtWidgets/QMenu>
+#include <QtWidgets/QMenuBar>
 
 // --- QVBoxLayout ---
 inline QVBoxLayout *QVBoxLayout_new(QWidget *parent) {

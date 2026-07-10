@@ -29,11 +29,11 @@ fn main() {
     // ============================================================
     // Title
     // ============================================================
-    let title_label = Label::new("\n=== qtrs Widget Gallery ===")
+    let title_label = Label::new("\nqtrs Widget Gallery")
         .parent(&window)
         .build();
     main_layout.add_widget(Box::new(title_label));
-
+    
     // ============================================================
     // Section 1: Buttons
     // ============================================================
@@ -294,7 +294,7 @@ fn main() {
             dialog::information(
                 None,  // No parent needed
                 "About",
-                "qtrs Widget Gallery\nVersion 0.2.4\n\nAll widgets test",
+                "qtrs Widget Gallery\nVersion 0.2.5\n\nAll widgets test",
             );
         })
         .parent(&window)

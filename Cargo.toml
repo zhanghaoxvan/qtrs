@@ -1,6 +1,6 @@
 [package]
 name = "qtrs"
-version = "0.2.4"
+version = "0.2.5"
 edition = "2021"
 authors = ["zhanghaoxvan <3592114583@qq.com>"]
 license = "MIT OR Apache-2.0"
@@ -14,9 +14,7 @@ categories = ["gui", "api-bindings"]
 cxx = "1.0"
 
 [build-dependencies]
-system-deps = "1.3"
 cxx-build = "1.0"
-pkg-config = "0.3"
 
 [features]
 default = []
@@ -35,7 +33,3 @@ required-features = ["ui"]
 name = "demo"
 path = "examples/demo/demo.rs"
 
-[package.metadata.system-deps]
-qt6-core = { name = "Qt6Core", version = "6.0" }
-qt6-gui = { name = "Qt6Gui", version = "6.0" }
-qt6-widgets = { name = "Qt6Widgets", version = "6.0" }

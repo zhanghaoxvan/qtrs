@@ -1,8 +1,8 @@
 // src/cpp/progress.h — QProgressBar
 #pragma once
 
-#include <QProgressBar>
-#include <QString>
+#include <QtWidgets/QProgressBar>
+#include <QtCore/QString>
 
 inline QProgressBar *QProgressBar_new(QWidget *parent) {
     return new QProgressBar(parent);

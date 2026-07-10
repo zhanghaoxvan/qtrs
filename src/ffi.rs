@@ -80,6 +80,8 @@ pub mod ffi_inner {
         unsafe fn QWidget_delete(widget: *mut QWidget);
         unsafe fn QWidget_setLayout(widget: *mut QWidget, layout: *mut QLayout);
         unsafe fn QWidget_setWindowIcon(widget: *mut QWidget, icon_path: &CxxString);
+        unsafe fn QWidget_move(widget: *mut QWidget, x: i32, y: i32);
+        unsafe fn QWidget_moveToPoint(widget: *mut QWidget, point: *mut QPoint);
 
         // --- Common QWidget properties ---
         unsafe fn QWidget_setEnabled(widget: *mut QWidget, enabled: bool);
@@ -319,6 +321,10 @@ pub mod ffi_inner {
             caption: &CxxString,
             dir: &CxxString,
         ) -> String;
+
+        // --- QPoint ---
+        unsafe fn QPoint_new(x: i32, y: i32) -> *mut QPoint;
+        unsafe fn QPoint_delete(point: *mut QPoint);
 
     }
 

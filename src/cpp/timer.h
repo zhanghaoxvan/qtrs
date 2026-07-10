@@ -1,8 +1,8 @@
 // src/cpp/timer.h — QTimer
 #pragma once
 
-#include <QObject>
-#include <QTimer>
+#include <QtCore/QObject>
+#include <QtCore/QTimer>
 
 #include "signal.h"
 

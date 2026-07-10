@@ -93,34 +93,7 @@ Qt6 with development headers:
 | macOS (Homebrew) | `brew install qt@6` |
 | Windows | Install from [qt.io](https://www.qt.io/download-open-source) or via [vcpkg](https://vcpkg.io) |
 
-### macOS notes
-
-After installing via Homebrew, tell `pkg-config` where to find Qt:
-
-```sh
-export PKG_CONFIG_PATH="$(brew --prefix qt@6)/lib/pkgconfig:$PKG_CONFIG_PATH"
-```
-
-Add this to your `~/.zshrc` or `~/.bashrc` for persistence.
-
-### Windows notes
-
-The build script uses `pkg-config` to locate Qt. When using **vcpkg**,
-set the environment variable:
-
-```powershell
-$env:PKG_CONFIG_PATH = "$env:VCPKG_ROOT\installed\x64-windows\lib\pkgconfig"
-```
-
-When using the **official Qt installer**, set `CMAKE_PREFIX_PATH` and
-ensure `qmake6` is on your `PATH`.
-
-```powershell
-$env:CMAKE_PREFIX_PATH = "C:\Qt\6.8.2\msvc2022_64"
-$env:PATH += ";C:\Qt\6.8.2\msvc2022_64\bin"
-```
-
-A Microsoft Visual Studio build toolchain (MSVC) is required on Windows.
+Remember to set a `PATH` environment to tell `qtrs` where the `qmake` are.
 
 ## Installation
 
@@ -128,13 +101,13 @@ Add to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-qtrs = "0.2.4"
+qtrs = "0.2.5"
 ```
 Enable .ui file loading:
 
 ```toml
 [dependencies]
-qtrs = { version = "0.2.4", features = ["ui"] }
+qtrs = { version = "0.2.5", features = ["ui"] }
 ```
 
 ## Memory management

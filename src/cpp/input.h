@@ -1,9 +1,9 @@
 // src/cpp/input.h — QLineEdit
 #pragma once
 
-#include <QLineEdit>
-#include <QObject>
-#include <QString>
+#include <QtWidgets/QLineEdit>
+#include <QtCore/QObject>
+#include <QtCore/QString>
 #include <string>
 
 #include "rust/cxx.h"
