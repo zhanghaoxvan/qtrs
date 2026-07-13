@@ -1,4 +1,4 @@
-// src/cpp/uiloader.h — .ui file loading (feature = "ui")
+// src/cpp/uiloader.h — .ui file loading
 #pragma once
 
 #ifdef QTRS_HAS_UI

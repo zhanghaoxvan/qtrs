@@ -171,6 +171,11 @@ impl MenuBar {
         debug_assert!(!ptr.is_null());
         Self { ptr, has_parent: true, menus: Vec::new() }
     }
+
+    /// Get the raw menu bar pointer for use with [`MainWindow::set_menu_bar`].
+    pub(crate) fn menubar_ptr(&self) -> *mut ffi::QMenuBar {
+        self.ptr
+    }
 }
 
 impl AsWidget for MenuBar {

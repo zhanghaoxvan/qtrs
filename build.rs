@@ -1,6 +1,5 @@
 // build.rs — supports both Qt5 and Qt6, using qmake only
 
-use std::env;
 use std::path::PathBuf;
 use std::process::Command;
 
@@ -22,7 +21,6 @@ fn main() {
     );
 
     let major = if qt_version.starts_with("6.") { 6 } else { 5 };
-    let is_ui = env::var("CARGO_FEATURE_UI").is_ok();
 
     // 2. Get paths from qmake
     let lib_path = qmake_query("QT_INSTALL_LIBS")
@@ -30,28 +28,24 @@ fn main() {
     let include_path = qmake_query("QT_INSTALL_HEADERS")
         .unwrap_or_else(|| format!("{}/include", qt_prefix));
     
-    // QtUiTools include path (only when "ui" feature is enabled)
-    let uitools_include = if is_ui {
-        qmake_query("QT_INSTALL_HEADERS")
-            .map(|path| {
-                let candidates = [
-                    format!("{}/QtUiTools", path),
-                    format!("{}/qt6/QtUiTools", path),
-                    format!("{}/Qt6/QtUiTools", path),
-                    format!("{}/qt5/QtUiTools", path),
-                    format!("{}/Qt5/QtUiTools", path),
-                ];
-                for candidate in candidates {
-                    if PathBuf::from(&candidate).exists() {
-                        return candidate;
-                    }
+    // QtUiTools include path (always needed for C++ compilation)
+    let uitools_include = qmake_query("QT_INSTALL_HEADERS")
+        .map(|path| {
+            let candidates = [
+                format!("{}/QtUiTools", path),
+                format!("{}/qt6/QtUiTools", path),
+                format!("{}/Qt6/QtUiTools", path),
+                format!("{}/qt5/QtUiTools", path),
+                format!("{}/Qt5/QtUiTools", path),
+            ];
+            for candidate in candidates {
+                if PathBuf::from(&candidate).exists() {
+                    return candidate;
                 }
-                format!("{}/QtUiTools", path)
-            })
-            .unwrap_or_else(|| format!("{}/QtUiTools", include_path))
-    } else {
-        String::new()
-    };
+            }
+            format!("{}/QtUiTools", path)
+        })
+        .unwrap_or_else(|| format!("{}/QtUiTools", include_path));
 
     println!("cargo:rustc-link-search=native={}", lib_path);
     println!("cargo:include={}", include_path);
@@ -60,9 +54,7 @@ fn main() {
     println!("cargo:rustc-link-lib=Qt{}Core", major);
     println!("cargo:rustc-link-lib=Qt{}Gui", major);
     println!("cargo:rustc-link-lib=Qt{}Widgets", major);
-    if is_ui {
-        println!("cargo:rustc-link-lib=Qt{}UiTools", major);
-    }
+    println!("cargo:rustc-link-lib=Qt{}UiTools", major);
 
     // 4. Pass Qt version to Rust via cfg flags
     println!("cargo:rustc-cfg=qt_{}", major);
@@ -73,11 +65,9 @@ fn main() {
     // Add main include
     build.include(&include_path);
     
-    // QtUiTools include and C++ define (only when "ui" feature is enabled)
-    if is_ui {
-        build.include(&uitools_include);
-        build.define("QTRS_HAS_UI", None);
-    }
+    // QtUiTools include and C++ define (always; Rust "ui" feature gates the Rust API)
+    build.include(&uitools_include);
+    build.define("QTRS_HAS_UI", None);
 
     // Add Qt module includes
     let modules = ["QtCore", "QtGui", "QtWidgets"];
@@ -119,9 +109,13 @@ fn main() {
     for name in &[
         "signal", "app", "widget", "button", "label", "input",
         "checkbox", "combobox", "textedit", "slider", "timer",
-        "layout", "dialog", "uiloader", "progress", "filedialog",
+        "layout", "dialog", "uiloader", "progressbar", "filedialog",
         "radiobutton", "groupbox", "tabwidget", "spinbox", "menu",
-        "thread"
+        "thread", "point", "listwidget",
+        "action", "mainwindow", "toolbar", "statusbar",
+        "messagebox", "inputdialog", "progressdialog",
+        "tablewidget", "treewidget", "scrollarea",
+        "stackedwidget", "splitter",
     ] {
         println!("cargo:rerun-if-changed=src/cpp/{}.h", name);
     }

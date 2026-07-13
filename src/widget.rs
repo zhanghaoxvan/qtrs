@@ -346,6 +346,41 @@ impl Widget {
                 if ptr.is_null() { None }
                 else { Some(FoundWidget::SpinBox(crate::SpinBox::from_raw(ptr))) }
             }
+            WidgetKind::ListWidget => {
+                let ptr = unsafe { ffi::QWidget_findListWidget(self.ptr, &c_name) };
+                if ptr.is_null() { None }
+                else { Some(FoundWidget::ListWidget(crate::ListWidget::from_raw(ptr, name))) }
+            }
+            WidgetKind::ProgressDialog => {
+                let ptr = unsafe { ffi::QWidget_findProgressDialog(self.ptr, &c_name) };
+                if ptr.is_null() { None }
+                else { Some(FoundWidget::ProgressDialog(crate::ProgressDialog::from_raw(ptr))) }
+            }
+            WidgetKind::ScrollArea => {
+                let ptr = unsafe { ffi::QWidget_findScrollArea(self.ptr, &c_name) };
+                if ptr.is_null() { None }
+                else { Some(FoundWidget::ScrollArea(crate::ScrollArea::from_raw(ptr))) }
+            }
+            WidgetKind::TableWidget => {
+                let ptr = unsafe { ffi::QWidget_findTableWidget(self.ptr, &c_name) };
+                if ptr.is_null() { None }
+                else { Some(FoundWidget::TableWidget(crate::TableWidget::from_raw(ptr))) }
+            }
+            WidgetKind::TreeWidget => {
+                let ptr = unsafe { ffi::QWidget_findTreeWidget(self.ptr, &c_name) };
+                if ptr.is_null() { None }
+                else { Some(FoundWidget::TreeWidget(crate::TreeWidget::from_raw(ptr))) }
+            }
+            WidgetKind::StackedWidget => {
+                let ptr = unsafe { ffi::QWidget_findStackedWidget(self.ptr, &c_name) };
+                if ptr.is_null() { None }
+                else { Some(FoundWidget::StackedWidget(crate::StackedWidget::from_raw(ptr))) }
+            }
+            WidgetKind::Splitter => {
+                let ptr = unsafe { ffi::QWidget_findSplitter(self.ptr, &c_name) };
+                if ptr.is_null() { None }
+                else { Some(FoundWidget::Splitter(crate::Splitter::from_raw(ptr))) }
+            }
             WidgetKind::Any => {
                 let ptr = unsafe { ffi::QWidget_findWidget(self.ptr, &c_name) };
                 if ptr.is_null() { None }
@@ -374,6 +409,13 @@ pub enum WidgetKind {
     GroupBox,
     TabWidget,
     SpinBox,
+    ListWidget,
+    ProgressDialog,
+    ScrollArea,
+    TableWidget,
+    TreeWidget,
+    StackedWidget,
+    Splitter,
     /// Any `QWidget` (no signal support).
     Any,
 }
@@ -392,6 +434,13 @@ pub enum FoundWidget {
     GroupBox(crate::GroupBox),
     TabWidget(crate::TabWidget),
     SpinBox(crate::SpinBox),
+    ListWidget(crate::ListWidget),
+    ProgressDialog(crate::ProgressDialog),
+    ScrollArea(crate::ScrollArea),
+    TableWidget(crate::TableWidget),
+    TreeWidget(crate::TreeWidget),
+    StackedWidget(crate::StackedWidget),
+    Splitter(crate::Splitter),
     Widget(Widget),
 }
 

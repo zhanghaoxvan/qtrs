@@ -6,6 +6,7 @@
 #include <string>
 #include <QtCore/QObject>
 #include <QtCore/Qt>
+#include <sys/types.h>
 
 #include "rust/cxx.h"
 
@@ -16,9 +17,11 @@
 static bool g_hasVoidTrampoline = false;
 static bool g_hasBoolTrampoline = false;
 static bool g_hasIntTrampoline = false;
+static bool g_hasStringTrampoline = false;
 static rust::Fn<void(uint64_t)>       g_voidTrampoline;
 static rust::Fn<void(uint64_t, bool)> g_boolTrampoline;
 static rust::Fn<void(uint64_t, int32_t)> g_intTrampoline;
+static rust::Fn<void(uint64_t, rust::String)> g_stringTrampoline;
 
 inline void qtrs_setVoidTrampoline(rust::Fn<void(uint64_t)> t) {
     g_voidTrampoline = t;
@@ -31,6 +34,10 @@ inline void qtrs_setBoolTrampoline(rust::Fn<void(uint64_t, bool)> t) {
 inline void qtrs_setIntTrampoline(rust::Fn<void(uint64_t, int32_t)> t) {
     g_intTrampoline = t;
     g_hasIntTrampoline = true;
+}
+inline void qtrs_setStringTrampoline(rust::Fn<void(uint64_t, rust::String)> t) {
+    g_stringTrampoline = t;
+    g_hasStringTrampoline = true;
 }
 
 // ============================================================

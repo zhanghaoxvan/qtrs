@@ -16,7 +16,7 @@ management and signal/callback bridging.
 - RAII cleanup — automatic C++ deletion, parent-child aware (no double-free)
 - Signal bridging — Qt signals invoke Rust closures via a global trampoline
 - Layout ownership — adding a widget to a layout transfers ownership
-- .ui file loading — load Qt Designer `.ui` files at runtime (`feature = "ui"`)
+- .ui file loading — load Qt Designer `.ui` files at runtime
 - Zero unsafe in public API — all FFI is encapsulated
 
 ## Quick Start
@@ -53,33 +53,74 @@ You can see [demo.rs](https://github.com/zhanghaoxvan/qtrs/blob/main/examples/de
 
 ## Widgets
 
+### Windows & Containers
 | Type | Qt Class | Signals |
 |------|----------|---------|
 | `Application` | `QApplication` | — |
 | `Widget` | `QWidget` | — |
-| `PushButton` | `QPushButton` | `on_clicked` |
-| `Label` | `QLabel` | — |
-| `LineEdit` | `QLineEdit` | `on_return_pressed` |
-| `CheckBox` | `QCheckBox` | `on_toggled(bool)` |
-| `RadioButton` | `QRadioButton` | `on_toggled(bool)` |
-| `ComboBox` | `QComboBox` | `on_current_text_changed`<br>`on_current_index_changed(i32)` |
-| `TextEdit` | `QTextEdit` | `on_text_changed` |
-| `Slider` | `QSlider` | `on_value_changed(i32)` |
-| `SpinBox` | `QSpinBox` | `on_value_changed(i32)` |
-| `ProgressBar` | `QProgressBar` | — |
+| `MainWindow` | `QMainWindow` | — |
 | `GroupBox` | `QGroupBox` | — |
 | `TabWidget` | `QTabWidget` | `on_current_changed(i32)` |
+| `StackedWidget` | `QStackedWidget` | `on_current_changed(i32)` |
+| `ScrollArea` | `QScrollArea` | — |
+| `Splitter` | `QSplitter` | — |
+
+### Buttons & Controls
+| Type | Qt Class | Signals |
+|------|----------|---------|
+| `PushButton` | `QPushButton` | `on_clicked` |
+| `CheckBox` | `QCheckBox` | `on_toggled(bool)` |
+| `RadioButton` | `QRadioButton` | `on_toggled(bool)` |
+| `Slider` | `QSlider` | `on_value_changed(i32)` |
+| `SpinBox` | `QSpinBox` | `on_value_changed(i32)` |
+| `ComboBox` | `QComboBox` | `on_current_text_changed`<br>`on_current_index_changed(i32)` |
+
+### Text & Display
+| Type | Qt Class | Signals |
+|------|----------|---------|
+| `Label` | `QLabel` | — |
+| `LineEdit` | `QLineEdit` | `on_return_pressed` |
+| `TextEdit` | `QTextEdit` | `on_text_changed` |
+| `ProgressBar` | `QProgressBar` | — |
+
+### Item Views
+| Type | Qt Class | Signals |
+|------|----------|---------|
+| `ListWidget` | `QListWidget` | `on_item_clicked(String)`<br>`on_item_double_clicked(String)`<br>`on_current_item_changed(String)` |
+| `TableWidget` | `QTableWidget` | `on_cell_clicked`<br>`on_cell_double_clicked`<br>`on_current_cell_changed` |
+| `TreeWidget` | `QTreeWidget` | `on_item_clicked(String)`<br>`on_item_double_clicked(String)`<br>`on_item_expanded(String)`<br>`on_item_collapsed(String)`<br>`on_current_item_changed(String)` |
+
+### Menus & Toolbars
+| Type | Qt Class | Signals |
+|------|----------|---------|
+| `Action` | `QAction` | `on_triggered(bool)`<br>`on_toggled(bool)` |
 | `Menu` | `QMenu` | — |
 | `MenuBar` | `QMenuBar` | — |
-| `Timer` | `QTimer` | `on_timeout`<br>`single_shot(ms, fn)` |
+| `ToolBar` | `QToolBar` | per-action callbacks via `add_action` |
+| `StatusBar` | `QStatusBar` | — |
+
+### Dialogs
+| Type | Qt Class | Notes |
+|------|----------|-------|
+| `MessageBox` | `QMessageBox` | Builder + `exec()`, static `about()` |
+| `FileDialog` | `QFileDialog` | `open_file`, `save_file`, `select_directory` (static) |
+| `ProgressDialog` | `QProgressDialog` | Builder with `set_value` / `was_canceled` |
+| `InputDialog` | `QInputDialog` | `get_text`, `get_int`, `get_double`, `get_item` (static) |
+| `MessageBox` | `QMessageBox` | `information`, `warning`, `critical`, `question` (static) |
+
+### Layouts
+| Type | Qt Class | Signals |
+|------|----------|---------|
 | `VBoxLayout` | `QVBoxLayout` | — |
 | `HBoxLayout` | `QHBoxLayout` | — |
 | `GridLayout` | `QGridLayout` | — |
-| `FileDialog` | `QFileDialog` | — |
 
----
-
-This matches the current codebase. Remove `Status` column as requested.
+### System
+| Type | Qt Class | Signals |
+|------|----------|---------|
+| `Timer` | `QTimer` | `on_timeout`<br>`single_shot(ms, fn)` |
+| `UiLoader` | `QUiLoader` | `.ui` file loading |
+| `Point` | `QPoint` | — |
 
 ## Prerequisites
 
@@ -101,13 +142,7 @@ Add to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-qtrs = "0.2.5"
-```
-Enable .ui file loading:
-
-```toml
-[dependencies]
-qtrs = { version = "0.2.5", features = ["ui"] }
+qtrs = "0.3.0"
 ```
 
 ## Memory management

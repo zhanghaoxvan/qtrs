@@ -1,6 +1,6 @@
 [package]
 name = "qtrs"
-version = "0.2.5"
+version = "0.3.0"
 edition = "2021"
 authors = ["zhanghaoxvan <3592114583@qq.com>"]
 license = "MIT OR Apache-2.0"
@@ -16,10 +16,6 @@ cxx = "1.0"
 [build-dependencies]
 cxx-build = "1.0"
 
-[features]
-default = []
-ui = []    # enable .ui file loading from Qt Designer (requires qt6-tools-dev)
-
 [[example]]
 name = "basic"
 path = "examples/basic/basic.rs"
@@ -27,7 +23,6 @@ path = "examples/basic/basic.rs"
 [[example]]
 name = "ui"
 path = "examples/ui/ui.rs"
-required-features = ["ui"]
 
 [[example]]
 name = "demo"

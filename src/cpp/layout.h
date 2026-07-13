@@ -17,8 +17,15 @@
 #include <QtWidgets/QRadioButton>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QSpinBox>
+#include <QtWidgets/QListWidget>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
+#include <QtWidgets/QTableWidget>
+#include <QtWidgets/QTreeWidget>
+#include <QtWidgets/QStackedWidget>
+#include <QtWidgets/QSplitter>
+#include <QtWidgets/QProgressDialog>
+#include <QtWidgets/QScrollArea>
 
 // --- QVBoxLayout ---
 inline QVBoxLayout *QVBoxLayout_new(QWidget *parent) {
@@ -143,4 +150,25 @@ inline QTabWidget *QWidget_findTabWidget(QWidget *parent, const std::string &nam
 }
 inline QSpinBox *QWidget_findSpinBox(QWidget *parent, const std::string &name) {
     return parent->findChild<QSpinBox *>(QString::fromStdString(name));
+}
+inline QListWidget *QWidget_findListWidget(QWidget *parent, const std::string &name) {
+    return parent->findChild<QListWidget *>(QString::fromStdString(name));
+}
+inline QProgressDialog *QWidget_findProgressDialog(QWidget *parent, const std::string &name) {
+    return parent->findChild<QProgressDialog *>(QString::fromStdString(name));
+}
+inline QScrollArea *QWidget_findScrollArea(QWidget *parent, const std::string &name) {
+    return parent->findChild<QScrollArea *>(QString::fromStdString(name));
+}
+inline QTableWidget *QWidget_findTableWidget(QWidget *parent, const std::string &name) {
+    return parent->findChild<QTableWidget *>(QString::fromStdString(name));
+}
+inline QTreeWidget *QWidget_findTreeWidget(QWidget *parent, const std::string &name) {
+    return parent->findChild<QTreeWidget *>(QString::fromStdString(name));
+}
+inline QStackedWidget *QWidget_findStackedWidget(QWidget *parent, const std::string &name) {
+    return parent->findChild<QStackedWidget *>(QString::fromStdString(name));
+}
+inline QSplitter *QWidget_findSplitter(QWidget *parent, const std::string &name) {
+    return parent->findChild<QSplitter *>(QString::fromStdString(name));
 }

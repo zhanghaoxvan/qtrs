@@ -294,7 +294,7 @@ fn main() {
             dialog::information(
                 None,  // No parent needed
                 "About",
-                "qtrs Widget Gallery\nVersion 0.2.5\n\nAll widgets test",
+                "qtrs Widget Gallery\nVersion 0.3.0\n\nAll widgets test",
             );
         })
         .parent(&window)

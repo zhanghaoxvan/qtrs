@@ -37,6 +37,18 @@ pub mod ffi_inner {
         type QMenuBar;
         type QIcon;
         type QPoint;
+        type QListWidget;
+        type QAction;
+        type QMainWindow;
+        type QToolBar;
+        type QStatusBar;
+        type QMessageBox;
+        type QProgressDialog;
+        type QTableWidget;
+        type QTreeWidget;
+        type QScrollArea;
+        type QStackedWidget;
+        type QSplitter;
 
         // --- QObject (base class for signal-slot connections) ---
         type QObject;
@@ -64,6 +76,7 @@ pub mod ffi_inner {
         unsafe fn qtrs_setVoidTrampoline(trampoline: unsafe extern "C" fn(u64));
         unsafe fn qtrs_setBoolTrampoline(trampoline: unsafe extern "C" fn(u64, bool));
         unsafe fn qtrs_setIntTrampoline(trampoline: unsafe extern "C" fn(u64, i32));
+        unsafe fn qtrs_setStringTrampoline(trampoline: unsafe extern "C" fn(u64, String));
 
         // --- QApplication ---
         unsafe fn QApplication_new() -> *mut QApplication;
@@ -223,6 +236,13 @@ pub mod ffi_inner {
         unsafe fn QWidget_findGroupBox(parent: *mut QWidget, name: &CxxString) -> *mut QGroupBox;
         unsafe fn QWidget_findTabWidget(parent: *mut QWidget, name: &CxxString) -> *mut QTabWidget;
         unsafe fn QWidget_findSpinBox(parent: *mut QWidget, name: &CxxString) -> *mut QSpinBox;
+        unsafe fn QWidget_findListWidget(parent: *mut QWidget, name: &CxxString) -> *mut QListWidget;
+        unsafe fn QWidget_findProgressDialog(parent: *mut QWidget, name: &CxxString) -> *mut QProgressDialog;
+        unsafe fn QWidget_findScrollArea(parent: *mut QWidget, name: &CxxString) -> *mut QScrollArea;
+        unsafe fn QWidget_findTableWidget(parent: *mut QWidget, name: &CxxString) -> *mut QTableWidget;
+        unsafe fn QWidget_findTreeWidget(parent: *mut QWidget, name: &CxxString) -> *mut QTreeWidget;
+        unsafe fn QWidget_findStackedWidget(parent: *mut QWidget, name: &CxxString) -> *mut QStackedWidget;
+        unsafe fn QWidget_findSplitter(parent: *mut QWidget, name: &CxxString) -> *mut QSplitter;
 
         // --- QTimer ---
         unsafe fn QTimer_new() -> *mut QTimer;
@@ -326,9 +346,246 @@ pub mod ffi_inner {
         unsafe fn QPoint_new(x: i32, y: i32) -> *mut QPoint;
         unsafe fn QPoint_delete(point: *mut QPoint);
 
+        // ============================================================
+        // ListWidget
+        // ============================================================
+        
+
+        unsafe fn QListWidget_new(parent: *mut QWidget) -> *mut QListWidget;
+        unsafe fn QListWidget_delete(w: *mut QListWidget);
+        unsafe fn QListWidget_addItem(w: *mut QListWidget, text: &CxxString);
+        unsafe fn QListWidget_addItems(w: *mut QListWidget, items: &CxxVector<CxxString>);
+        unsafe fn QListWidget_insertItem(w: *mut QListWidget, row: i32, text: &CxxString);
+        unsafe fn QListWidget_clear(w: *mut QListWidget);
+        unsafe fn QListWidget_removeItem(w: *mut QListWidget, row: i32);
+        unsafe fn QListWidget_count(w: *mut QListWidget) -> i32;
+        unsafe fn QListWidget_itemText(w: *mut QListWidget, row: i32) -> String;
+        unsafe fn QListWidget_currentRow(w: *mut QListWidget) -> i32;
+        unsafe fn QListWidget_currentText(w: *mut QListWidget) -> String;
+        unsafe fn QListWidget_setCurrentRow(w: *mut QListWidget, row: i32);
+        unsafe fn QListWidget_setSelectionMode(w: *mut QListWidget, mode: i32);
+        unsafe fn QListWidget_onItemClicked(w: *mut QListWidget, ctx: u64);
+        unsafe fn QListWidget_onItemDoubleClicked(w: *mut QListWidget, ctx: u64);
+        unsafe fn QListWidget_onCurrentItemChanged(w: *mut QListWidget, ctx: u64);
+        unsafe fn toQWidget_QListWidget(w: *mut QListWidget) -> *mut QWidget;
+        unsafe fn toQWidget_QMainWindow(w: *mut QMainWindow) -> *mut QWidget;
+        unsafe fn toQWidget_QToolBar(toolbar: *mut QToolBar) -> *mut QWidget;
+        unsafe fn toQWidget_QStatusBar(bar: *mut QStatusBar) -> *mut QWidget;
+        unsafe fn toQWidget_QMessageBox(w: *mut QMessageBox) -> *mut QWidget;
+        unsafe fn toQWidget_QProgressDialog(w: *mut QProgressDialog) -> *mut QWidget;
+        unsafe fn toQWidget_QTableWidget(w: *mut QTableWidget) -> *mut QWidget;
+        unsafe fn toQWidget_QTreeWidget(w: *mut QTreeWidget) -> *mut QWidget;
+        unsafe fn toQWidget_QScrollArea(w: *mut QScrollArea) -> *mut QWidget;
+        unsafe fn toQWidget_QStackedWidget(w: *mut QStackedWidget) -> *mut QWidget;
+        unsafe fn toQWidget_QSplitter(w: *mut QSplitter) -> *mut QWidget;
+
+        // --- QAction ---
+        unsafe fn QAction_new(text: &CxxString, parent: *mut QWidget) -> *mut QAction;
+        unsafe fn QAction_delete(action: *mut QAction);
+        unsafe fn QAction_setText(action: *mut QAction, text: &CxxString);
+        unsafe fn QAction_setIcon(action: *mut QAction, icon_path: &CxxString);
+        unsafe fn QAction_setCheckable(action: *mut QAction, checkable: bool);
+        unsafe fn QAction_setChecked(action: *mut QAction, checked: bool);
+        unsafe fn QAction_setShortcut(action: *mut QAction, key: &CxxString);
+        unsafe fn QAction_setEnabled(action: *mut QAction, enabled: bool);
+        unsafe fn QAction_setToolTip(action: *mut QAction, tip: &CxxString);
+        unsafe fn QAction_text(action: *mut QAction) -> String;
+        unsafe fn QAction_isChecked(action: *mut QAction) -> bool;
+        unsafe fn QAction_isEnabled(action: *mut QAction) -> bool;
+        unsafe fn QAction_onTriggered(action: *mut QAction, ctx: u64);
+        unsafe fn QAction_onToggled(action: *mut QAction, ctx: u64);
+
+        // --- QMainWindow ---
+        unsafe fn QMainWindow_new(parent: *mut QWidget) -> *mut QMainWindow;
+        unsafe fn QMainWindow_delete(w: *mut QMainWindow);
+        unsafe fn QMainWindow_setMenuBar(w: *mut QMainWindow, menuBar: *mut QMenuBar);
+        unsafe fn QMainWindow_setCentralWidget(w: *mut QMainWindow, central: *mut QWidget);
+        unsafe fn QMainWindow_setStatusBar(w: *mut QMainWindow, statusBar: *mut QStatusBar);
+        unsafe fn QMainWindow_addToolBar(w: *mut QMainWindow, title: &CxxString) -> *mut QToolBar;
+        unsafe fn QMainWindow_addToolBarBreak(w: *mut QMainWindow);
+        unsafe fn QMainWindow_setWindowTitle(w: *mut QMainWindow, title: &CxxString);
+        unsafe fn QMainWindow_resize(w: *mut QMainWindow, width: i32, height: i32);
+        unsafe fn QMainWindow_show(w: *mut QMainWindow);
+        unsafe fn QMainWindow_hide(w: *mut QMainWindow);
+        unsafe fn QMainWindow_setDockOptions(w: *mut QMainWindow, options: i32);
+        unsafe fn QMainWindow_setTabPosition(w: *mut QMainWindow, areas: i32, tabPos: i32);
+
+        // --- QToolBar ---
+        unsafe fn QToolBar_new(title: &CxxString, parent: *mut QWidget) -> *mut QToolBar;
+        unsafe fn QToolBar_delete(toolbar: *mut QToolBar);
+        unsafe fn QToolBar_addAction(toolbar: *mut QToolBar, text: &CxxString, ctx: u64);
+        unsafe fn QToolBar_addSeparator(toolbar: *mut QToolBar);
+        unsafe fn QToolBar_addWidget(toolbar: *mut QToolBar, widget: *mut QWidget);
+        unsafe fn QToolBar_setMovable(toolbar: *mut QToolBar, movable: bool);
+        unsafe fn QToolBar_setFloatable(toolbar: *mut QToolBar, floatable: bool);
+        unsafe fn QToolBar_setIconSize(toolbar: *mut QToolBar, w: i32, h: i32);
+        unsafe fn QToolBar_setAllowedAreas(toolbar: *mut QToolBar, areas: i32);
+        unsafe fn QToolBar_setToolButtonStyle(toolbar: *mut QToolBar, style: i32);
+        unsafe fn QToolBar_clear(toolbar: *mut QToolBar);
+
+        // --- QStatusBar ---
+        unsafe fn QStatusBar_new(parent: *mut QWidget) -> *mut QStatusBar;
+        unsafe fn QStatusBar_delete(bar: *mut QStatusBar);
+        unsafe fn QStatusBar_showMessage(bar: *mut QStatusBar, text: &CxxString, timeout_ms: i32);
+        unsafe fn QStatusBar_clearMessage(bar: *mut QStatusBar);
+        unsafe fn QStatusBar_addWidget(bar: *mut QStatusBar, widget: *mut QWidget);
+        unsafe fn QStatusBar_addPermanentWidget(bar: *mut QStatusBar, widget: *mut QWidget);
+        unsafe fn QStatusBar_removeWidget(bar: *mut QStatusBar, widget: *mut QWidget);
+        unsafe fn QStatusBar_setSizeGripEnabled(bar: *mut QStatusBar, enabled: bool);
+
+        // --- QMessageBox (object-based) ---
+        unsafe fn QMessageBox_new(parent: *mut QWidget) -> *mut QMessageBox;
+        unsafe fn QMessageBox_delete(w: *mut QMessageBox);
+        unsafe fn QMessageBox_setIcon(w: *mut QMessageBox, icon: i32);
+        unsafe fn QMessageBox_setText(w: *mut QMessageBox, text: &CxxString);
+        unsafe fn QMessageBox_setInformativeText(w: *mut QMessageBox, text: &CxxString);
+        unsafe fn QMessageBox_setWindowTitle(w: *mut QMessageBox, title: &CxxString);
+        unsafe fn QMessageBox_setStandardButtons(w: *mut QMessageBox, buttons: i32);
+        unsafe fn QMessageBox_setDefaultButton(w: *mut QMessageBox, button: i32);
+        unsafe fn QMessageBox_setDetailedText(w: *mut QMessageBox, text: &CxxString);
+        unsafe fn QMessageBox_exec(w: *mut QMessageBox) -> i32;
+        unsafe fn QMessageBox_about(parent: *mut QWidget, title: &CxxString, text: &CxxString);
+
+        // --- QInputDialog ---
+        unsafe fn QInputDialog_getText(
+            parent: *mut QWidget,
+            title: &CxxString,
+            label: &CxxString,
+            text: &CxxString,
+        ) -> String;
+        unsafe fn QInputDialog_getInt(
+            parent: *mut QWidget,
+            title: &CxxString,
+            label: &CxxString,
+            value: i32,
+            min: i32,
+            max: i32,
+            step: i32,
+        ) -> i32;
+        unsafe fn QInputDialog_getDouble(
+            parent: *mut QWidget,
+            title: &CxxString,
+            label: &CxxString,
+            value: f64,
+            min: f64,
+            max: f64,
+            decimals: i32,
+        ) -> f64;
+        unsafe fn QInputDialog_getItem(
+            parent: *mut QWidget,
+            title: &CxxString,
+            label: &CxxString,
+            items: Vec<String>,
+            current: i32,
+            editable: bool,
+        ) -> String;
+
+        // --- QProgressDialog ---
+        unsafe fn QProgressDialog_new(
+            label: &CxxString,
+            cancelText: &CxxString,
+            min: i32,
+            max: i32,
+            parent: *mut QWidget,
+        ) -> *mut QProgressDialog;
+        unsafe fn QProgressDialog_delete(w: *mut QProgressDialog);
+        unsafe fn QProgressDialog_setMinimum(w: *mut QProgressDialog, min: i32);
+        unsafe fn QProgressDialog_setMaximum(w: *mut QProgressDialog, max: i32);
+        unsafe fn QProgressDialog_setRange(w: *mut QProgressDialog, min: i32, max: i32);
+        unsafe fn QProgressDialog_setValue(w: *mut QProgressDialog, value: i32);
+        unsafe fn QProgressDialog_value(w: *mut QProgressDialog) -> i32;
+        unsafe fn QProgressDialog_setLabelText(w: *mut QProgressDialog, text: &CxxString);
+        unsafe fn QProgressDialog_setCancelButtonText(w: *mut QProgressDialog, text: &CxxString);
+        unsafe fn QProgressDialog_wasCanceled(w: *mut QProgressDialog) -> bool;
+        unsafe fn QProgressDialog_setMinimumDuration(w: *mut QProgressDialog, ms: i32);
+        unsafe fn QProgressDialog_setAutoClose(w: *mut QProgressDialog, close: bool);
+        unsafe fn QProgressDialog_setAutoReset(w: *mut QProgressDialog, reset: bool);
+        unsafe fn QProgressDialog_show(w: *mut QProgressDialog);
+        unsafe fn QProgressDialog_hide(w: *mut QProgressDialog);
+        unsafe fn QProgressDialog_close(w: *mut QProgressDialog);
+
+        // --- QTableWidget ---
+        unsafe fn QTableWidget_new(rows: i32, cols: i32, parent: *mut QWidget) -> *mut QTableWidget;
+        unsafe fn QTableWidget_delete(w: *mut QTableWidget);
+        unsafe fn QTableWidget_setRowCount(w: *mut QTableWidget, rows: i32);
+        unsafe fn QTableWidget_setColumnCount(w: *mut QTableWidget, cols: i32);
+        unsafe fn QTableWidget_setItem(w: *mut QTableWidget, row: i32, col: i32, text: &CxxString);
+        unsafe fn QTableWidget_itemText(w: *mut QTableWidget, row: i32, col: i32) -> String;
+        unsafe fn QTableWidget_setHorizontalHeaderLabels(w: *mut QTableWidget, labels: Vec<String>);
+        unsafe fn QTableWidget_setVerticalHeaderLabels(w: *mut QTableWidget, labels: Vec<String>);
+        unsafe fn QTableWidget_setCurrentCell(w: *mut QTableWidget, row: i32, col: i32);
+        unsafe fn QTableWidget_currentRow(w: *mut QTableWidget) -> i32;
+        unsafe fn QTableWidget_currentColumn(w: *mut QTableWidget) -> i32;
+        unsafe fn QTableWidget_selectedRows(w: *mut QTableWidget) -> Vec<i32>;
+        unsafe fn QTableWidget_clear(w: *mut QTableWidget);
+        unsafe fn QTableWidget_clearContents(w: *mut QTableWidget);
+        unsafe fn QTableWidget_setSelectionMode(w: *mut QTableWidget, mode: i32);
+        unsafe fn QTableWidget_setSelectionBehavior(w: *mut QTableWidget, behavior: i32);
+        unsafe fn QTableWidget_removeRow(w: *mut QTableWidget, row: i32);
+        unsafe fn QTableWidget_insertRow(w: *mut QTableWidget, row: i32);
+        unsafe fn QTableWidget_setColumnWidth(w: *mut QTableWidget, col: i32, width: i32);
+        unsafe fn QTableWidget_setRowHeight(w: *mut QTableWidget, row: i32, height: i32);
+        unsafe fn QTableWidget_onCellClicked(w: *mut QTableWidget, ctx: u64);
+        unsafe fn QTableWidget_onCellDoubleClicked(w: *mut QTableWidget, ctx: u64);
+        unsafe fn QTableWidget_onCurrentCellChanged(w: *mut QTableWidget, ctx: u64);
+
+        // --- QTreeWidget ---
+        unsafe fn QTreeWidget_new(parent: *mut QWidget) -> *mut QTreeWidget;
+        unsafe fn QTreeWidget_delete(w: *mut QTreeWidget);
+        unsafe fn QTreeWidget_addTopLevelItem(w: *mut QTreeWidget, text: &CxxString);
+        unsafe fn QTreeWidget_clear(w: *mut QTreeWidget);
+        unsafe fn QTreeWidget_currentItemText(w: *mut QTreeWidget) -> String;
+        unsafe fn QTreeWidget_setHeaderLabel(w: *mut QTreeWidget, text: &CxxString);
+        unsafe fn QTreeWidget_setHeaderLabels(w: *mut QTreeWidget, labels: Vec<String>);
+        unsafe fn QTreeWidget_expandAll(w: *mut QTreeWidget);
+        unsafe fn QTreeWidget_collapseAll(w: *mut QTreeWidget);
+        unsafe fn QTreeWidget_expandItem(w: *mut QTreeWidget, text: &CxxString);
+        unsafe fn QTreeWidget_setCurrentItem(w: *mut QTreeWidget, text: &CxxString);
+        unsafe fn QTreeWidget_topLevelItemCount(w: *mut QTreeWidget) -> i32;
+        unsafe fn QTreeWidget_onItemClicked(w: *mut QTreeWidget, ctx: u64);
+        unsafe fn QTreeWidget_onItemDoubleClicked(w: *mut QTreeWidget, ctx: u64);
+        unsafe fn QTreeWidget_onItemExpanded(w: *mut QTreeWidget, ctx: u64);
+        unsafe fn QTreeWidget_onItemCollapsed(w: *mut QTreeWidget, ctx: u64);
+        unsafe fn QTreeWidget_onCurrentItemChanged(w: *mut QTreeWidget, ctx: u64);
+
+        // --- QScrollArea ---
+        unsafe fn QScrollArea_new(parent: *mut QWidget) -> *mut QScrollArea;
+        unsafe fn QScrollArea_delete(w: *mut QScrollArea);
+        unsafe fn QScrollArea_setWidget(w: *mut QScrollArea, widget: *mut QWidget);
+        unsafe fn QScrollArea_takeWidget(w: *mut QScrollArea) -> *mut QWidget;
+        unsafe fn QScrollArea_setWidgetResizable(w: *mut QScrollArea, resizable: bool);
+        unsafe fn QScrollArea_setHorizontalScrollBarPolicy(w: *mut QScrollArea, policy: i32);
+        unsafe fn QScrollArea_setVerticalScrollBarPolicy(w: *mut QScrollArea, policy: i32);
+        unsafe fn QScrollArea_ensureVisible(w: *mut QScrollArea, x: i32, y: i32);
+        unsafe fn QScrollArea_ensureWidgetVisible(w: *mut QScrollArea, widget: *mut QWidget);
+
+        // --- QStackedWidget ---
+        unsafe fn QStackedWidget_new(parent: *mut QWidget) -> *mut QStackedWidget;
+        unsafe fn QStackedWidget_delete(w: *mut QStackedWidget);
+        unsafe fn QStackedWidget_addWidget(w: *mut QStackedWidget, page: *mut QWidget) -> i32;
+        unsafe fn QStackedWidget_insertWidget(w: *mut QStackedWidget, index: i32, page: *mut QWidget) -> i32;
+        unsafe fn QStackedWidget_removeWidget(w: *mut QStackedWidget, page: *mut QWidget);
+        unsafe fn QStackedWidget_setCurrentIndex(w: *mut QStackedWidget, index: i32);
+        unsafe fn QStackedWidget_currentIndex(w: *mut QStackedWidget) -> i32;
+        unsafe fn QStackedWidget_count(w: *mut QStackedWidget) -> i32;
+        unsafe fn QStackedWidget_widget(w: *mut QStackedWidget, index: i32) -> *mut QWidget;
+        unsafe fn QStackedWidget_onCurrentChanged(w: *mut QStackedWidget, ctx: u64);
+
+        // --- QSplitter ---
+        unsafe fn QSplitter_new(orientation: i32, parent: *mut QWidget) -> *mut QSplitter;
+        unsafe fn QSplitter_delete(w: *mut QSplitter);
+        unsafe fn QSplitter_addWidget(w: *mut QSplitter, widget: *mut QWidget);
+        unsafe fn QSplitter_insertWidget(w: *mut QSplitter, index: i32, widget: *mut QWidget);
+        unsafe fn QSplitter_setStretchFactor(w: *mut QSplitter, index: i32, stretch: i32);
+        unsafe fn QSplitter_setSizes(w: *mut QSplitter, sizes: Vec<i32>);
+        unsafe fn QSplitter_sizes(w: *mut QSplitter) -> Vec<i32>;
+        unsafe fn QSplitter_setOrientation(w: *mut QSplitter, orientation: i32);
+        unsafe fn QSplitter_count(w: *mut QSplitter) -> i32;
+        unsafe fn QSplitter_setHandleWidth(w: *mut QSplitter, width: i32);
+        unsafe fn QSplitter_setChildrenCollapsible(w: *mut QSplitter, collapsible: bool);
+
     }
 
-    #[cfg(feature = "ui")]
     unsafe extern "C++" {
         include!("src/cpp/uiloader.h");
 

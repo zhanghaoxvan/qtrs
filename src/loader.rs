@@ -3,7 +3,6 @@
 //! Wraps [`QUiLoader`](https://doc.qt.io/qt-6/quiloader.html) to load
 //! XML-based `.ui` files at runtime and instantiate the widget tree.
 //!
-//! Enable with feature `ui` in Cargo.toml.
 
 use cxx::let_cxx_string;
 

@@ -23,6 +23,7 @@ pub(crate) fn ensure_trampolines_registered() {
         ffi::qtrs_setVoidTrampoline(trampoline_void);
         ffi::qtrs_setBoolTrampoline(trampoline_bool);
         ffi::qtrs_setIntTrampoline(trampoline_int);
+        ffi::qtrs_setStringTrampoline(trampoline_string);
     });
 }
 
@@ -35,6 +36,7 @@ pub(crate) enum SignalKind {
     Void,
     Bool,
     Int,
+    String,
 }
 
 pub(crate) struct SignalHandle {
@@ -54,6 +56,9 @@ impl SignalHandle {
             }
             SignalKind::Int => {
                 let _ = Box::from_raw(self.token as *mut Box<dyn Fn(i32)>);
+            }
+            SignalKind::String => {
+                let _ = Box::from_raw(self.token as *mut Box<dyn Fn(String)>);
             }
         }
     }
@@ -90,6 +95,15 @@ pub(crate) fn leak_int<F: Fn(i32) + 'static>(f: F) -> SignalHandle {
     }
 }
 
+pub(crate) fn leak_string<F: Fn(String) + 'static>(f: F) -> SignalHandle {
+    ensure_trampolines_registered();
+    let boxed: Box<dyn Fn(String)> = Box::new(f);
+    SignalHandle {
+        token: Box::into_raw(Box::new(boxed)) as u64,
+        kind: SignalKind::String,
+    }
+}
+
 // ============================================================
 // Trampolines
 // ============================================================
@@ -109,6 +123,12 @@ pub(crate) fn trampoline_bool(ctx: u64, value: bool) {
 pub(crate) fn trampoline_int(ctx: u64, value: i32) {
     debug_assert_ne!(ctx, 0, "trampoline_int called with null ctx");
     let cb: &Box<dyn Fn(i32)> = unsafe { &*(ctx as *const Box<dyn Fn(i32)>) };
+    cb(value);
+}
+
+pub(crate) fn trampoline_string(ctx: u64, value: String) {
+    debug_assert_ne!(ctx, 0, "trampoline_string called with null ctx");
+    let cb: &Box<dyn Fn(String)> = unsafe { &*(ctx as *const Box<dyn Fn(String)>) };
     cb(value);
 }
 

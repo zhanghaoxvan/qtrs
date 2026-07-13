@@ -1,7 +1,7 @@
 //! `.ui` file example — load + find + connect signals
 //!
 //! ```bash
-//! cargo run --example ui --features ui
+//! cargo run --example ui
 //! ```
 
 use qtrs::prelude::*;

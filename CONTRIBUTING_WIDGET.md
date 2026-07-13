@@ -26,9 +26,9 @@ Create `src/cpp/picture.h`:
 // src/cpp/picture.h — QLabel-based image widget
 #pragma once
 
-#include <QLabel>
-#include <QPixmap>
-#include <QString>
+#include <QtWidgets/QLabel>
+#include <QtGui/QPixmap>
+#include <QtCore/QString>
 #include <string>
 
 // Constructor
@@ -300,8 +300,8 @@ If your widget emits signals (e.g., `clicked`, `valueChanged`), you need:
 // src/cpp/clickablelabel.h
 #pragma once
 
-#include <QLabel>
-#include <QMouseEvent>
+#include <QtWidgets/QLabel>
+#include <QtGui/QMouseEvent>
 #include "signal.h"
 
 // Define Qt subclass with signals
@@ -668,7 +668,7 @@ fn main() {
 
 | Error | Likely Cause | Fix |
 |-------|--------------|-----|
-| `unknown type 'QLabel'` | Missing include in C++ header | Add `#include <QLabel>` |
+| `unknown type 'QLabel'` | Missing include in C++ header | Add `#include <QtWidgets/QLabel>` |
 | `cannot find function` | Header not included in `qt_widget.h` | Add `#include "{widget}.h"` |
 | `undefined reference` | C++ function signature mismatch | Check FFI matches C++ exactly |
 | `debug_assert!(!self.ptr.is_null())` | Widget not constructed | Check `*_new` returns non-null |
