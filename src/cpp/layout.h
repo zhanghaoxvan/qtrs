@@ -26,6 +26,14 @@
 #include <QtWidgets/QSplitter>
 #include <QtWidgets/QProgressDialog>
 #include <QtWidgets/QScrollArea>
+#include <QtWidgets/QDateEdit>
+#include <QtWidgets/QTimeEdit>
+#include <QtWidgets/QDateTimeEdit>
+#include <QtWidgets/QPlainTextEdit>
+#include <QtWidgets/QTextBrowser>
+#include <QtWidgets/QFrame>
+#include <QtWidgets/QToolButton>
+#include <QtWidgets/QCalendarWidget>
 
 // --- QVBoxLayout ---
 inline QVBoxLayout *QVBoxLayout_new(QWidget *parent) {
@@ -171,4 +179,28 @@ inline QStackedWidget *QWidget_findStackedWidget(QWidget *parent, const std::str
 }
 inline QSplitter *QWidget_findSplitter(QWidget *parent, const std::string &name) {
     return parent->findChild<QSplitter *>(QString::fromStdString(name));
+}
+inline QDateEdit *QWidget_findDateEdit(QWidget *parent, const std::string &name) {
+    return parent->findChild<QDateEdit *>(QString::fromStdString(name));
+}
+inline QTimeEdit *QWidget_findTimeEdit(QWidget *parent, const std::string &name) {
+    return parent->findChild<QTimeEdit *>(QString::fromStdString(name));
+}
+inline QDateTimeEdit *QWidget_findDateTimeEdit(QWidget *parent, const std::string &name) {
+    return parent->findChild<QDateTimeEdit *>(QString::fromStdString(name));
+}
+inline QPlainTextEdit *QWidget_findPlainTextEdit(QWidget *parent, const std::string &name) {
+    return parent->findChild<QPlainTextEdit *>(QString::fromStdString(name));
+}
+inline QTextBrowser *QWidget_findTextBrowser(QWidget *parent, const std::string &name) {
+    return parent->findChild<QTextBrowser *>(QString::fromStdString(name));
+}
+inline QFrame *QWidget_findFrame(QWidget *parent, const std::string &name) {
+    return parent->findChild<QFrame *>(QString::fromStdString(name));
+}
+inline QToolButton *QWidget_findToolButton(QWidget *parent, const std::string &name) {
+    return parent->findChild<QToolButton *>(QString::fromStdString(name));
+}
+inline QCalendarWidget *QWidget_findCalendarWidget(QWidget *parent, const std::string &name) {
+    return parent->findChild<QCalendarWidget *>(QString::fromStdString(name));
 }

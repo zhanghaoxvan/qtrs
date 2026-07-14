@@ -16,6 +16,9 @@ cxx = "1.0"
 [build-dependencies]
 cxx-build = "1.0"
 
+[lints.rust]
+unexpected_cfgs = { level = "allow", check-cfg = ['cfg(qt_5)', 'cfg(qt_6)'] }
+
 [[example]]
 name = "basic"
 path = "examples/basic/basic.rs"

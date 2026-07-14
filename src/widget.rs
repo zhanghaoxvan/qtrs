@@ -381,6 +381,31 @@ impl Widget {
                 if ptr.is_null() { None }
                 else { Some(FoundWidget::Splitter(crate::Splitter::from_raw(ptr))) }
             }
+            WidgetKind::DateEdit => {
+                let ptr = unsafe { ffi::QWidget_findDateEdit(self.ptr, &c_name) };
+                if ptr.is_null() { None }
+                else { Some(FoundWidget::DateEdit(crate::DateEdit::from_raw(ptr, name))) }
+            }
+            WidgetKind::TimeEdit => {
+                let ptr = unsafe { ffi::QWidget_findTimeEdit(self.ptr, &c_name) };
+                if ptr.is_null() { None }
+                else { Some(FoundWidget::TimeEdit(crate::TimeEdit::from_raw(ptr, name))) }
+            }
+            WidgetKind::DateTimeEdit => {
+                let ptr = unsafe { ffi::QWidget_findDateTimeEdit(self.ptr, &c_name) };
+                if ptr.is_null() { None }
+                else { Some(FoundWidget::DateTimeEdit(crate::DateTimeEdit::from_raw(ptr, name))) }
+            }
+            WidgetKind::PlainTextEdit => {
+                let ptr = unsafe { ffi::QWidget_findPlainTextEdit(self.ptr, &c_name) };
+                if ptr.is_null() { None }
+                else { Some(FoundWidget::PlainTextEdit(crate::PlainTextEdit::from_raw(ptr, name))) }
+            }
+            WidgetKind::TextBrowser => {
+                let ptr = unsafe { ffi::QWidget_findTextBrowser(self.ptr, &c_name) };
+                if ptr.is_null() { None }
+                else { Some(FoundWidget::TextBrowser(crate::TextBrowser::from_raw(ptr, name))) }
+            }
             WidgetKind::Any => {
                 let ptr = unsafe { ffi::QWidget_findWidget(self.ptr, &c_name) };
                 if ptr.is_null() { None }
@@ -416,8 +441,14 @@ pub enum WidgetKind {
     TreeWidget,
     StackedWidget,
     Splitter,
+    DateEdit,
+    TimeEdit,
+    DateTimeEdit,
+    PlainTextEdit,
+    TextBrowser,
     /// Any `QWidget` (no signal support).
     Any,
+
 }
 
 /// Returned by [`Widget::find`] — match to unwrap and connect signals.
@@ -441,6 +472,11 @@ pub enum FoundWidget {
     TreeWidget(crate::TreeWidget),
     StackedWidget(crate::StackedWidget),
     Splitter(crate::Splitter),
+    DateEdit(crate::DateEdit),
+    TimeEdit(crate::TimeEdit),
+    DateTimeEdit(crate::DateTimeEdit),
+    PlainTextEdit(crate::PlainTextEdit),
+    TextBrowser(crate::TextBrowser),
     Widget(Widget),
 }
 

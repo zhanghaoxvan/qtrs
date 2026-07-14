@@ -58,6 +58,8 @@ fn main() {
 
     // 4. Pass Qt version to Rust via cfg flags
     println!("cargo:rustc-cfg=qt_{}", major);
+    println!("cargo:rustc-check-cfg=cfg(qt_5)");
+    println!("cargo:rustc-check-cfg=cfg(qt_6)");
 
     // 5. Set up cxx bridge
     let mut build = cxx_build::bridge("src/ffi.rs");
@@ -116,6 +118,9 @@ fn main() {
         "messagebox", "inputdialog", "progressdialog",
         "tablewidget", "treewidget", "scrollarea",
         "stackedwidget", "splitter",
+        "dateedit", "timeedit", "datetimeedit",
+        "plaintextedit", "textbrowser",
+        "frame", "toolbutton", "calendarwidget", "shortcut", "systemtrayicon",
     ] {
         println!("cargo:rerun-if-changed=src/cpp/{}.h", name);
     }

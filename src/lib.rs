@@ -162,6 +162,8 @@ pub mod button;
 pub mod checkbox;
 pub mod combobox;
 pub mod conn;
+pub mod dateedit;
+pub mod datetimeedit;
 pub mod dialog;
 pub mod ffi;
 pub mod grid;
@@ -193,8 +195,16 @@ pub mod toolbar;
 mod signal;
 pub mod widget;
 pub mod filedialog;
+pub mod plaintextedit;
 pub mod point;
+pub mod textbrowser;
+pub mod timeedit;
 pub mod loader;
+pub mod frame;
+pub mod toolbutton;
+pub mod calendarwidget;
+pub mod shortcut;
+pub mod systemtrayicon;
 
 // ================================================
 // Re-Exports
@@ -237,9 +247,19 @@ pub use messagebox::{
     ABORT, RETRY, IGNORE, NO_BUTTON,
 };
 pub use conn::{ConnectExt, ConnType, SignalMeta, SlotMeta};
+pub use dateedit::DateEdit;
+pub use datetimeedit::DateTimeEdit;
 pub use filedialog::FileDialog;
+pub use plaintextedit::PlainTextEdit;
 pub use point::Point;
+pub use textbrowser::TextBrowser;
+pub use timeedit::TimeEdit;
 pub use loader::UiLoader;
+pub use frame::Frame;
+pub use toolbutton::ToolButton;
+pub use calendarwidget::CalendarWidget;
+pub use shortcut::Shortcut;
+pub use systemtrayicon::SystemTrayIcon;
 
 
 // ============================================================
@@ -257,6 +277,8 @@ pub mod prelude {
         MainWindow, StatusBar, ToolBar, MessageBox,
         ProgressDialog, ScrollArea, Splitter, StackedWidget,
         TableWidget, TreeWidget,
+        DateEdit, DateTimeEdit, PlainTextEdit, TextBrowser, TimeEdit,
+        Frame, ToolButton, CalendarWidget, Shortcut, SystemTrayIcon,
         ConnectExt, ConnType, signals, FileDialog, Point, UiLoader,
         get_text, get_int, get_double, get_item,
     };

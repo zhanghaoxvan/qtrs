@@ -49,6 +49,16 @@ pub mod ffi_inner {
         type QScrollArea;
         type QStackedWidget;
         type QSplitter;
+        type QDateEdit;
+        type QTimeEdit;
+        type QDateTimeEdit;
+        type QPlainTextEdit;
+        type QTextBrowser;
+        type QFrame;
+        type QToolButton;
+        type QCalendarWidget;
+        type QShortcut;
+        type QSystemTrayIcon;
 
         // --- QObject (base class for signal-slot connections) ---
         type QObject;
@@ -243,6 +253,14 @@ pub mod ffi_inner {
         unsafe fn QWidget_findTreeWidget(parent: *mut QWidget, name: &CxxString) -> *mut QTreeWidget;
         unsafe fn QWidget_findStackedWidget(parent: *mut QWidget, name: &CxxString) -> *mut QStackedWidget;
         unsafe fn QWidget_findSplitter(parent: *mut QWidget, name: &CxxString) -> *mut QSplitter;
+        unsafe fn QWidget_findFrame(parent: *mut QWidget, name: &CxxString) -> *mut QFrame;
+        unsafe fn QWidget_findToolButton(parent: *mut QWidget, name: &CxxString) -> *mut QToolButton;
+        unsafe fn QWidget_findCalendarWidget(parent: *mut QWidget, name: &CxxString) -> *mut QCalendarWidget;
+        unsafe fn QWidget_findDateEdit(parent: *mut QWidget, name: &CxxString) -> *mut QDateEdit;
+        unsafe fn QWidget_findTimeEdit(parent: *mut QWidget, name: &CxxString) -> *mut QTimeEdit;
+        unsafe fn QWidget_findDateTimeEdit(parent: *mut QWidget, name: &CxxString) -> *mut QDateTimeEdit;
+        unsafe fn QWidget_findPlainTextEdit(parent: *mut QWidget, name: &CxxString) -> *mut QPlainTextEdit;
+        unsafe fn QWidget_findTextBrowser(parent: *mut QWidget, name: &CxxString) -> *mut QTextBrowser;
 
         // --- QTimer ---
         unsafe fn QTimer_new() -> *mut QTimer;
@@ -378,6 +396,14 @@ pub mod ffi_inner {
         unsafe fn toQWidget_QScrollArea(w: *mut QScrollArea) -> *mut QWidget;
         unsafe fn toQWidget_QStackedWidget(w: *mut QStackedWidget) -> *mut QWidget;
         unsafe fn toQWidget_QSplitter(w: *mut QSplitter) -> *mut QWidget;
+        unsafe fn toQWidget_QDateEdit(w: *mut QDateEdit) -> *mut QWidget;
+        unsafe fn toQWidget_QTimeEdit(w: *mut QTimeEdit) -> *mut QWidget;
+        unsafe fn toQWidget_QDateTimeEdit(w: *mut QDateTimeEdit) -> *mut QWidget;
+        unsafe fn toQWidget_QPlainTextEdit(w: *mut QPlainTextEdit) -> *mut QWidget;
+        unsafe fn toQWidget_QTextBrowser(w: *mut QTextBrowser) -> *mut QWidget;
+        unsafe fn toQWidget_QFrame(w: *mut QFrame) -> *mut QWidget;
+        unsafe fn toQWidget_QToolButton(btn: *mut QToolButton) -> *mut QWidget;
+        unsafe fn toQWidget_QCalendarWidget(cal: *mut QCalendarWidget) -> *mut QWidget;
 
         // --- QAction ---
         unsafe fn QAction_new(text: &CxxString, parent: *mut QWidget) -> *mut QAction;
@@ -583,6 +609,151 @@ pub mod ffi_inner {
         unsafe fn QSplitter_count(w: *mut QSplitter) -> i32;
         unsafe fn QSplitter_setHandleWidth(w: *mut QSplitter, width: i32);
         unsafe fn QSplitter_setChildrenCollapsible(w: *mut QSplitter, collapsible: bool);
+
+        // ============================================================
+        // QDateEdit
+        // ============================================================
+
+        unsafe fn QDateEdit_new(parent: *mut QWidget) -> *mut QDateEdit;
+        unsafe fn QDateEdit_delete(w: *mut QDateEdit);
+        unsafe fn QDateEdit_setDate(w: *mut QDateEdit, date: &CxxString);
+        unsafe fn QDateEdit_date(w: *mut QDateEdit) -> String;
+        unsafe fn QDateEdit_setMinimumDate(w: *mut QDateEdit, date: &CxxString);
+        unsafe fn QDateEdit_setMaximumDate(w: *mut QDateEdit, date: &CxxString);
+        unsafe fn QDateEdit_clearMinimumDate(w: *mut QDateEdit);
+        unsafe fn QDateEdit_clearMaximumDate(w: *mut QDateEdit);
+        unsafe fn QDateEdit_setDisplayFormat(w: *mut QDateEdit, format: &CxxString);
+        unsafe fn QDateEdit_setCalendarPopup(w: *mut QDateEdit, enabled: bool);
+        unsafe fn QDateEdit_onDateChanged(w: *mut QDateEdit, ctx: u64);
+
+        // ============================================================
+        // QTimeEdit
+        // ============================================================
+
+        unsafe fn QTimeEdit_new(parent: *mut QWidget) -> *mut QTimeEdit;
+        unsafe fn QTimeEdit_delete(w: *mut QTimeEdit);
+        unsafe fn QTimeEdit_setTime(w: *mut QTimeEdit, time: &CxxString);
+        unsafe fn QTimeEdit_time(w: *mut QTimeEdit) -> String;
+        unsafe fn QTimeEdit_setDisplayFormat(w: *mut QTimeEdit, format: &CxxString);
+        unsafe fn QTimeEdit_onTimeChanged(w: *mut QTimeEdit, ctx: u64);
+
+        // ============================================================
+        // QDateTimeEdit
+        // ============================================================
+
+        unsafe fn QDateTimeEdit_new(parent: *mut QWidget) -> *mut QDateTimeEdit;
+        unsafe fn QDateTimeEdit_delete(w: *mut QDateTimeEdit);
+        unsafe fn QDateTimeEdit_setDateTime(w: *mut QDateTimeEdit, dt: &CxxString);
+        unsafe fn QDateTimeEdit_dateTime(w: *mut QDateTimeEdit) -> String;
+        unsafe fn QDateTimeEdit_setDisplayFormat(w: *mut QDateTimeEdit, format: &CxxString);
+        unsafe fn QDateTimeEdit_setCalendarPopup(w: *mut QDateTimeEdit, enabled: bool);
+        unsafe fn QDateTimeEdit_onDateTimeChanged(w: *mut QDateTimeEdit, ctx: u64);
+
+        // ============================================================
+        // QPlainTextEdit
+        // ============================================================
+
+        unsafe fn QPlainTextEdit_new(parent: *mut QWidget) -> *mut QPlainTextEdit;
+        unsafe fn QPlainTextEdit_delete(w: *mut QPlainTextEdit);
+        unsafe fn QPlainTextEdit_setPlainText(w: *mut QPlainTextEdit, text: &CxxString);
+        unsafe fn QPlainTextEdit_plainText(w: *mut QPlainTextEdit) -> String;
+        unsafe fn QPlainTextEdit_setPlaceholderText(w: *mut QPlainTextEdit, text: &CxxString);
+        unsafe fn QPlainTextEdit_setReadOnly(w: *mut QPlainTextEdit, readOnly: bool);
+        unsafe fn QPlainTextEdit_setLineWrapMode(w: *mut QPlainTextEdit, mode: i32);
+        unsafe fn QPlainTextEdit_appendPlainText(w: *mut QPlainTextEdit, text: &CxxString);
+        unsafe fn QPlainTextEdit_clear(w: *mut QPlainTextEdit);
+        unsafe fn QPlainTextEdit_onTextChanged(w: *mut QPlainTextEdit, ctx: u64);
+        unsafe fn QPlainTextEdit_onCursorPositionChanged(w: *mut QPlainTextEdit, ctx: u64);
+
+        // ============================================================
+        // QTextBrowser
+        // ============================================================
+
+        unsafe fn QTextBrowser_new(parent: *mut QWidget) -> *mut QTextBrowser;
+        unsafe fn QTextBrowser_delete(w: *mut QTextBrowser);
+        unsafe fn QTextBrowser_setHtml(w: *mut QTextBrowser, html: &CxxString);
+        unsafe fn QTextBrowser_setPlainText(w: *mut QTextBrowser, text: &CxxString);
+        unsafe fn QTextBrowser_plainText(w: *mut QTextBrowser) -> String;
+        unsafe fn QTextBrowser_toHtml(w: *mut QTextBrowser) -> String;
+        unsafe fn QTextBrowser_setOpenExternalLinks(w: *mut QTextBrowser, open: bool);
+        unsafe fn QTextBrowser_setOpenLinks(w: *mut QTextBrowser, open: bool);
+        unsafe fn QTextBrowser_setSource(w: *mut QTextBrowser, url: &CxxString);
+        unsafe fn QTextBrowser_source(w: *mut QTextBrowser) -> String;
+        unsafe fn QTextBrowser_clear(w: *mut QTextBrowser);
+        unsafe fn QTextBrowser_append(w: *mut QTextBrowser, text: &CxxString);
+        unsafe fn QTextBrowser_setSearchPaths(w: *mut QTextBrowser, paths: Vec<String>);
+        unsafe fn QTextBrowser_onAnchorClicked(w: *mut QTextBrowser, ctx: u64);
+        unsafe fn QTextBrowser_onTextChanged(w: *mut QTextBrowser, ctx: u64);
+
+        // ============================================================
+        // QFrame
+        // ============================================================
+
+        unsafe fn QFrame_new(parent: *mut QWidget) -> *mut QFrame;
+        unsafe fn QFrame_delete(frame: *mut QFrame);
+        unsafe fn QFrame_setFrameShape(frame: *mut QFrame, shape: i32);
+        unsafe fn QFrame_setFrameShadow(frame: *mut QFrame, shadow: i32);
+        unsafe fn QFrame_setLineWidth(frame: *mut QFrame, width: i32);
+        unsafe fn QFrame_setMidLineWidth(frame: *mut QFrame, width: i32);
+        unsafe fn QFrame_setFrameStyle(frame: *mut QFrame, style: i32);
+
+        // ============================================================
+        // QToolButton
+        // ============================================================
+
+        unsafe fn QToolButton_new(parent: *mut QWidget) -> *mut QToolButton;
+        unsafe fn QToolButton_delete(btn: *mut QToolButton);
+        unsafe fn QToolButton_setText(btn: *mut QToolButton, text: &CxxString);
+        unsafe fn QToolButton_setIcon(btn: *mut QToolButton, icon_path: &CxxString);
+        unsafe fn QToolButton_setToolButtonStyle(btn: *mut QToolButton, style: i32);
+        unsafe fn QToolButton_setPopupMode(btn: *mut QToolButton, mode: i32);
+        unsafe fn QToolButton_setAutoRaise(btn: *mut QToolButton, enabled: bool);
+        unsafe fn QToolButton_setCheckable(btn: *mut QToolButton, checkable: bool);
+        unsafe fn QToolButton_setChecked(btn: *mut QToolButton, checked: bool);
+        unsafe fn QToolButton_setShortcut(btn: *mut QToolButton, key: &CxxString);
+        unsafe fn QToolButton_onClicked(btn: *mut QToolButton, ctx: u64);
+        unsafe fn QToolButton_onToggled(btn: *mut QToolButton, ctx: u64);
+
+        // ============================================================
+        // QCalendarWidget
+        // ============================================================
+
+        unsafe fn QCalendarWidget_new(parent: *mut QWidget) -> *mut QCalendarWidget;
+        unsafe fn QCalendarWidget_delete(cal: *mut QCalendarWidget);
+        unsafe fn QCalendarWidget_setSelectedDate(cal: *mut QCalendarWidget, date_str: &CxxString);
+        unsafe fn QCalendarWidget_selectedDate(cal: *mut QCalendarWidget) -> String;
+        unsafe fn QCalendarWidget_setMinimumDate(cal: *mut QCalendarWidget, date_str: &CxxString);
+        unsafe fn QCalendarWidget_setMaximumDate(cal: *mut QCalendarWidget, date_str: &CxxString);
+        unsafe fn QCalendarWidget_setFirstDayOfWeek(cal: *mut QCalendarWidget, day: i32);
+        unsafe fn QCalendarWidget_setGridVisible(cal: *mut QCalendarWidget, visible: bool);
+        unsafe fn QCalendarWidget_setNavigationBarVisible(cal: *mut QCalendarWidget, visible: bool);
+        unsafe fn QCalendarWidget_onSelectionChanged(cal: *mut QCalendarWidget, ctx: u64);
+        unsafe fn QCalendarWidget_onActivated(cal: *mut QCalendarWidget, ctx: u64);
+
+        // ============================================================
+        // QShortcut
+        // ============================================================
+
+        unsafe fn QShortcut_new(key: &CxxString, parent: *mut QWidget) -> *mut QShortcut;
+        unsafe fn QShortcut_delete(sc: *mut QShortcut);
+        unsafe fn QShortcut_setKey(sc: *mut QShortcut, key: &CxxString);
+        unsafe fn QShortcut_setEnabled(sc: *mut QShortcut, enabled: bool);
+        unsafe fn QShortcut_setAutoRepeat(sc: *mut QShortcut, repeat: bool);
+        unsafe fn QShortcut_onActivated(sc: *mut QShortcut, ctx: u64);
+
+        // ============================================================
+        // QSystemTrayIcon
+        // ============================================================
+
+        unsafe fn QSystemTrayIcon_new(icon_path: &CxxString, parent: *mut QObject) -> *mut QSystemTrayIcon;
+        unsafe fn QSystemTrayIcon_delete(tray: *mut QSystemTrayIcon);
+        unsafe fn QSystemTrayIcon_setIcon(tray: *mut QSystemTrayIcon, icon_path: &CxxString);
+        unsafe fn QSystemTrayIcon_setToolTip(tray: *mut QSystemTrayIcon, tip: &CxxString);
+        unsafe fn QSystemTrayIcon_show(tray: *mut QSystemTrayIcon);
+        unsafe fn QSystemTrayIcon_hide(tray: *mut QSystemTrayIcon);
+        unsafe fn QSystemTrayIcon_isVisible(tray: *mut QSystemTrayIcon) -> bool;
+        unsafe fn QSystemTrayIcon_setContextMenu(tray: *mut QSystemTrayIcon, menu: *mut QMenu);
+        unsafe fn QSystemTrayIcon_onActivated(tray: *mut QSystemTrayIcon, ctx: u64);
 
     }
 

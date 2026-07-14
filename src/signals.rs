@@ -56,6 +56,12 @@ pub mod slider_signals {
     /// The new value is passed as `i32`.
     #[derive(Debug, Clone, Copy)]
     pub struct ValueChanged;
+    #[cfg(qt_5)]
+    impl SignalMeta for ValueChanged {
+        const QT_SIGNATURE: &'static str = "valueChanged(int)";
+        type Args = (i32,);
+    }
+    #[cfg(qt_6)]
     impl SignalMeta for ValueChanged {
         const QT_SIGNATURE: &'static str = "2valueChanged(int)";
         type Args = (i32,);
@@ -69,6 +75,12 @@ pub mod slider_signals {
     /// No parameters.
     #[derive(Debug, Clone, Copy)]
     pub struct SliderPressed;
+    #[cfg(qt_5)]
+    impl SignalMeta for SliderPressed {
+        const QT_SIGNATURE: &'static str = "sliderPressed()";
+        type Args = ();
+    }
+    #[cfg(qt_6)]
     impl SignalMeta for SliderPressed {
         const QT_SIGNATURE: &'static str = "2sliderPressed()";
         type Args = ();
@@ -82,6 +94,12 @@ pub mod slider_signals {
     /// No parameters.
     #[derive(Debug, Clone, Copy)]
     pub struct SliderReleased;
+    #[cfg(qt_5)]
+    impl SignalMeta for SliderReleased {
+        const QT_SIGNATURE: &'static str = "sliderReleased()";
+        type Args = ();
+    }
+    #[cfg(qt_6)]
     impl SignalMeta for SliderReleased {
         const QT_SIGNATURE: &'static str = "2sliderReleased()";
         type Args = ();
@@ -95,6 +113,12 @@ pub mod slider_signals {
     /// The current value during dragging is passed as `i32`.
     #[derive(Debug, Clone, Copy)]
     pub struct SliderMoved;
+    #[cfg(qt_5)]
+    impl SignalMeta for SliderMoved {
+        const QT_SIGNATURE: &'static str = "sliderMoved(int)";
+        type Args = (i32,);
+    }
+    #[cfg(qt_6)]
     impl SignalMeta for SliderMoved {
         const QT_SIGNATURE: &'static str = "2sliderMoved(int)";
         type Args = (i32,);
@@ -127,6 +151,12 @@ pub mod spin_box_slots {
     /// The new value is passed as `i32`.
     #[derive(Debug, Clone, Copy)]
     pub struct SetValue;
+    #[cfg(qt_5)]
+    impl SlotMeta for SetValue {
+        const QT_SIGNATURE: &'static str = "setValue(int)";
+        type Args = (i32,);
+    }
+    #[cfg(qt_6)]
     impl SlotMeta for SetValue {
         const QT_SIGNATURE: &'static str = "1setValue(int)";
         type Args = (i32,);
@@ -140,6 +170,12 @@ pub mod spin_box_slots {
     /// The minimum and maximum values are passed as `(i32, i32)`.
     #[derive(Debug, Clone, Copy)]
     pub struct SetRange;
+    #[cfg(qt_5)]
+    impl SlotMeta for SetRange {
+        const QT_SIGNATURE: &'static str = "setRange(int, int)";
+        type Args = (i32, i32);
+    }
+    #[cfg(qt_6)]
     impl SlotMeta for SetRange {
         const QT_SIGNATURE: &'static str = "1setRange(int, int)";
         type Args = (i32, i32);
@@ -153,6 +189,12 @@ pub mod spin_box_slots {
     /// The suffix text is passed as `String`.
     #[derive(Debug, Clone, Copy)]
     pub struct SetSuffix;
+    #[cfg(qt_5)]
+    impl SlotMeta for SetSuffix {
+        const QT_SIGNATURE: &'static str = "setSuffix(QString)";
+        type Args = (String,);
+    }
+    #[cfg(qt_6)]
     impl SlotMeta for SetSuffix {
         const QT_SIGNATURE: &'static str = "1setSuffix(QString)";
         type Args = (String,);
@@ -166,6 +208,12 @@ pub mod spin_box_slots {
     /// The new minimum is passed as `i32`.
     #[derive(Debug, Clone, Copy)]
     pub struct SetMinimum;
+    #[cfg(qt_5)]
+    impl SlotMeta for SetMinimum {
+        const QT_SIGNATURE: &'static str = "setMinimum(int)";
+        type Args = (i32,);
+    }
+    #[cfg(qt_6)]
     impl SlotMeta for SetMinimum {
         const QT_SIGNATURE: &'static str = "1setMinimum(int)";
         type Args = (i32,);
@@ -179,6 +227,12 @@ pub mod spin_box_slots {
     /// The new maximum is passed as `i32`.
     #[derive(Debug, Clone, Copy)]
     pub struct SetMaximum;
+    #[cfg(qt_5)]
+    impl SlotMeta for SetMaximum {
+        const QT_SIGNATURE: &'static str = "setMaximum(int)";
+        type Args = (i32,);
+    }
+    #[cfg(qt_6)]
     impl SlotMeta for SetMaximum {
         const QT_SIGNATURE: &'static str = "1setMaximum(int)";
         type Args = (i32,);
@@ -201,6 +255,12 @@ pub mod spin_box_signals {
     /// The new value is passed as `i32`.
     #[derive(Debug, Clone, Copy)]
     pub struct ValueChanged;
+    #[cfg(qt_5)]
+    impl SignalMeta for ValueChanged {
+        const QT_SIGNATURE: &'static str = "valueChanged(int)";
+        type Args = (i32,);
+    }
+    #[cfg(qt_6)]
     impl SignalMeta for ValueChanged {
         const QT_SIGNATURE: &'static str = "2valueChanged(int)";
         type Args = (i32,);
@@ -214,6 +274,12 @@ pub mod spin_box_signals {
     /// The new text is passed as `String`.
     #[derive(Debug, Clone, Copy)]
     pub struct TextChanged;
+    #[cfg(qt_5)]
+    impl SignalMeta for TextChanged {
+        const QT_SIGNATURE: &'static str = "textChanged(QString)";
+        type Args = (String,);
+    }
+    #[cfg(qt_6)]
     impl SignalMeta for TextChanged {
         const QT_SIGNATURE: &'static str = "2textChanged(QString)";
         type Args = (String,);
@@ -236,6 +302,12 @@ pub mod push_button_signals {
     /// No parameters.
     #[derive(Debug, Clone, Copy)]
     pub struct Clicked;
+    #[cfg(qt_5)]
+    impl SignalMeta for Clicked {
+        const QT_SIGNATURE: &'static str = "clicked()";
+        type Args = ();
+    }
+    #[cfg(qt_6)]
     impl SignalMeta for Clicked {
         const QT_SIGNATURE: &'static str = "2clicked()";
         type Args = ();
@@ -249,6 +321,12 @@ pub mod push_button_signals {
     /// No parameters.
     #[derive(Debug, Clone, Copy)]
     pub struct Pressed;
+    #[cfg(qt_5)]
+    impl SignalMeta for Pressed {
+        const QT_SIGNATURE: &'static str = "pressed()";
+        type Args = ();
+    }
+    #[cfg(qt_6)]
     impl SignalMeta for Pressed {
         const QT_SIGNATURE: &'static str = "2pressed()";
         type Args = ();
@@ -262,6 +340,12 @@ pub mod push_button_signals {
     /// No parameters.
     #[derive(Debug, Clone, Copy)]
     pub struct Released;
+    #[cfg(qt_5)]
+    impl SignalMeta for Released {
+        const QT_SIGNATURE: &'static str = "released()";
+        type Args = ();
+    }
+    #[cfg(qt_6)]
     impl SignalMeta for Released {
         const QT_SIGNATURE: &'static str = "2released()";
         type Args = ();
@@ -284,6 +368,12 @@ pub mod check_box_signals {
     /// `true` if checked, `false` if unchecked.
     #[derive(Debug, Clone, Copy)]
     pub struct Toggled;
+    #[cfg(qt_5)]
+    impl SignalMeta for Toggled {
+        const QT_SIGNATURE: &'static str = "toggled(bool)";
+        type Args = (bool,);
+    }
+    #[cfg(qt_6)]
     impl SignalMeta for Toggled {
         const QT_SIGNATURE: &'static str = "2toggled(bool)";
         type Args = (bool,);
@@ -297,6 +387,12 @@ pub mod check_box_signals {
     /// The new state is passed as `i32` (0=unchecked, 1=partially, 2=checked).
     #[derive(Debug, Clone, Copy)]
     pub struct StateChanged;
+    #[cfg(qt_5)]
+    impl SignalMeta for StateChanged {
+        const QT_SIGNATURE: &'static str = "stateChanged(int)";
+        type Args = (i32,);
+    }
+    #[cfg(qt_6)]
     impl SignalMeta for StateChanged {
         const QT_SIGNATURE: &'static str = "2stateChanged(int)";
         type Args = (i32,);
@@ -319,6 +415,12 @@ pub mod check_box_slots {
     /// `true` to check, `false` to uncheck.
     #[derive(Debug, Clone, Copy)]
     pub struct SetChecked;
+    #[cfg(qt_5)]
+    impl SlotMeta for SetChecked {
+        const QT_SIGNATURE: &'static str = "setChecked(bool)";
+        type Args = (bool,);
+    }
+    #[cfg(qt_6)]
     impl SlotMeta for SetChecked {
         const QT_SIGNATURE: &'static str = "1setChecked(bool)";
         type Args = (bool,);
@@ -332,6 +434,12 @@ pub mod check_box_slots {
     /// `true` to enable tristate mode.
     #[derive(Debug, Clone, Copy)]
     pub struct SetTristate;
+    #[cfg(qt_5)]
+    impl SlotMeta for SetTristate {
+        const QT_SIGNATURE: &'static str = "setTristate(bool)";
+        type Args = (bool,);
+    }
+    #[cfg(qt_6)]
     impl SlotMeta for SetTristate {
         const QT_SIGNATURE: &'static str = "1setTristate(bool)";
         type Args = (bool,);
@@ -354,6 +462,12 @@ pub mod radio_button_signals {
     /// `true` if selected, `false` if deselected.
     #[derive(Debug, Clone, Copy)]
     pub struct Toggled;
+    #[cfg(qt_5)]
+    impl SignalMeta for Toggled {
+        const QT_SIGNATURE: &'static str = "toggled(bool)";
+        type Args = (bool,);
+    }
+    #[cfg(qt_6)]
     impl SignalMeta for Toggled {
         const QT_SIGNATURE: &'static str = "2toggled(bool)";
         type Args = (bool,);
@@ -376,6 +490,12 @@ pub mod radio_button_slots {
     /// `true` to select, `false` to deselect.
     #[derive(Debug, Clone, Copy)]
     pub struct SetChecked;
+    #[cfg(qt_5)]
+    impl SlotMeta for SetChecked {
+        const QT_SIGNATURE: &'static str = "setChecked(bool)";
+        type Args = (bool,);
+    }
+    #[cfg(qt_6)]
     impl SlotMeta for SetChecked {
         const QT_SIGNATURE: &'static str = "1setChecked(bool)";
         type Args = (bool,);
@@ -398,6 +518,12 @@ pub mod line_edit_signals {
     /// No parameters.
     #[derive(Debug, Clone, Copy)]
     pub struct ReturnPressed;
+    #[cfg(qt_5)]
+    impl SignalMeta for ReturnPressed {
+        const QT_SIGNATURE: &'static str = "returnPressed()";
+        type Args = ();
+    }
+    #[cfg(qt_6)]
     impl SignalMeta for ReturnPressed {
         const QT_SIGNATURE: &'static str = "2returnPressed()";
         type Args = ();
@@ -411,6 +537,12 @@ pub mod line_edit_signals {
     /// The new text is passed as `String`.
     #[derive(Debug, Clone, Copy)]
     pub struct TextChanged;
+    #[cfg(qt_5)]
+    impl SignalMeta for TextChanged {
+        const QT_SIGNATURE: &'static str = "textChanged(QString)";
+        type Args = (String,);
+    }
+    #[cfg(qt_6)]
     impl SignalMeta for TextChanged {
         const QT_SIGNATURE: &'static str = "2textChanged(QString)";
         type Args = (String,);
@@ -424,6 +556,12 @@ pub mod line_edit_signals {
     /// The new text is passed as `String`.
     #[derive(Debug, Clone, Copy)]
     pub struct TextEdited;
+    #[cfg(qt_5)]
+    impl SignalMeta for TextEdited {
+        const QT_SIGNATURE: &'static str = "textEdited(QString)";
+        type Args = (String,);
+    }
+    #[cfg(qt_6)]
     impl SignalMeta for TextEdited {
         const QT_SIGNATURE: &'static str = "2textEdited(QString)";
         type Args = (String,);
@@ -446,6 +584,12 @@ pub mod line_edit_slots {
     /// The new text is passed as `String`.
     #[derive(Debug, Clone, Copy)]
     pub struct SetText;
+    #[cfg(qt_5)]
+    impl SlotMeta for SetText {
+        const QT_SIGNATURE: &'static str = "setText(QString)";
+        type Args = (String,);
+    }
+    #[cfg(qt_6)]
     impl SlotMeta for SetText {
         const QT_SIGNATURE: &'static str = "1setText(QString)";
         type Args = (String,);
@@ -459,6 +603,12 @@ pub mod line_edit_slots {
     /// No parameters.
     #[derive(Debug, Clone, Copy)]
     pub struct Clear;
+    #[cfg(qt_5)]
+    impl SlotMeta for Clear {
+        const QT_SIGNATURE: &'static str = "clear()";
+        type Args = ();
+    }
+    #[cfg(qt_6)]
     impl SlotMeta for Clear {
         const QT_SIGNATURE: &'static str = "1clear()";
         type Args = ();
@@ -481,6 +631,12 @@ pub mod combo_box_signals {
     /// The new index is passed as `i32`.
     #[derive(Debug, Clone, Copy)]
     pub struct CurrentIndexChanged;
+    #[cfg(qt_5)]
+    impl SignalMeta for CurrentIndexChanged {
+        const QT_SIGNATURE: &'static str = "currentIndexChanged(int)";
+        type Args = (i32,);
+    }
+    #[cfg(qt_6)]
     impl SignalMeta for CurrentIndexChanged {
         const QT_SIGNATURE: &'static str = "2currentIndexChanged(int)";
         type Args = (i32,);
@@ -494,6 +650,12 @@ pub mod combo_box_signals {
     /// The new text is passed as `String`.
     #[derive(Debug, Clone, Copy)]
     pub struct CurrentTextChanged;
+    #[cfg(qt_5)]
+    impl SignalMeta for CurrentTextChanged {
+        const QT_SIGNATURE: &'static str = "currentTextChanged(QString)";
+        type Args = (String,);
+    }
+    #[cfg(qt_6)]
     impl SignalMeta for CurrentTextChanged {
         const QT_SIGNATURE: &'static str = "2currentTextChanged(QString)";
         type Args = (String,);
@@ -516,6 +678,12 @@ pub mod combo_box_slots {
     /// The new index is passed as `i32`.
     #[derive(Debug, Clone, Copy)]
     pub struct SetCurrentIndex;
+    #[cfg(qt_5)]
+    impl SlotMeta for SetCurrentIndex {
+        const QT_SIGNATURE: &'static str = "setCurrentIndex(int)";
+        type Args = (i32,);
+    }
+    #[cfg(qt_6)]
     impl SlotMeta for SetCurrentIndex {
         const QT_SIGNATURE: &'static str = "1setCurrentIndex(int)";
         type Args = (i32,);
@@ -529,6 +697,12 @@ pub mod combo_box_slots {
     /// The item text is passed as `String`.
     #[derive(Debug, Clone, Copy)]
     pub struct AddItem;
+    #[cfg(qt_5)]
+    impl SlotMeta for AddItem {
+        const QT_SIGNATURE: &'static str = "addItem(QString)";
+        type Args = (String,);
+    }
+    #[cfg(qt_6)]
     impl SlotMeta for AddItem {
         const QT_SIGNATURE: &'static str = "1addItem(QString)";
         type Args = (String,);
@@ -542,6 +716,12 @@ pub mod combo_box_slots {
     /// No parameters.
     #[derive(Debug, Clone, Copy)]
     pub struct Clear;
+    #[cfg(qt_5)]
+    impl SlotMeta for Clear {
+        const QT_SIGNATURE: &'static str = "clear()";
+        type Args = ();
+    }
+    #[cfg(qt_6)]
     impl SlotMeta for Clear {
         const QT_SIGNATURE: &'static str = "1clear()";
         type Args = ();
@@ -564,6 +744,12 @@ pub mod progress_bar_slots {
     /// The progress value is passed as `i32`.
     #[derive(Debug, Clone, Copy)]
     pub struct SetValue;
+    #[cfg(qt_5)]
+    impl SlotMeta for SetValue {
+        const QT_SIGNATURE: &'static str = "setValue(int)";
+        type Args = (i32,);
+    }
+    #[cfg(qt_6)]
     impl SlotMeta for SetValue {
         const QT_SIGNATURE: &'static str = "1setValue(int)";
         type Args = (i32,);
@@ -577,6 +763,12 @@ pub mod progress_bar_slots {
     /// The minimum and maximum values are passed as `(i32, i32)`.
     #[derive(Debug, Clone, Copy)]
     pub struct SetRange;
+    #[cfg(qt_5)]
+    impl SlotMeta for SetRange {
+        const QT_SIGNATURE: &'static str = "setRange(int, int)";
+        type Args = (i32, i32);
+    }
+    #[cfg(qt_6)]
     impl SlotMeta for SetRange {
         const QT_SIGNATURE: &'static str = "1setRange(int, int)";
         type Args = (i32, i32);
@@ -590,6 +782,12 @@ pub mod progress_bar_slots {
     /// No parameters.
     #[derive(Debug, Clone, Copy)]
     pub struct Reset;
+    #[cfg(qt_5)]
+    impl SlotMeta for Reset {
+        const QT_SIGNATURE: &'static str = "reset()";
+        type Args = ();
+    }
+    #[cfg(qt_6)]
     impl SlotMeta for Reset {
         const QT_SIGNATURE: &'static str = "1reset()";
         type Args = ();
@@ -612,6 +810,12 @@ pub mod tab_widget_signals {
     /// The new tab index is passed as `i32`.
     #[derive(Debug, Clone, Copy)]
     pub struct CurrentChanged;
+    #[cfg(qt_5)]
+    impl SignalMeta for CurrentChanged {
+        const QT_SIGNATURE: &'static str = "currentChanged(int)";
+        type Args = (i32,);
+    }
+    #[cfg(qt_6)]
     impl SignalMeta for CurrentChanged {
         const QT_SIGNATURE: &'static str = "2currentChanged(int)";
         type Args = (i32,);
@@ -634,6 +838,12 @@ pub mod tab_widget_slots {
     /// The new tab index is passed as `i32`.
     #[derive(Debug, Clone, Copy)]
     pub struct SetCurrentIndex;
+    #[cfg(qt_5)]
+    impl SlotMeta for SetCurrentIndex {
+        const QT_SIGNATURE: &'static str = "setCurrentIndex(int)";
+        type Args = (i32,);
+    }
+    #[cfg(qt_6)]
     impl SlotMeta for SetCurrentIndex {
         const QT_SIGNATURE: &'static str = "1setCurrentIndex(int)";
         type Args = (i32,);
@@ -647,6 +857,12 @@ pub mod tab_widget_slots {
     /// The page widget and label are passed as `(*mut QWidget, String)`.
     #[derive(Debug, Clone, Copy)]
     pub struct AddTab;
+    #[cfg(qt_5)]
+    impl SlotMeta for AddTab {
+        const QT_SIGNATURE: &'static str = "addTab(QWidget*, QString)";
+        type Args = (*mut crate::ffi::QWidget, String);
+    }
+    #[cfg(qt_6)]
     impl SlotMeta for AddTab {
         const QT_SIGNATURE: &'static str = "1addTab(QWidget*, QString)";
         type Args = (*mut crate::ffi::QWidget, String);
@@ -669,6 +885,12 @@ pub mod text_edit_signals {
     /// No parameters.
     #[derive(Debug, Clone, Copy)]
     pub struct TextChanged;
+    #[cfg(qt_5)]
+    impl SignalMeta for TextChanged {
+        const QT_SIGNATURE: &'static str = "textChanged()";
+        type Args = ();
+    }
+    #[cfg(qt_6)]
     impl SignalMeta for TextChanged {
         const QT_SIGNATURE: &'static str = "2textChanged()";
         type Args = ();
@@ -682,6 +904,12 @@ pub mod text_edit_signals {
     /// `true` if text is selected and can be copied.
     #[derive(Debug, Clone, Copy)]
     pub struct CopyAvailable;
+    #[cfg(qt_5)]
+    impl SignalMeta for CopyAvailable {
+        const QT_SIGNATURE: &'static str = "copyAvailable(bool)";
+        type Args = (bool,);
+    }
+    #[cfg(qt_6)]
     impl SignalMeta for CopyAvailable {
         const QT_SIGNATURE: &'static str = "2copyAvailable(bool)";
         type Args = (bool,);
@@ -704,6 +932,12 @@ pub mod text_edit_slots {
     /// The text content is passed as `String`.
     #[derive(Debug, Clone, Copy)]
     pub struct SetPlainText;
+    #[cfg(qt_5)]
+    impl SlotMeta for SetPlainText {
+        const QT_SIGNATURE: &'static str = "setPlainText(QString)";
+        type Args = (String,);
+    }
+    #[cfg(qt_6)]
     impl SlotMeta for SetPlainText {
         const QT_SIGNATURE: &'static str = "1setPlainText(QString)";
         type Args = (String,);
@@ -717,6 +951,12 @@ pub mod text_edit_slots {
     /// No parameters.
     #[derive(Debug, Clone, Copy)]
     pub struct Clear;
+    #[cfg(qt_5)]
+    impl SlotMeta for Clear {
+        const QT_SIGNATURE: &'static str = "clear()";
+        type Args = ();
+    }
+    #[cfg(qt_6)]
     impl SlotMeta for Clear {
         const QT_SIGNATURE: &'static str = "1clear()";
         type Args = ();
@@ -730,6 +970,12 @@ pub mod text_edit_slots {
     /// No parameters.
     #[derive(Debug, Clone, Copy)]
     pub struct Copy;
+    #[cfg(qt_5)]
+    impl SlotMeta for Copy {
+        const QT_SIGNATURE: &'static str = "copy()";
+        type Args = ();
+    }
+    #[cfg(qt_6)]
     impl SlotMeta for Copy {
         const QT_SIGNATURE: &'static str = "1copy()";
         type Args = ();
@@ -743,6 +989,12 @@ pub mod text_edit_slots {
     /// No parameters.
     #[derive(Debug, Clone, Copy)]
     pub struct Paste;
+    #[cfg(qt_5)]
+    impl SlotMeta for Paste {
+        const QT_SIGNATURE: &'static str = "paste()";
+        type Args = ();
+    }
+    #[cfg(qt_6)]
     impl SlotMeta for Paste {
         const QT_SIGNATURE: &'static str = "1paste()";
         type Args = ();
@@ -765,6 +1017,12 @@ pub mod timer_signals {
     /// No parameters.
     #[derive(Debug, Clone, Copy)]
     pub struct Timeout;
+    #[cfg(qt_5)]
+    impl SignalMeta for Timeout {
+        const QT_SIGNATURE: &'static str = "timeout()";
+        type Args = ();
+    }
+    #[cfg(qt_6)]
     impl SignalMeta for Timeout {
         const QT_SIGNATURE: &'static str = "2timeout()";
         type Args = ();
@@ -787,6 +1045,12 @@ pub mod timer_slots {
     /// No parameters.
     #[derive(Debug, Clone, Copy)]
     pub struct Start;
+    #[cfg(qt_5)]
+    impl SlotMeta for Start {
+        const QT_SIGNATURE: &'static str = "start()";
+        type Args = ();
+    }
+    #[cfg(qt_6)]
     impl SlotMeta for Start {
         const QT_SIGNATURE: &'static str = "1start()";
         type Args = ();
@@ -800,6 +1064,12 @@ pub mod timer_slots {
     /// No parameters.
     #[derive(Debug, Clone, Copy)]
     pub struct Stop;
+    #[cfg(qt_5)]
+    impl SlotMeta for Stop {
+        const QT_SIGNATURE: &'static str = "stop()";
+        type Args = ();
+    }
+    #[cfg(qt_6)]
     impl SlotMeta for Stop {
         const QT_SIGNATURE: &'static str = "1stop()";
         type Args = ();
@@ -822,6 +1092,12 @@ pub mod widget_signals {
     /// The new title is passed as `String`.
     #[derive(Debug, Clone, Copy)]
     pub struct WindowTitleChanged;
+    #[cfg(qt_5)]
+    impl SignalMeta for WindowTitleChanged {
+        const QT_SIGNATURE: &'static str = "windowTitleChanged(QString)";
+        type Args = (String,);
+    }
+    #[cfg(qt_6)]
     impl SignalMeta for WindowTitleChanged {
         const QT_SIGNATURE: &'static str = "2windowTitleChanged(QString)";
         type Args = (String,);
@@ -835,6 +1111,12 @@ pub mod widget_signals {
     /// The new icon is passed as `QIcon`.
     #[derive(Debug, Clone, Copy)]
     pub struct WindowIconChanged;
+    #[cfg(qt_5)]
+    impl SignalMeta for WindowIconChanged {
+        const QT_SIGNATURE: &'static str = "windowIconChanged(QIcon)";
+        type Args = (crate::ffi::QIcon,);
+    }
+    #[cfg(qt_6)]
     impl SignalMeta for WindowIconChanged {
         const QT_SIGNATURE: &'static str = "2windowIconChanged(QIcon)";
         type Args = (crate::ffi::QIcon,);
@@ -848,6 +1130,12 @@ pub mod widget_signals {
     /// The cursor position is passed as `QPoint`.
     #[derive(Debug, Clone, Copy)]
     pub struct CustomContextMenuRequested;
+    #[cfg(qt_5)]
+    impl SignalMeta for CustomContextMenuRequested {
+        const QT_SIGNATURE: &'static str = "customContextMenuRequested(QPoint)";
+        type Args = (crate::ffi::QPoint,);
+    }
+    #[cfg(qt_6)]
     impl SignalMeta for CustomContextMenuRequested {
         const QT_SIGNATURE: &'static str = "2customContextMenuRequested(QPoint)";
         type Args = (crate::ffi::QPoint,);

@@ -29,7 +29,7 @@ use crate::widget::AsWidget;
 ///     .build();
 /// ```
 pub struct Menu {
-    ptr: *mut ffi::QMenu,
+    pub(crate) ptr: *mut ffi::QMenu,
     has_parent: bool,
     signal_handles: Vec<SignalHandle>,
 }
