@@ -79,6 +79,7 @@ impl Frame {
     }
 
     #[doc(hidden)]
+    #[allow(dead_code)]
     pub(crate) fn from_raw(ptr: *mut ffi::QFrame, _name: &str) -> Self {
         debug_assert!(!ptr.is_null());
         Self { ptr, has_parent: true, signal_handles: Vec::new() }
