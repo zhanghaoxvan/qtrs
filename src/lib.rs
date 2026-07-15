@@ -10,7 +10,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! qtrs = "0.3.1"
+//! qtrs = "0.3.2"
 //! ```
 //!
 //! ## Design principles
@@ -205,6 +205,7 @@ pub mod toolbutton;
 pub mod calendarwidget;
 pub mod shortcut;
 pub mod systemtrayicon;
+pub mod font;
 
 // ================================================
 // Re-Exports
@@ -254,6 +255,7 @@ pub use plaintextedit::PlainTextEdit;
 pub use point::Point;
 pub use textbrowser::TextBrowser;
 pub use timeedit::TimeEdit;
+pub use font::{Font, FontExt};
 pub use loader::UiLoader;
 pub use frame::Frame;
 pub use toolbutton::ToolButton;
@@ -279,7 +281,8 @@ pub mod prelude {
         TableWidget, TreeWidget,
         DateEdit, DateTimeEdit, PlainTextEdit, TextBrowser, TimeEdit,
         Frame, ToolButton, CalendarWidget, Shortcut, SystemTrayIcon,
-        ConnectExt, ConnType, signals, FileDialog, Point, UiLoader,
+        ConnectExt, ConnType, signals, FileDialog, Point,
+        Font, FontExt, UiLoader,
         get_text, get_int, get_double, get_item,
     };
 }

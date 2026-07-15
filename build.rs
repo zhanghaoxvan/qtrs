@@ -117,7 +117,7 @@ fn main() {
         "action", "mainwindow", "toolbar", "statusbar",
         "messagebox", "inputdialog", "progressdialog",
         "tablewidget", "treewidget", "scrollarea",
-        "stackedwidget", "splitter",
+        "stackedwidget", "splitter", "font",
         "dateedit", "timeedit", "datetimeedit",
         "plaintextedit", "textbrowser",
         "frame", "toolbutton", "calendarwidget", "shortcut", "systemtrayicon",

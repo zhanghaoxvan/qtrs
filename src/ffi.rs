@@ -59,6 +59,7 @@ pub mod ffi_inner {
         type QCalendarWidget;
         type QShortcut;
         type QSystemTrayIcon;
+        type QFont;
 
         // --- QObject (base class for signal-slot connections) ---
         type QObject;
@@ -114,6 +115,8 @@ pub mod ffi_inner {
         unsafe fn QWidget_setMaximumSize(widget: *mut QWidget, width: i32, height: i32);
         unsafe fn QWidget_setFixedSize(widget: *mut QWidget, width: i32, height: i32);
         unsafe fn QWidget_setStyleSheet(widget: *mut QWidget, css: &CxxString);
+        unsafe fn QWidget_setFont(widget: *mut QWidget, font: *mut QFont);
+        unsafe fn QWidget_font(widget: *mut QWidget) -> *mut QFont;
         unsafe fn QWidget_disconnectAll(widget: *mut QWidget);
 
         // --- toQWidget upcasts ---
@@ -740,6 +743,29 @@ pub mod ffi_inner {
         unsafe fn QShortcut_setEnabled(sc: *mut QShortcut, enabled: bool);
         unsafe fn QShortcut_setAutoRepeat(sc: *mut QShortcut, repeat: bool);
         unsafe fn QShortcut_onActivated(sc: *mut QShortcut, ctx: u64);
+
+        // ============================================================
+        // QFont
+        // ============================================================
+
+        unsafe fn QFont_new() -> *mut QFont;
+        unsafe fn QFont_setFamily(font: *mut QFont, family: &CxxString);
+        unsafe fn QFont_setPointSize(font: *mut QFont, size: i32);
+        unsafe fn QFont_setPixelSize(font: *mut QFont, size: i32);
+        unsafe fn QFont_setBold(font: *mut QFont, bold: bool);
+        unsafe fn QFont_setItalic(font: *mut QFont, italic: bool);
+        unsafe fn QFont_setUnderline(font: *mut QFont, underline: bool);
+        unsafe fn QFont_setStrikeOut(font: *mut QFont, strike: bool);
+        unsafe fn QFont_setWeight(font: *mut QFont, weight: i32);
+        unsafe fn QFont_family(font: *mut QFont) -> String;
+        unsafe fn QFont_pointSize(font: *mut QFont) -> i32;
+        unsafe fn QFont_pixelSize(font: *mut QFont) -> i32;
+        unsafe fn QFont_bold(font: *mut QFont) -> bool;
+        unsafe fn QFont_italic(font: *mut QFont) -> bool;
+        unsafe fn QFont_underline(font: *mut QFont) -> bool;
+        unsafe fn QFont_strikeOut(font: *mut QFont) -> bool;
+        unsafe fn QFont_weight(font: *mut QFont) -> i32;
+        unsafe fn QFont_delete(font: *mut QFont);
 
         // ============================================================
         // QSystemTrayIcon

@@ -2,6 +2,7 @@
 #pragma once
 
 #include "qwidget.h"
+#include <QtGui/QFont>
 #include <QtGui/QIcon>
 #include <QtCore/QString>
 #include <QtWidgets/QWidget>
@@ -45,6 +46,14 @@ inline void QWidget_setFixedSize(QWidget *w, int width, int height) {
 inline void QWidget_setStyleSheet(QWidget *w, const std::string &css) {
     w->setStyleSheet(QString::fromStdString(css));
 }
+inline void QWidget_setFont(QWidget *w, QFont *f) {
+    w->setFont(*f);
+}
+
+inline QFont *QWidget_font(QWidget *w) {
+    return new QFont(w->font());
+}
+
 inline void QWidget_disconnectAll(QWidget *w) {
     QObject::disconnect(w, nullptr, nullptr, nullptr);
 }

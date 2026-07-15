@@ -47,3 +47,4 @@
 #include "calendarwidget.h"
 #include "shortcut.h"
 #include "systemtrayicon.h"
+#include "font.h"
