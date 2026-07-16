@@ -16,6 +16,9 @@ cxx = "1.0"
 [build-dependencies]
 cxx-build = "1.0"
 
+[dev-dependencies]
+pulldown-cmark = "0.13.4"
+
 [lints.rust]
 unexpected_cfgs = { level = "allow", check-cfg = ['cfg(qt_5)', 'cfg(qt_6)'] }
 
@@ -31,3 +34,6 @@ path = "examples/ui/ui.rs"
 name = "demo"
 path = "examples/demo/demo.rs"
 
+[[example]]
+name = "editor"
+path = "examples/editor/editor.rs"
