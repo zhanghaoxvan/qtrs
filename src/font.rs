@@ -206,7 +206,7 @@ impl Builder {
     /// This is the terminal method of the builder pattern.
     pub fn build(self) -> Font {
         let ptr = unsafe { ffi::QFont_new() };
-        debug_assert!(!ptr.is_null(), "QFont_new returned null");
+        assert!(!ptr.is_null(), "QFont_new returned null");
 
         let font = Font { ptr };
 

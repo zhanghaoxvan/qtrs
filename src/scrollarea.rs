@@ -95,7 +95,8 @@ impl Drop for ScrollArea {
     fn drop(&mut self) {
         if self.ptr.is_null() { return; }
         if self.has_parent {
-            self.signal_handles.clear();
+            unsafe { ffi::QWidget_disconnectAll(self.ptr as *mut _); }
+            for h in self.signal_handles.drain(..) { unsafe { h.reclaim(); } }
         } else {
             for h in self.signal_handles.drain(..) { unsafe { h.reclaim(); } }
             unsafe { ffi::QScrollArea_delete(self.ptr) };

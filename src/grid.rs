@@ -55,6 +55,13 @@ impl GridLayout {
         self.children.push(widget);
     }
 
+    /// Add a widget by value at `(row, col)` (auto-boxed).
+    pub fn add<T: AsWidget + 'static>(
+        &mut self, widget: T, row: i32, col: i32, row_span: i32, col_span: i32,
+    ) {
+        self.add_widget(Box::new(widget), row, col, row_span, col_span);
+    }
+
     /// Get the raw layout pointer for use with [`Widget::set_grid`].
     ///
     /// [`Widget::set_grid`]: crate::Widget::set_grid

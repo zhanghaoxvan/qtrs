@@ -191,7 +191,7 @@ impl Builder {
                 self.parent.unwrap_or(std::ptr::null_mut()),
             )
         };
-        debug_assert!(!ptr.is_null(), "QPushButton_new returned null");
+        assert!(!ptr.is_null(), "QPushButton_new returned null");
 
         let has_parent = self.parent.is_some();
         let mut signal_handles = Vec::new();

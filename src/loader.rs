@@ -39,7 +39,7 @@ impl UiLoader {
     /// Create a new `QUiLoader`.
     pub fn new() -> Self {
         let ptr = unsafe { ffi::QUiLoader_new() };
-        debug_assert!(!ptr.is_null(), "QUiLoader_new returned null");
+        assert!(!ptr.is_null(), "QUiLoader_new returned null");
         Self { ptr }
     }
 

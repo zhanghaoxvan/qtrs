@@ -19,11 +19,11 @@ fn main() {
     let label = Label::new("Welcome!").build();
 
     // Layout takes ownership of widgets
-    layout.add_widget(Box::new(btn));
-    layout.add_widget(Box::new(label));
+    layout.add(btn);
+    layout.add(label);
 
     // Install layout, then show the window
-    window.set_vlayout(layout.layout_ptr());
+    window.set_layout(&layout);
     window.show();
 
     // Enter the Qt event loop

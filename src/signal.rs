@@ -28,7 +28,7 @@ pub(crate) fn ensure_trampolines_registered() {
 }
 
 // ============================================================
-// Signal handle — tagged token so Drop can reclaim correctly
+// SignalHandle — tagged token so Drop can reclaim correctly
 // ============================================================
 
 #[derive(Clone, Copy)]
@@ -46,7 +46,9 @@ pub(crate) struct SignalHandle {
 
 impl SignalHandle {
     pub(crate) unsafe fn reclaim(self) {
-        if self.token == 0 { return; }
+        if self.token == 0 {
+            return;
+        }
         match self.kind {
             SignalKind::Void => {
                 let _ = Box::from_raw(self.token as *mut Box<dyn Fn()>);
@@ -65,72 +67,94 @@ impl SignalHandle {
 }
 
 // ============================================================
-// Leak helpers
+// Leak helpers — one per callback signature
 // ============================================================
 
+/// Leak a void `Fn()` closure.  Most common callback type.
 pub(crate) fn leak_void<F: Fn() + 'static>(f: F) -> SignalHandle {
     ensure_trampolines_registered();
-    let boxed: Box<dyn Fn()> = Box::new(f);
     SignalHandle {
-        token: Box::into_raw(Box::new(boxed)) as u64,
+        token: Box::into_raw(Box::new(Box::new(f) as Box<dyn Fn()>)) as u64,
         kind: SignalKind::Void,
     }
 }
 
+/// Leak a `Fn(bool)` closure.
 pub(crate) fn leak_bool<F: Fn(bool) + 'static>(f: F) -> SignalHandle {
     ensure_trampolines_registered();
-    let boxed: Box<dyn Fn(bool)> = Box::new(f);
     SignalHandle {
-        token: Box::into_raw(Box::new(boxed)) as u64,
+        token: Box::into_raw(Box::new(Box::new(f) as Box<dyn Fn(bool)>)) as u64,
         kind: SignalKind::Bool,
     }
 }
 
+/// Leak a `Fn(i32)` closure.
 pub(crate) fn leak_int<F: Fn(i32) + 'static>(f: F) -> SignalHandle {
     ensure_trampolines_registered();
-    let boxed: Box<dyn Fn(i32)> = Box::new(f);
     SignalHandle {
-        token: Box::into_raw(Box::new(boxed)) as u64,
+        token: Box::into_raw(Box::new(Box::new(f) as Box<dyn Fn(i32)>)) as u64,
         kind: SignalKind::Int,
     }
 }
 
+/// Leak a `Fn(String)` closure.
 pub(crate) fn leak_string<F: Fn(String) + 'static>(f: F) -> SignalHandle {
     ensure_trampolines_registered();
-    let boxed: Box<dyn Fn(String)> = Box::new(f);
     SignalHandle {
-        token: Box::into_raw(Box::new(boxed)) as u64,
+        token: Box::into_raw(Box::new(Box::new(f) as Box<dyn Fn(String)>)) as u64,
         kind: SignalKind::String,
     }
 }
 
+/// Convenience — leaks a void callback (most common).
+#[allow(dead_code)]
+pub(crate) fn leak<F: Fn() + 'static>(f: F) -> SignalHandle {
+    leak_void(f)
+}
+
 // ============================================================
-// Trampolines
+// Trampolines — called from C++ via registered function pointers
 // ============================================================
 
-pub(crate) fn trampoline_void(ctx: u64) {
-    debug_assert_ne!(ctx, 0, "trampoline_void called with null ctx");
-    let cb: &Box<dyn Fn()> = unsafe { &*(ctx as *const Box<dyn Fn()>) };
-    cb();
+macro_rules! define_trampoline {
+    (void, $name:ident, ()) => {
+        pub(crate) fn $name(ctx: u64) {
+            debug_assert_ne!(ctx, 0, concat!(stringify!($name), " called with null ctx"));
+            let cb: &Box<dyn Fn()> = unsafe { &*(ctx as *const Box<dyn Fn()>) };
+            cb();
+        }
+    };
+    (bool, $name:ident, $arg:ident : $ty:ty) => {
+        pub(crate) fn $name(ctx: u64, $arg: $ty) {
+            debug_assert_ne!(ctx, 0, concat!(stringify!($name), " called with null ctx"));
+            let cb: &Box<dyn Fn($ty)> = unsafe { &*(ctx as *const Box<dyn Fn($ty)>) };
+            cb($arg);
+        }
+    };
+    (int, $name:ident, $arg:ident : $ty:ty) => {
+        pub(crate) fn $name(ctx: u64, $arg: $ty) {
+            debug_assert_ne!(ctx, 0, concat!(stringify!($name), " called with null ctx"));
+            let cb: &Box<dyn Fn($ty)> = unsafe { &*(ctx as *const Box<dyn Fn($ty)>) };
+            cb($arg);
+        }
+    };
+    (string, $name:ident, $arg:ident : $ty:ty) => {
+        pub(crate) fn $name(ctx: u64, $arg: $ty) {
+            debug_assert_ne!(ctx, 0, concat!(stringify!($name), " called with null ctx"));
+            let cb: &Box<dyn Fn($ty)> = unsafe { &*(ctx as *const Box<dyn Fn($ty)>) };
+            cb($arg);
+        }
+    };
 }
 
-pub(crate) fn trampoline_bool(ctx: u64, value: bool) {
-    debug_assert_ne!(ctx, 0, "trampoline_bool called with null ctx");
-    let cb: &Box<dyn Fn(bool)> = unsafe { &*(ctx as *const Box<dyn Fn(bool)>) };
-    cb(value);
-}
+define_trampoline!(void, trampoline_void, ());
+define_trampoline!(bool, trampoline_bool, value: bool);
+define_trampoline!(int, trampoline_int, value: i32);
+define_trampoline!(string, trampoline_string, value: String);
 
-pub(crate) fn trampoline_int(ctx: u64, value: i32) {
-    debug_assert_ne!(ctx, 0, "trampoline_int called with null ctx");
-    let cb: &Box<dyn Fn(i32)> = unsafe { &*(ctx as *const Box<dyn Fn(i32)>) };
-    cb(value);
-}
-
-pub(crate) fn trampoline_string(ctx: u64, value: String) {
-    debug_assert_ne!(ctx, 0, "trampoline_string called with null ctx");
-    let cb: &Box<dyn Fn(String)> = unsafe { &*(ctx as *const Box<dyn Fn(String)>) };
-    cb(value);
-}
+// ============================================================
+// Tests
+// ============================================================
 
 #[cfg(test)]
 mod tests {
@@ -142,7 +166,7 @@ mod tests {
     fn test_void_callback() {
         let called = Arc::new(AtomicBool::new(false));
         let c = called.clone();
-        let h = leak_void(move || { c.store(true, Ordering::SeqCst); });
+        let h = leak(move || { c.store(true, Ordering::SeqCst); });
         trampoline_void(h.token);
         assert!(called.load(Ordering::SeqCst));
         unsafe { h.reclaim(); }

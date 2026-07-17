@@ -82,7 +82,8 @@ impl Drop for ComboBox {
     fn drop(&mut self) {
         if self.ptr.is_null() { return; }
         if self.has_parent {
-            self.signal_handles.clear();
+            unsafe { ffi::QWidget_disconnectAll(self.ptr as *mut _); }
+            for h in self.signal_handles.drain(..) { unsafe { h.reclaim(); } }
         } else {
             for h in self.signal_handles.drain(..) { unsafe { h.reclaim(); } }
             unsafe { ffi::QComboBox_delete(self.ptr) };

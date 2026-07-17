@@ -121,7 +121,7 @@ impl Builder {
                 self.parent.unwrap_or(std::ptr::null_mut()),
             )
         };
-        debug_assert!(!ptr.is_null(), "QLabel_new returned null");
+        assert!(!ptr.is_null(), "QLabel_new returned null");
 
         Label {
             ptr,

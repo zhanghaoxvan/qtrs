@@ -366,7 +366,10 @@ inline void ClickableLabel_onClickedWithPos(ClickableLabel *label, uint64_t ctx)
 | None (`void`) | `g_voidTrampoline(ctx)` | `signal::leak_void(f)` | `g_hasVoidTrampoline` |
 | `bool` | `g_boolTrampoline(ctx, value)` | `signal::leak_bool(f)` | `g_hasBoolTrampoline` |
 | `int` / `i32` | `g_intTrampoline(ctx, value)` | `signal::leak_int(f)` | `g_hasIntTrampoline` |
+| `String` | `g_stringTrampoline(ctx, rust::String(...))` | `signal::leak_string(f)` | `g_hasStringTrampoline` |
 | Multiple parameters | Need custom trampoline | N/A | N/A |
+
+> **Note:** A generic convenience function `signal::leak(f)` exists for void callbacks (most common).
 
 ### FFI Bridge (src/ffi.rs)
 
@@ -556,9 +559,10 @@ flowchart TD
 
 | Signal Type | C++ Connection Function | Rust Leak Helper | Trampoline Check |
 |-------------|------------------------|------------------|------------------|
-| `void()` | `g_voidTrampoline(ctx)` | `signal::leak_void(f)` | `g_hasVoidTrampoline` |
+| `void()` | `g_voidTrampoline(ctx)` | `signal::leak_void(f)` or `signal::leak(f)` | `g_hasVoidTrampoline` |
 | `bool` | `g_boolTrampoline(ctx, value)` | `signal::leak_bool(f)` | `g_hasBoolTrampoline` |
 | `int` / `i32` | `g_intTrampoline(ctx, value)` | `signal::leak_int(f)` | `g_hasIntTrampoline` |
+| `String` | `g_stringTrampoline(ctx, rust::String(...))` | `signal::leak_string(f)` | `g_hasStringTrampoline` |
 
 ### Key Points for Signal Implementation
 
@@ -566,8 +570,9 @@ flowchart TD
 2. Signal connections are made using `QObject::connect` with lambda capturing `ctx`
 3. `g_has*Trampoline` checks ensure trampoline is registered
 4. `signal::leak_*` stores the Rust closure and returns a `u64` token
-5. `SignalHandle` manages the closure lifetime (reclaims on Drop)
-6. `has_parent` logic determines whether closures are reclaimed or leaked
+5. `signal::leak(f)` is a generic convenience for void callbacks
+6. `SignalHandle` manages the closure lifetime (reclaims on Drop)
+7. `has_parent` logic determines whether closures are reclaimed or leaked
 
 ### Multiple Parameters
 
@@ -579,6 +584,24 @@ Currently, the trampoline system supports single-parameter signals. For multiple
 4. Add a new C++ trampoline function
 
 See `src/signal.rs` for existing implementations.
+
+---
+
+## Font Support (Optional)
+
+If your widget extends `QWidget`, it automatically gets `font()` / `set_font()`
+via the `FontExt` blanket trait — no extra code needed:
+
+```rust
+use qtrs::prelude::*;
+
+let label = Label::new("Hello").build();
+label.set_font(&Font::new().family("Arial").point_size(14).bold(true).build());
+let current = label.font();  // returns Font
+```
+
+The `FontExt` trait is implemented for all `AsWidget` types. No C++ or FFI
+changes are required for new QWidget subclasses.
 
 ---
 
@@ -605,14 +628,29 @@ pub enum FoundWidget {
 }
 ```
 
-### 3. Add match arm in Widget::find() (src/widget.rs)
+### 3. Add entry to the `find_match!` macro (src/widget.rs)
+
+The `find()` method uses a compact macro to generate all match arms.
+Add one line — use `YES` if `from_raw` takes an object name, `NO` otherwise:
 
 ```rust
-WidgetKind::Picture => {
-    let ptr = unsafe { ffi::QWidget_findPicture(self.ptr, &c_name) };
-    if ptr.is_null() { None }
-    else { Some(FoundWidget::Picture(crate::Picture::from_raw(ptr))) }
+find_match! {
+    // ...
+    Picture QWidget_findPicture Picture YES crate::Picture;  // ADD
 }
+```
+
+### 4. C++ findChild function (src/cpp/layout.h)
+
+```cpp
+inline QLabel *QWidget_findPicture(QWidget *parent, const std::string &name) {
+    return parent->findChild<QLabel *>(QString::fromStdString(name));
+}
+```
+
+And in `src/ffi.rs`:
+```rust
+unsafe fn QWidget_findPicture(parent: *mut QWidget, name: &CxxString) -> *mut QLabel;
 ```
 
 ---
@@ -653,10 +691,10 @@ fn main() {
 
     let label = Label::new("Hello, qtrs!").build();
 
-    layout.add_widget(Box::new(logo));
-    layout.add_widget(Box::new(label));
+    layout.add(logo);
+    layout.add(label);
 
-    window.set_vlayout(layout.layout_ptr());
+    window.set_layout(&layout);
 
     app.exec();
 }
@@ -674,13 +712,14 @@ fn main() {
 | `debug_assert!(!self.ptr.is_null())` | Widget not constructed | Check `*_new` returns non-null |
 | Signal not firing | Trampoline not registered | Ensure `ensure_trampolines_registered()` is called |
 | `g_*Trampoline` undefined | Missing `#include "signal.h"` | Add `#include "signal.h"` to C++ header |
+| `rust::String` undefined | Missing `#include "rust/cxx.h"` | Add `#include "rust/cxx.h"` for String signals |
 | Closure not called on Drop | `has_parent` logic wrong | Check `has_parent` is set correctly |
 
 ---
 
 ## Document Version
 
-- **Version:** 2.0
-- **Qt Version:** 6.2+
+- **Version:** 2.2
+- **Qt Version:** 5.15+ / 6.2+
 - **Rust MSRV:** 1.70+
-- **Last Updated:** 2026-07-09
+- **Last Updated:** 2026-07-14

@@ -43,7 +43,7 @@ impl Application {
     /// Linux without `QT_QPA_PLATFORM=offscreen`).
     pub fn new() -> Self {
         let ptr = unsafe { ffi::QApplication_new() };
-        debug_assert!(!ptr.is_null(), "QApplication_new returned null");
+        assert!(!ptr.is_null(), "QApplication_new returned null");
         Self { ptr }
     }
 

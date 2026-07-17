@@ -164,7 +164,7 @@ impl Builder {
         let ptr = unsafe {
             ffi::QProgressBar_new(self.parent.unwrap_or(std::ptr::null_mut()))
         };
-        debug_assert!(!ptr.is_null(), "QProgressBar_new returned null");
+        assert!(!ptr.is_null(), "QProgressBar_new returned null");
 
         let bar = ProgressBar {
             ptr,

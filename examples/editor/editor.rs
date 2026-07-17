@@ -187,8 +187,8 @@ fn main() {
     right_scroll.set_widget(&*preview.borrow());
 
     let mut splitter = Splitter::new(HORIZONTAL).build();
-    splitter.add_widget(Box::new(left_scroll));
-    splitter.add_widget(Box::new(right_scroll));
+    splitter.add(left_scroll);
+    splitter.add(right_scroll);
 
     window.set_central_widget(&splitter);
     window.show();

@@ -10,7 +10,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! qtrs = "0.3.2"
+//! qtrs = "0.4.0"
 //! ```
 //!
 //! ## Design principles
@@ -53,6 +53,7 @@
 //! | Type | Qt class | Signals |
 //! |---|---|---|
 //! | [`PushButton`] | `QPushButton` | `on_clicked` |
+//! | [`ToolButton`] | `QToolButton` | `on_clicked`<br>`on_toggled(bool)` |
 //! | [`CheckBox`] | `QCheckBox` | `on_toggled(bool)` |
 //! | [`RadioButton`] | `QRadioButton` | `on_toggled(bool)` |
 //! | [`Slider`] | `QSlider` | `on_value_changed(i32)` |
@@ -66,6 +67,8 @@
 //! | [`Label`] | `QLabel` | — |
 //! | [`LineEdit`] | `QLineEdit` | `on_return_pressed` |
 //! | [`TextEdit`] | `QTextEdit` | `on_text_changed` |
+//! | [`PlainTextEdit`] | `QPlainTextEdit` | `on_text_changed`<br>`on_cursor_position_changed` |
+//! | [`TextBrowser`] | `QTextBrowser` | `on_anchor_clicked(String)`<br>`on_text_changed` |
 //! | [`ProgressBar`] | `QProgressBar` | — |
 //!
 //! ### Item Views
@@ -75,6 +78,15 @@
 //! | [`ListWidget`] | `QListWidget` | `on_item_clicked(String)`<br>`on_item_double_clicked(String)`<br>`on_current_item_changed(String)` |
 //! | [`TableWidget`] | `QTableWidget` | `on_cell_clicked`<br>`on_cell_double_clicked`<br>`on_current_cell_changed` |
 //! | [`TreeWidget`] | `QTreeWidget` | `on_item_clicked(String)`<br>`on_item_double_clicked(String)`<br>`on_item_expanded(String)`<br>`on_item_collapsed(String)`<br>`on_current_item_changed(String)` |
+//!
+//! ### Date & Time
+//!
+//! | Type | Qt class | Signals |
+//! |---|---|---|
+//! | [`DateEdit`] | `QDateEdit` | `on_date_changed(String)` |
+//! | [`TimeEdit`] | `QTimeEdit` | `on_time_changed(String)` |
+//! | [`DateTimeEdit`] | `QDateTimeEdit` | `on_date_time_changed(String)` |
+//! | [`CalendarWidget`] | `QCalendarWidget` | `on_selection_changed`<br>`on_activated(String)` |
 //!
 //! ### Menus & Toolbars
 //!
@@ -104,11 +116,21 @@
 //! | [`HBoxLayout`] | `QHBoxLayout` | — |
 //! | [`GridLayout`] | `QGridLayout` | — |
 //!
+//! ### Styling & Utilities
+//!
+//! | Type | Qt class | Signals |
+//! |---|---|---|
+//! | [`Frame`] | `QFrame` | — (shape/shadow decorations) |
+//! | [`Font`] | `QFont` | — (builder: family, size, weight) |
+//! | [`FontExt`] | *(trait)* | `font()` / `set_font()` on all widgets |
+//! | [`Shortcut`] | `QShortcut` | `on_activated()` (QObject) |
+//!
 //! ### System
 //!
 //! | Type | Qt class | Signals |
 //! |---|---|---|
 //! | [`Timer`] | `QTimer` | `on_timeout`<br>`single_shot(ms, fn)` |
+//! | [`SystemTrayIcon`] | `QSystemTrayIcon` | `on_activated(TrayIconReason)` |
 //! | [`UiLoader`] | `QUiLoader` | `.ui` file loading |
 //! | [`Point`] | `QPoint` | — |
 //!
@@ -132,10 +154,10 @@
 //!         .build();
 //!     let label = Label::new("Welcome!").build();
 //!
-//!     layout.add_widget(Box::new(btn));
-//!     layout.add_widget(Box::new(label));
+//!     layout.add(btn);
+//!     layout.add(label);
 //!
-//!     window.set_vlayout(layout.layout_ptr());
+//!     window.set_layout(&layout);
 //!     window.show();
 //!
 //!     app.exec();

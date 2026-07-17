@@ -64,7 +64,7 @@ impl VBoxLayout {
     /// [`Widget::set_vlayout`]: crate::Widget::set_vlayout
     pub fn new() -> Self {
         let ptr = unsafe { ffi::QVBoxLayout_new(std::ptr::null_mut()) };
-        debug_assert!(!ptr.is_null(), "QVBoxLayout_new returned null");
+        assert!(!ptr.is_null(), "QVBoxLayout_new returned null");
         Self {
             ptr,
             children: Vec::new(),
@@ -80,7 +80,7 @@ impl VBoxLayout {
     /// [`Widget::set_vlayout`]: crate::Widget::set_vlayout
     pub fn with_parent(parent: &dyn AsWidget) -> Self {
         let ptr = unsafe { ffi::QVBoxLayout_new(parent.widget_ptr()) };
-        debug_assert!(!ptr.is_null(), "QVBoxLayout_new returned null");
+        assert!(!ptr.is_null(), "QVBoxLayout_new returned null");
         Self {
             ptr,
             children: Vec::new(),
@@ -98,6 +98,15 @@ impl VBoxLayout {
         }
         widget.set_has_parent(); // Qt parent manages the C++ lifetime
         self.children.push(widget);
+    }
+
+    /// Add a widget by value (auto-boxed).  Equivalent to `add_widget(Box::new(w))`.
+    ///
+    /// ```no_run
+    /// layout.add(PushButton::new("OK").build());
+    /// ```
+    pub fn add<T: AsWidget + 'static>(&mut self, widget: T) {
+        self.add_widget(Box::new(widget));
     }
 
     /// Get the raw `QVBoxLayout*` pointer.
@@ -170,7 +179,7 @@ impl HBoxLayout {
     /// [`Widget::set_hlayout`]: crate::Widget::set_hlayout
     pub fn new() -> Self {
         let ptr = unsafe { ffi::QHBoxLayout_new(std::ptr::null_mut()) };
-        debug_assert!(!ptr.is_null(), "QHBoxLayout_new returned null");
+        assert!(!ptr.is_null(), "QHBoxLayout_new returned null");
         Self {
             ptr,
             children: Vec::new(),
@@ -180,7 +189,7 @@ impl HBoxLayout {
     /// Create a layout and immediately attach it to `parent`.
     pub fn with_parent(parent: &dyn AsWidget) -> Self {
         let ptr = unsafe { ffi::QHBoxLayout_new(parent.widget_ptr()) };
-        debug_assert!(!ptr.is_null(), "QHBoxLayout_new returned null");
+        assert!(!ptr.is_null(), "QHBoxLayout_new returned null");
         Self {
             ptr,
             children: Vec::new(),
@@ -197,6 +206,11 @@ impl HBoxLayout {
         }
         widget.set_has_parent();
         self.children.push(widget);
+    }
+
+    /// Add a widget by value (auto-boxed).
+    pub fn add<T: AsWidget + 'static>(&mut self, widget: T) {
+        self.add_widget(Box::new(widget));
     }
 
     /// Get the raw `QHBoxLayout*` pointer.

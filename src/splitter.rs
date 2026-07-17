@@ -52,6 +52,11 @@ impl Splitter {
         self.children.push(w);
     }
 
+    /// Add a widget by value (auto-boxed).
+    pub fn add<T: AsWidget + 'static>(&mut self, widget: T) {
+        self.add_widget(Box::new(widget));
+    }
+
     /// Insert a widget at the given index.
     ///
     /// The widget is moved into the splitter and owned by it.
@@ -126,7 +131,8 @@ impl Drop for Splitter {
         if self.ptr.is_null() { return; }
         if self.has_parent {
             self.children.clear();
-            self.signal_handles.clear();
+            unsafe { ffi::QWidget_disconnectAll(self.ptr as *mut _); }
+            for h in self.signal_handles.drain(..) { unsafe { h.reclaim(); } }
         } else {
             for h in self.signal_handles.drain(..) { unsafe { h.reclaim(); } }
             self.children.clear();

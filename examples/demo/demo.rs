@@ -32,7 +32,7 @@ fn main() {
     let title_label = Label::new("\nqtrs Widget Gallery")
         .parent(&window)
         .build();
-    main_layout.add_widget(Box::new(title_label));
+    main_layout.add(title_label);
     
     // ============================================================
     // Section 1: Buttons
@@ -48,7 +48,7 @@ fn main() {
         .on_clicked(|| println!("[LOG] Button clicked"))
         .parent(&group1)
         .build();
-    g1_layout.add_widget(Box::new(btn));
+    g1_layout.add(btn);
 
     // CheckBox
     let cb = CheckBox::new("Check me")
@@ -56,11 +56,11 @@ fn main() {
         .on_toggled(|checked| println!("[LOG] CheckBox: {}", checked))
         .parent(&group1)
         .build();
-    g1_layout.add_widget(Box::new(cb));
+    g1_layout.add(cb);
 
     // RadioButton group
     let rb1_label = Label::new("Radio Group (click to log):").parent(&group1).build();
-    g1_layout.add_widget(Box::new(rb1_label));
+    g1_layout.add(rb1_label);
 
     let rb1 = RadioButton::new("Option A")
         .checked(true)
@@ -71,7 +71,7 @@ fn main() {
         })
         .parent(&group1)
         .build();
-    g1_layout.add_widget(Box::new(rb1));
+    g1_layout.add(rb1);
 
     let rb2 = RadioButton::new("Option B")
         .checked(false)
@@ -82,7 +82,7 @@ fn main() {
         })
         .parent(&group1)
         .build();
-    g1_layout.add_widget(Box::new(rb2));
+    g1_layout.add(rb2);
 
     let rb3 = RadioButton::new("Option C")
         .checked(false)
@@ -93,9 +93,9 @@ fn main() {
         })
         .parent(&group1)
         .build();
-    g1_layout.add_widget(Box::new(rb3));
+    g1_layout.add(rb3);
 
-    main_layout.add_widget(Box::new(group1));
+    main_layout.add(group1);
 
     // ============================================================
     // Section 2: Input widgets
@@ -111,7 +111,7 @@ fn main() {
         .on_return_pressed(|| println!("[LOG] LineEdit return pressed"))
         .parent(&group2)
         .build();
-    g2_layout.add_widget(Box::new(edit));
+    g2_layout.add(edit);
 
     // ComboBox
     let mut combo = ComboBox::new()
@@ -122,7 +122,7 @@ fn main() {
     combo.connect_current_index_changed(|idx| {
         println!("[LOG] ComboBox index: {}", idx);
     });
-    g2_layout.add_widget(Box::new(combo));
+    g2_layout.add(combo);
 
     // TextEdit
     let text_edit = TextEdit::new()
@@ -130,9 +130,9 @@ fn main() {
         .on_text_changed(|| println!("[LOG] TextEdit content changed"))
         .parent(&group2)
         .build();
-    g2_layout.add_widget(Box::new(text_edit));
+    g2_layout.add(text_edit);
 
-    main_layout.add_widget(Box::new(group2));
+    main_layout.add(group2);
 
     // ============================================================
     // Section 3: Full Bidirectional Sync (Slider ↔ SpinBox → ProgressBar)
@@ -203,11 +203,11 @@ fn main() {
     // ============================================================
     // NOW add widgets to layout (after all connections)
     // ============================================================
-    g3_layout.add_widget(Box::new(bar));
-    g3_layout.add_widget(Box::new(slider));
-    g3_layout.add_widget(Box::new(spin));
+    g3_layout.add(bar);
+    g3_layout.add(slider);
+    g3_layout.add(spin);
 
-    main_layout.add_widget(Box::new(group3));
+    main_layout.add(group3);
 
     // ============================================================
     // Section 4: TabWidget
@@ -221,7 +221,7 @@ fn main() {
     let tab1 = Widget::new().parent(&tabs).build();
     let mut tab1_layout = VBoxLayout::with_parent(&tab1);
     let tab1_label = Label::new("This is Tab 1").parent(&tab1).build();
-    tab1_layout.add_widget(Box::new(tab1_label));
+    tab1_layout.add(tab1_label);
     tabs.add_tab(Box::new(tab1), "Tab 1");
 
     // Tab 2: CheckBoxes
@@ -229,8 +229,8 @@ fn main() {
     let mut tab2_layout = VBoxLayout::with_parent(&tab2);
     let cb1 = CheckBox::new("Option X").parent(&tab2).build();
     let cb2 = CheckBox::new("Option Y").parent(&tab2).build();
-    tab2_layout.add_widget(Box::new(cb1));
-    tab2_layout.add_widget(Box::new(cb2));
+    tab2_layout.add(cb1);
+    tab2_layout.add(cb2);
     tabs.add_tab(Box::new(tab2), "Tab 2");
 
     // Tab 3: Button
@@ -240,10 +240,10 @@ fn main() {
         .on_clicked(|| println!("[LOG] Tab 3 button clicked"))
         .parent(&tab3)
         .build();
-    tab3_layout.add_widget(Box::new(btn_tab3));
+    tab3_layout.add(btn_tab3);
     tabs.add_tab(Box::new(tab3), "Tab 3");
 
-    main_layout.add_widget(Box::new(tabs));
+    main_layout.add(tabs);
 
     // ============================================================
     // Section 5: Menu + MenuBar
@@ -294,7 +294,7 @@ fn main() {
             dialog::information(
                 None,  // No parent needed
                 "About",
-                "qtrs Widget Gallery\nVersion 0.3.2\n\nAll widgets test",
+                "qtrs Widget Gallery\nVersion 0.4.0\n\nAll widgets test",
             );
         })
         .parent(&window)
@@ -320,7 +320,7 @@ fn main() {
         })
         .parent(&window)
         .build();
-    bottom_layout.add_widget(Box::new(info_btn));
+    bottom_layout.add(info_btn);
 
     let warn_btn = PushButton::new("Show Warning")
         .on_clicked(|| {
@@ -329,7 +329,7 @@ fn main() {
         })
         .parent(&window)
         .build();
-    bottom_layout.add_widget(Box::new(warn_btn));
+    bottom_layout.add(warn_btn);
 
     let ask_btn = PushButton::new("Ask Question")
         .on_clicked(|| {
@@ -339,11 +339,11 @@ fn main() {
         })
         .parent(&window)
         .build();
-    bottom_layout.add_widget(Box::new(ask_btn));
+    bottom_layout.add(ask_btn);
 
     let mut bottom_widget = Widget::new().parent(&window).build();
-    bottom_widget.set_hlayout(bottom_layout.layout_ptr());
-    main_layout.add_widget(Box::new(bottom_widget));
+    bottom_widget.set_layout(&bottom_layout);
+    main_layout.add(bottom_widget);
 
     // ============================================================
     // Status bar
@@ -351,7 +351,7 @@ fn main() {
     let status_label = Label::new("Status: Ready - All widgets loaded")
         .parent(&window)
         .build();
-    main_layout.add_widget(Box::new(status_label));
+    main_layout.add(status_label);
 
     // ============================================================
     // Show window and run

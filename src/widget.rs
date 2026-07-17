@@ -203,6 +203,21 @@ impl Widget {
         }
     }
 
+    /// Install any layout (unified API — works with all layout types).
+    ///
+    /// ```no_run
+    /// # use qtrs::*;
+    /// let mut window = Widget::new().build();
+    /// let vbox = VBoxLayout::with_parent(&window);
+    /// window.set_layout(&vbox);
+    /// ```
+    pub fn set_layout(&mut self, layout: &impl crate::layout::AsLayout) {
+        assert!(!self.ptr.is_null(), "Widget::set_layout on null pointer");
+        let lp = layout.layout_ptr();
+        assert!(!lp.is_null(), "set_layout with null layout");
+        unsafe { ffi::QWidget_setLayout(self.ptr, lp); }
+    }
+
     /// Set the window icon from an image file.
     pub fn set_icon(&self, icon_path: &str) {
         debug_assert!(!self.ptr.is_null(), "Widget::set_icon on null pointer");
@@ -283,134 +298,63 @@ impl Widget {
     /// }
     /// ```
     pub fn find(&self, kind: WidgetKind, name: &str) -> Option<FoundWidget> {
-        debug_assert!(!self.ptr.is_null());
+        assert!(!self.ptr.is_null(), "Widget::find on null pointer");
         let_cxx_string!(c_name = name);
-        match kind {
-            WidgetKind::PushButton => {
-                let ptr = unsafe { ffi::QWidget_findPushButton(self.ptr, &c_name) };
-                if ptr.is_null() { None }
-                else { Some(FoundWidget::PushButton(crate::PushButton::from_raw(ptr, name))) }
-            }
-            WidgetKind::LineEdit => {
-                let ptr = unsafe { ffi::QWidget_findLineEdit(self.ptr, &c_name) };
-                if ptr.is_null() { None }
-                else { Some(FoundWidget::LineEdit(crate::LineEdit::from_raw(ptr, name))) }
-            }
-            WidgetKind::CheckBox => {
-                let ptr = unsafe { ffi::QWidget_findCheckBox(self.ptr, &c_name) };
-                if ptr.is_null() { None }
-                else { Some(FoundWidget::CheckBox(crate::CheckBox::from_raw(ptr, name))) }
-            }
-            WidgetKind::ComboBox => {
-                let ptr = unsafe { ffi::QWidget_findComboBox(self.ptr, &c_name) };
-                if ptr.is_null() { None }
-                else { Some(FoundWidget::ComboBox(crate::ComboBox::from_raw(ptr, name))) }
-            }
-            WidgetKind::Slider => {
-                let ptr = unsafe { ffi::QWidget_findSlider(self.ptr, &c_name) };
-                if ptr.is_null() { None }
-                else { Some(FoundWidget::Slider(crate::Slider::from_raw(ptr, name))) }
-            }
-            WidgetKind::TextEdit => {
-                let ptr = unsafe { ffi::QWidget_findTextEdit(self.ptr, &c_name) };
-                if ptr.is_null() { None }
-                else { Some(FoundWidget::TextEdit(crate::TextEdit::from_raw(ptr, name))) }
-            }
-            WidgetKind::Label => {
-                let ptr = unsafe { ffi::QWidget_findLabel(self.ptr, &c_name) };
-                if ptr.is_null() { None }
-                else { Some(FoundWidget::Label(crate::Label::from_raw(ptr, name))) }
-            }
-            WidgetKind::ProgressBar => {
-                let ptr = unsafe { ffi::QWidget_findProgressBar(self.ptr, &c_name) };
-                if ptr.is_null() { None }
-                else { Some(FoundWidget::ProgressBar(crate::ProgressBar::from_raw(ptr))) }
-            }
-            WidgetKind::RadioButton => {
-                let ptr = unsafe { ffi::QWidget_findRadioButton(self.ptr, &c_name) };
-                if ptr.is_null() { None }
-                else { Some(FoundWidget::RadioButton(crate::RadioButton::from_raw(ptr))) }
-            }
-            WidgetKind::GroupBox => {
-                let ptr = unsafe { ffi::QWidget_findGroupBox(self.ptr, &c_name) };
-                if ptr.is_null() { None }
-                else { Some(FoundWidget::GroupBox(crate::GroupBox::from_raw(ptr))) }
-            }
-            WidgetKind::TabWidget => {
-                let ptr = unsafe { ffi::QWidget_findTabWidget(self.ptr, &c_name) };
-                if ptr.is_null() { None }
-                else { Some(FoundWidget::TabWidget(crate::TabWidget::from_raw(ptr))) }
-            }
-            WidgetKind::SpinBox => {
-                let ptr = unsafe { ffi::QWidget_findSpinBox(self.ptr, &c_name) };
-                if ptr.is_null() { None }
-                else { Some(FoundWidget::SpinBox(crate::SpinBox::from_raw(ptr))) }
-            }
-            WidgetKind::ListWidget => {
-                let ptr = unsafe { ffi::QWidget_findListWidget(self.ptr, &c_name) };
-                if ptr.is_null() { None }
-                else { Some(FoundWidget::ListWidget(crate::ListWidget::from_raw(ptr, name))) }
-            }
-            WidgetKind::ProgressDialog => {
-                let ptr = unsafe { ffi::QWidget_findProgressDialog(self.ptr, &c_name) };
-                if ptr.is_null() { None }
-                else { Some(FoundWidget::ProgressDialog(crate::ProgressDialog::from_raw(ptr))) }
-            }
-            WidgetKind::ScrollArea => {
-                let ptr = unsafe { ffi::QWidget_findScrollArea(self.ptr, &c_name) };
-                if ptr.is_null() { None }
-                else { Some(FoundWidget::ScrollArea(crate::ScrollArea::from_raw(ptr))) }
-            }
-            WidgetKind::TableWidget => {
-                let ptr = unsafe { ffi::QWidget_findTableWidget(self.ptr, &c_name) };
-                if ptr.is_null() { None }
-                else { Some(FoundWidget::TableWidget(crate::TableWidget::from_raw(ptr))) }
-            }
-            WidgetKind::TreeWidget => {
-                let ptr = unsafe { ffi::QWidget_findTreeWidget(self.ptr, &c_name) };
-                if ptr.is_null() { None }
-                else { Some(FoundWidget::TreeWidget(crate::TreeWidget::from_raw(ptr))) }
-            }
-            WidgetKind::StackedWidget => {
-                let ptr = unsafe { ffi::QWidget_findStackedWidget(self.ptr, &c_name) };
-                if ptr.is_null() { None }
-                else { Some(FoundWidget::StackedWidget(crate::StackedWidget::from_raw(ptr))) }
-            }
-            WidgetKind::Splitter => {
-                let ptr = unsafe { ffi::QWidget_findSplitter(self.ptr, &c_name) };
-                if ptr.is_null() { None }
-                else { Some(FoundWidget::Splitter(crate::Splitter::from_raw(ptr))) }
-            }
-            WidgetKind::DateEdit => {
-                let ptr = unsafe { ffi::QWidget_findDateEdit(self.ptr, &c_name) };
-                if ptr.is_null() { None }
-                else { Some(FoundWidget::DateEdit(crate::DateEdit::from_raw(ptr, name))) }
-            }
-            WidgetKind::TimeEdit => {
-                let ptr = unsafe { ffi::QWidget_findTimeEdit(self.ptr, &c_name) };
-                if ptr.is_null() { None }
-                else { Some(FoundWidget::TimeEdit(crate::TimeEdit::from_raw(ptr, name))) }
-            }
-            WidgetKind::DateTimeEdit => {
-                let ptr = unsafe { ffi::QWidget_findDateTimeEdit(self.ptr, &c_name) };
-                if ptr.is_null() { None }
-                else { Some(FoundWidget::DateTimeEdit(crate::DateTimeEdit::from_raw(ptr, name))) }
-            }
-            WidgetKind::PlainTextEdit => {
-                let ptr = unsafe { ffi::QWidget_findPlainTextEdit(self.ptr, &c_name) };
-                if ptr.is_null() { None }
-                else { Some(FoundWidget::PlainTextEdit(crate::PlainTextEdit::from_raw(ptr, name))) }
-            }
-            WidgetKind::TextBrowser => {
-                let ptr = unsafe { ffi::QWidget_findTextBrowser(self.ptr, &c_name) };
-                if ptr.is_null() { None }
-                else { Some(FoundWidget::TextBrowser(crate::TextBrowser::from_raw(ptr, name))) }
-            }
-            WidgetKind::Any => {
-                let ptr = unsafe { ffi::QWidget_findWidget(self.ptr, &c_name) };
-                if ptr.is_null() { None }
-                else { Some(FoundWidget::Widget(Widget::from_raw(ptr, true))) }
-            }
+
+        // Generate all find arms from a compact spec in a single macro call.
+        // Entries separated by `;`. Last token before `;` is `0` (no name) or `1` (with name).
+        macro_rules! find_match {
+            ($($kind:ident $ffi:ident $found:ident $use_name:ident $ty:path);* $(;)?) => {
+                match kind {
+                    $(
+                        WidgetKind::$kind => {
+                            let ptr = unsafe { ffi::$ffi(self.ptr, &c_name) };
+                            if ptr.is_null() { None }
+                            else {
+                                find_match!(@raw $use_name, $found, $ty, ptr)
+                            }
+                        }
+                    ),*
+                    WidgetKind::Any => {
+                        let ptr = unsafe { ffi::QWidget_findWidget(self.ptr, &c_name) };
+                        if ptr.is_null() { None }
+                        else { Some(FoundWidget::Widget(Widget::from_raw(ptr, true))) }
+                    }
+                }
+            };
+            (@raw YES, $found:ident, $ty:path, $ptr:ident) => {
+                Some(FoundWidget::$found(<$ty>::from_raw($ptr, name)))
+            };
+            (@raw NO, $found:ident, $ty:path, $ptr:ident) => {
+                Some(FoundWidget::$found(<$ty>::from_raw($ptr)))
+            };
+        }
+
+        find_match! {
+            PushButton QWidget_findPushButton PushButton YES crate::PushButton;
+            LineEdit QWidget_findLineEdit LineEdit YES crate::LineEdit;
+            CheckBox QWidget_findCheckBox CheckBox YES crate::CheckBox;
+            ComboBox QWidget_findComboBox ComboBox YES crate::ComboBox;
+            Slider QWidget_findSlider Slider YES crate::Slider;
+            TextEdit QWidget_findTextEdit TextEdit YES crate::TextEdit;
+            Label QWidget_findLabel Label YES crate::Label;
+            ProgressBar QWidget_findProgressBar ProgressBar NO crate::ProgressBar;
+            RadioButton QWidget_findRadioButton RadioButton NO crate::RadioButton;
+            GroupBox QWidget_findGroupBox GroupBox NO crate::GroupBox;
+            TabWidget QWidget_findTabWidget TabWidget NO crate::TabWidget;
+            SpinBox QWidget_findSpinBox SpinBox NO crate::SpinBox;
+            ListWidget QWidget_findListWidget ListWidget YES crate::ListWidget;
+            ProgressDialog QWidget_findProgressDialog ProgressDialog NO crate::ProgressDialog;
+            ScrollArea QWidget_findScrollArea ScrollArea NO crate::ScrollArea;
+            TableWidget QWidget_findTableWidget TableWidget NO crate::TableWidget;
+            TreeWidget QWidget_findTreeWidget TreeWidget NO crate::TreeWidget;
+            StackedWidget QWidget_findStackedWidget StackedWidget NO crate::StackedWidget;
+            Splitter QWidget_findSplitter Splitter NO crate::Splitter;
+            DateEdit QWidget_findDateEdit DateEdit YES crate::DateEdit;
+            TimeEdit QWidget_findTimeEdit TimeEdit YES crate::TimeEdit;
+            DateTimeEdit QWidget_findDateTimeEdit DateTimeEdit YES crate::DateTimeEdit;
+            PlainTextEdit QWidget_findPlainTextEdit PlainTextEdit YES crate::PlainTextEdit;
+            TextBrowser QWidget_findTextBrowser TextBrowser YES crate::TextBrowser;
         }
     }
 }
@@ -595,7 +539,7 @@ impl Builder {
                 self.parent.unwrap_or(std::ptr::null_mut()),
             )
         };
-        debug_assert!(!ptr.is_null(), "QWidget_new returned null");
+        assert!(!ptr.is_null(), "QWidget_new returned null");
 
         let has_parent = self.parent.is_some();
 
