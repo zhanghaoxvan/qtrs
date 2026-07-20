@@ -35,7 +35,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.3.0] - 2026-07-13
 
 ### Added
-- **First public release** on crates.io.
 - Core widgets: `Widget`, `MainWindow`, `Label`, `Button`, `LineEdit`, `TextEdit`,
   `PlainTextEdit`, `CheckBox`, `ComboBox`, `SpinBox`, `Slider`, `ProgressBar`,
   `ListWidget`, `TableWidget`, `TreeWidget`, `TabWidget`, `StackedWidget`,
