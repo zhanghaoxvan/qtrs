@@ -44,8 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Menus & toolbars: `Menu`, `MenuBar`, `ToolBar`, `Action`, `StatusBar`, `Shortcut`.
 - Dialogs: `FileDialog`, `InputDialog`, `MessageBox`, `ProgressDialog`, `Dialog`.
 - Type-safe signal-slot connections with compile-time checking.
-- Qt Designer `.ui` file support via `UiLoader` (feature: `ui`).
-- QML integration via `QmlEngine` (feature: `qml`).
+- Qt Designer `.ui` file support via `UiLoader`.
 - Markdown Editor example.
 - Font support with builder-pattern `Font` struct.
 - Timer widget with `on_timeout` callback.
@@ -66,7 +65,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Thread safety checks (`QObject_isInGuiThread`).
 - Additional widgets: `CheckBox`, `ComboBox`, `TextEdit`, `Slider`, `GridLayout`.
 - Qt Designer `.ui` file loading with slot connections.
-- QML engine support (initial implementation, later removed and re-added as feature).
 - Timer widget with `on_timeout` callback.
 - Demo example showcasing `Slider` ↔ `SpinBox` ↔ `ProgressBar` synchronization.
 
@@ -75,6 +73,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Cross-platform compatibility improvements.
+
+### Removed
+- QML support (removed to keep focus on QWidgets).
 
 ---
 
