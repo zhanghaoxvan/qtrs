@@ -119,7 +119,7 @@ impl Action {
     // --- Runtime signal connections ---
 
     /// Connect a callback when the action is triggered. Receives the checked state.
-    pub fn connect_triggered<F: Fn(bool) + 'static>(&mut self, f: F) {
+    pub fn connect_triggered<F: Fn(bool)>(&mut self, f: F) {
         debug_assert!(!self.ptr.is_null());
         let handle = signal::leak_bool(f);
         unsafe { ffi::QAction_onTriggered(self.ptr, handle.token); }
@@ -127,7 +127,7 @@ impl Action {
     }
 
     /// Connect a callback when the action toggles. Receives the checked state.
-    pub fn connect_toggled<F: Fn(bool) + 'static>(&mut self, f: F) {
+    pub fn connect_toggled<F: Fn(bool)>(&mut self, f: F) {
         debug_assert!(!self.ptr.is_null());
         let handle = signal::leak_bool(f);
         unsafe { ffi::QAction_onToggled(self.ptr, handle.token); }

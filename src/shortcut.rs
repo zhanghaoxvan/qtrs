@@ -68,7 +68,7 @@ impl Shortcut {
     // --- Runtime signal connections ---
 
     /// Connect a callback when the shortcut is activated.
-    pub fn connect_activated<F: Fn() + 'static>(&mut self, f: F) {
+    pub fn connect_activated<F: Fn()>(&mut self, f: F) {
         debug_assert!(!self.ptr.is_null());
         let handle = signal::leak_void(f);
         unsafe { ffi::QShortcut_onActivated(self.ptr, handle.token); }

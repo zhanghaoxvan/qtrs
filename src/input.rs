@@ -86,7 +86,7 @@ impl LineEdit {
     }
 
     /// Connect a return-pressed callback to an already-existing widget.
-    pub fn connect_return_pressed<F: Fn() + 'static>(&mut self, f: F) {
+    pub fn connect_return_pressed<F: Fn()>(&mut self, f: F) {
         debug_assert!(!self.ptr.is_null());
         let handle = signal::leak_void(f);
         unsafe { ffi::QLineEdit_onReturnPressed(self.ptr, handle.token); }

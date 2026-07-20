@@ -48,7 +48,7 @@ impl CheckBox {
     }
 
     /// Connect a toggle callback to an already-existing checkbox.
-    pub fn connect_toggled<F: Fn(bool) + 'static>(&mut self, f: F) {
+    pub fn connect_toggled<F: Fn(bool)>(&mut self, f: F) {
         debug_assert!(!self.ptr.is_null());
         let handle = signal::leak_bool(f);
         unsafe { ffi::QCheckBox_onToggled(self.ptr, handle.token); }

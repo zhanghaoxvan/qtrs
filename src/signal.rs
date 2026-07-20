@@ -70,45 +70,36 @@ impl SignalHandle {
 // Leak helpers — one per callback signature
 // ============================================================
 
-/// Leak a void `Fn()` closure.  Most common callback type.
-pub(crate) fn leak_void<F: Fn() + 'static>(f: F) -> SignalHandle {
-    ensure_trampolines_registered();
-    SignalHandle {
-        token: Box::into_raw(Box::new(Box::new(f) as Box<dyn Fn()>)) as u64,
-        kind: SignalKind::Void,
-    }
+// `leak_fn!` generates one leak function per signal signature.
+// Takes: $name (function name), $kind (SignalKind variant),
+//        $bound: the Fn(…) trait, $dyn: the dyn Fn(…) trait-object type.
+macro_rules! leak_fn {
+    ($name:ident, $kind:ident, $bound:path, $dyn:ty) => {
+        pub(crate) fn $name<F>(f: F) -> SignalHandle
+        where F: $bound
+        {
+            ensure_trampolines_registered();
+            // SAFETY: closure is reclaimed in Drop before the widget (and its
+            // captured refs) is destroyed.  Qt signals are disconnected first.
+            let thin: *mut F = Box::into_raw(Box::new(f));
+            let fat: *mut $dyn = thin; // raw-pointer unsizing — no lifetime check
+            let inner: Box<$dyn> = unsafe { std::mem::transmute(fat) };
+            SignalHandle {
+                token: Box::into_raw(Box::new(inner)) as u64,
+                kind: SignalKind::$kind,
+            }
+        }
+    };
 }
 
-/// Leak a `Fn(bool)` closure.
-pub(crate) fn leak_bool<F: Fn(bool) + 'static>(f: F) -> SignalHandle {
-    ensure_trampolines_registered();
-    SignalHandle {
-        token: Box::into_raw(Box::new(Box::new(f) as Box<dyn Fn(bool)>)) as u64,
-        kind: SignalKind::Bool,
-    }
-}
-
-/// Leak a `Fn(i32)` closure.
-pub(crate) fn leak_int<F: Fn(i32) + 'static>(f: F) -> SignalHandle {
-    ensure_trampolines_registered();
-    SignalHandle {
-        token: Box::into_raw(Box::new(Box::new(f) as Box<dyn Fn(i32)>)) as u64,
-        kind: SignalKind::Int,
-    }
-}
-
-/// Leak a `Fn(String)` closure.
-pub(crate) fn leak_string<F: Fn(String) + 'static>(f: F) -> SignalHandle {
-    ensure_trampolines_registered();
-    SignalHandle {
-        token: Box::into_raw(Box::new(Box::new(f) as Box<dyn Fn(String)>)) as u64,
-        kind: SignalKind::String,
-    }
-}
+leak_fn!(leak_void, Void, Fn(), dyn Fn());
+leak_fn!(leak_bool, Bool, Fn(bool), dyn Fn(bool));
+leak_fn!(leak_int, Int, Fn(i32), dyn Fn(i32));
+leak_fn!(leak_string, String, Fn(String), dyn Fn(String));
 
 /// Convenience — leaks a void callback (most common).
 #[allow(dead_code)]
-pub(crate) fn leak<F: Fn() + 'static>(f: F) -> SignalHandle {
+pub(crate) fn leak<F: Fn()>(f: F) -> SignalHandle {
     leak_void(f)
 }
 

@@ -48,7 +48,7 @@ impl TimeEdit {
     }
 
     /// Connect a callback that fires when the time changes. Receives the ISO time string.
-    pub fn connect_time_changed<F: Fn(String) + 'static>(&mut self, f: F) {
+    pub fn connect_time_changed<F: Fn(String)>(&mut self, f: F) {
         debug_assert!(!self.ptr.is_null());
         let handle = signal::leak_string(f);
         unsafe { ffi::QTimeEdit_onTimeChanged(self.ptr, handle.token); }

@@ -122,7 +122,7 @@ impl TreeWidget {
     // --- Signal connections (runtime) ---
 
     /// Connect callback when an item is clicked. Receives the item text.
-    pub fn connect_item_clicked<F: Fn(String) + 'static>(&mut self, f: F) {
+    pub fn connect_item_clicked<F: Fn(String)>(&mut self, f: F) {
         debug_assert!(!self.ptr.is_null());
         let handle = signal::leak_string(f);
         unsafe { ffi::QTreeWidget_onItemClicked(self.ptr, handle.token); }
@@ -130,7 +130,7 @@ impl TreeWidget {
     }
 
     /// Connect callback when an item is double-clicked. Receives the item text.
-    pub fn connect_item_double_clicked<F: Fn(String) + 'static>(&mut self, f: F) {
+    pub fn connect_item_double_clicked<F: Fn(String)>(&mut self, f: F) {
         debug_assert!(!self.ptr.is_null());
         let handle = signal::leak_string(f);
         unsafe { ffi::QTreeWidget_onItemDoubleClicked(self.ptr, handle.token); }
@@ -138,7 +138,7 @@ impl TreeWidget {
     }
 
     /// Connect callback when an item is expanded. Receives the item text.
-    pub fn connect_item_expanded<F: Fn(String) + 'static>(&mut self, f: F) {
+    pub fn connect_item_expanded<F: Fn(String)>(&mut self, f: F) {
         debug_assert!(!self.ptr.is_null());
         let handle = signal::leak_string(f);
         unsafe { ffi::QTreeWidget_onItemExpanded(self.ptr, handle.token); }
@@ -146,7 +146,7 @@ impl TreeWidget {
     }
 
     /// Connect callback when an item is collapsed. Receives the item text.
-    pub fn connect_item_collapsed<F: Fn(String) + 'static>(&mut self, f: F) {
+    pub fn connect_item_collapsed<F: Fn(String)>(&mut self, f: F) {
         debug_assert!(!self.ptr.is_null());
         let handle = signal::leak_string(f);
         unsafe { ffi::QTreeWidget_onItemCollapsed(self.ptr, handle.token); }
@@ -154,7 +154,7 @@ impl TreeWidget {
     }
 
     /// Connect callback when the current item changes. Receives the item text.
-    pub fn connect_current_item_changed<F: Fn(String) + 'static>(&mut self, f: F) {
+    pub fn connect_current_item_changed<F: Fn(String)>(&mut self, f: F) {
         debug_assert!(!self.ptr.is_null());
         let handle = signal::leak_string(f);
         unsafe { ffi::QTreeWidget_onCurrentItemChanged(self.ptr, handle.token); }

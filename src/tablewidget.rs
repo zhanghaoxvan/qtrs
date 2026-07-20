@@ -185,7 +185,7 @@ impl TableWidget {
     // --- Signal connections (runtime) ---
 
     /// Connect a callback that fires when a cell is clicked (void callback).
-    pub fn connect_cell_clicked<F: Fn() + 'static>(&mut self, f: F) {
+    pub fn connect_cell_clicked<F: Fn()>(&mut self, f: F) {
         debug_assert!(!self.ptr.is_null());
         let handle = signal::leak_void(f);
         unsafe { ffi::QTableWidget_onCellClicked(self.ptr, handle.token); }
@@ -193,7 +193,7 @@ impl TableWidget {
     }
 
     /// Connect a callback that fires when a cell is double-clicked (void callback).
-    pub fn connect_cell_double_clicked<F: Fn() + 'static>(&mut self, f: F) {
+    pub fn connect_cell_double_clicked<F: Fn()>(&mut self, f: F) {
         debug_assert!(!self.ptr.is_null());
         let handle = signal::leak_void(f);
         unsafe { ffi::QTableWidget_onCellDoubleClicked(self.ptr, handle.token); }
@@ -201,7 +201,7 @@ impl TableWidget {
     }
 
     /// Connect a callback that fires when the current cell changes (void callback).
-    pub fn connect_current_cell_changed<F: Fn() + 'static>(&mut self, f: F) {
+    pub fn connect_current_cell_changed<F: Fn()>(&mut self, f: F) {
         debug_assert!(!self.ptr.is_null());
         let handle = signal::leak_void(f);
         unsafe { ffi::QTableWidget_onCurrentCellChanged(self.ptr, handle.token); }

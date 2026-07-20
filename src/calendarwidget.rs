@@ -91,7 +91,7 @@ impl CalendarWidget {
     // --- Signal connections (runtime) ---
 
     /// Connect a callback when the selection changes.
-    pub fn connect_selection_changed<F: Fn() + 'static>(&mut self, f: F) {
+    pub fn connect_selection_changed<F: Fn()>(&mut self, f: F) {
         debug_assert!(!self.ptr.is_null());
         let handle = signal::leak_void(f);
         unsafe { ffi::QCalendarWidget_onSelectionChanged(self.ptr, handle.token); }
@@ -100,7 +100,7 @@ impl CalendarWidget {
 
     /// Connect a callback when a date is activated (double-clicked or pressed).
     /// Receives the date as a `"yyyy-MM-dd"` string.
-    pub fn connect_activated<F: Fn(String) + 'static>(&mut self, f: F) {
+    pub fn connect_activated<F: Fn(String)>(&mut self, f: F) {
         debug_assert!(!self.ptr.is_null());
         let handle = signal::leak_string(f);
         unsafe { ffi::QCalendarWidget_onActivated(self.ptr, handle.token); }

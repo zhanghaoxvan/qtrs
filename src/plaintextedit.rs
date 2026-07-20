@@ -78,7 +78,7 @@ impl PlainTextEdit {
     }
 
     /// Connect a callback that fires when the text changes.
-    pub fn connect_text_changed<F: Fn() + 'static>(&mut self, f: F) {
+    pub fn connect_text_changed<F: Fn()>(&mut self, f: F) {
         debug_assert!(!self.ptr.is_null());
         let handle = signal::leak_void(f);
         unsafe { ffi::QPlainTextEdit_onTextChanged(self.ptr, handle.token); }
@@ -86,7 +86,7 @@ impl PlainTextEdit {
     }
 
     /// Connect a callback that fires when the cursor position changes.
-    pub fn connect_cursor_position_changed<F: Fn() + 'static>(&mut self, f: F) {
+    pub fn connect_cursor_position_changed<F: Fn()>(&mut self, f: F) {
         debug_assert!(!self.ptr.is_null());
         let handle = signal::leak_void(f);
         unsafe { ffi::QPlainTextEdit_onCursorPositionChanged(self.ptr, handle.token); }

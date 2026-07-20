@@ -54,7 +54,7 @@ impl DateTimeEdit {
     }
 
     /// Connect a callback that fires when the date-time changes. Receives the ISO string.
-    pub fn connect_date_time_changed<F: Fn(String) + 'static>(&mut self, f: F) {
+    pub fn connect_date_time_changed<F: Fn(String)>(&mut self, f: F) {
         debug_assert!(!self.ptr.is_null());
         let handle = signal::leak_string(f);
         unsafe { ffi::QDateTimeEdit_onDateTimeChanged(self.ptr, handle.token); }

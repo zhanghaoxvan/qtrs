@@ -127,7 +127,7 @@ impl ListWidget {
     // --- Signal connections (runtime) ---
 
     /// Connect callback when an item is clicked. Receives the item text.
-    pub fn connect_item_clicked<F: Fn(String) + 'static>(&mut self, f: F) {
+    pub fn connect_item_clicked<F: Fn(String)>(&mut self, f: F) {
         debug_assert!(!self.ptr.is_null());
         let handle = signal::leak_string(f);
         unsafe { ffi::QListWidget_onItemClicked(self.ptr, handle.token); }
@@ -135,7 +135,7 @@ impl ListWidget {
     }
 
     /// Connect callback when an item is double-clicked. Receives the item text.
-    pub fn connect_item_double_clicked<F: Fn(String) + 'static>(&mut self, f: F) {
+    pub fn connect_item_double_clicked<F: Fn(String)>(&mut self, f: F) {
         debug_assert!(!self.ptr.is_null());
         let handle = signal::leak_string(f);
         unsafe { ffi::QListWidget_onItemDoubleClicked(self.ptr, handle.token); }
@@ -143,7 +143,7 @@ impl ListWidget {
     }
 
     /// Connect callback when the current item changes. Receives the item text.
-    pub fn connect_current_item_changed<F: Fn(String) + 'static>(&mut self, f: F) {
+    pub fn connect_current_item_changed<F: Fn(String)>(&mut self, f: F) {
         debug_assert!(!self.ptr.is_null());
         let handle = signal::leak_string(f);
         unsafe { ffi::QListWidget_onCurrentItemChanged(self.ptr, handle.token); }

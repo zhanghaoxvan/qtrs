@@ -98,7 +98,7 @@ impl SystemTrayIcon {
 
     /// Connect a callback when the tray icon is activated.
     /// Receives a reason constant (`UNKNOWN`, `CONTEXT`, `DOUBLE_CLICK`, `TRIGGER`, `MIDDLE_CLICK`).
-    pub fn connect_activated<F: Fn(i32) + 'static>(&mut self, f: F) {
+    pub fn connect_activated<F: Fn(i32)>(&mut self, f: F) {
         debug_assert!(!self.ptr.is_null());
         let handle = signal::leak_int(f);
         unsafe { ffi::QSystemTrayIcon_onActivated(self.ptr, handle.token); }

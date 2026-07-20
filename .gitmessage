@@ -1,0 +1,27 @@
+# <type>(<scope>): <subject>
+# |<--  type  -->|<-- scope -->|<--  subject  -->|
+# 
+# type: feat, fix, docs, style, refactor, perf, test, chore, release
+# scope: optional, e.g., widget, signal, layout, example, build
+# subject: imperative, present tense, not capitalized, no trailing period
+#
+# --- Body (optional) ---
+# 
+# Explain what and why, not how. Wrap at 72 chars.
+#
+# --- Footer (optional) ---
+#
+# BREAKING CHANGE: <description>
+# Fixes #<issue>
+#
+# --- Examples ---
+#
+# feat(signal): remove 'static bound on callbacks
+# 
+# Allows capturing local references directly without Rc<RefCell<>>.
+# 
+# fix(widget): correct minimum_size behavior in Builder
+# 
+# BREAKING CHANGE: minimum_size now enforces min, not initial size
+#
+# release: v0.4.1

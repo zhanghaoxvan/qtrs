@@ -89,7 +89,7 @@ impl PushButton {
     /// This is the runtime equivalent of
     /// [`Builder::on_clicked`] — useful when the button was loaded
     /// from a `.ui` file rather than built in Rust.
-    pub fn connect_clicked<F: Fn() + 'static>(&mut self, f: F) {
+    pub fn connect_clicked<F: Fn()>(&mut self, f: F) {
         debug_assert!(!self.ptr.is_null());
         let handle = signal::leak_void(f);
         unsafe { ffi::QPushButton_onClicked(self.ptr, handle.token); }

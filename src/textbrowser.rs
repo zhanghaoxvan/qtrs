@@ -101,7 +101,7 @@ impl TextBrowser {
     }
 
     /// Connect a callback that fires when an anchor is clicked. Receives the URL string.
-    pub fn connect_anchor_clicked<F: Fn(String) + 'static>(&mut self, f: F) {
+    pub fn connect_anchor_clicked<F: Fn(String)>(&mut self, f: F) {
         debug_assert!(!self.ptr.is_null());
         let handle = signal::leak_string(f);
         unsafe { ffi::QTextBrowser_onAnchorClicked(self.ptr, handle.token); }
@@ -109,7 +109,7 @@ impl TextBrowser {
     }
 
     /// Connect a callback that fires when the text changes.
-    pub fn connect_text_changed<F: Fn() + 'static>(&mut self, f: F) {
+    pub fn connect_text_changed<F: Fn()>(&mut self, f: F) {
         debug_assert!(!self.ptr.is_null());
         let handle = signal::leak_void(f);
         unsafe { ffi::QTextBrowser_onTextChanged(self.ptr, handle.token); }

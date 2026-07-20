@@ -12,7 +12,7 @@ management and signal/callback bridging.
 
 ## Features
 
-- Builder pattern — chain `.title("X").size(800, 600).show()`
+- Builder pattern — chain `.title("X").size(800, 600).build()`
 - RAII cleanup — automatic C++ deletion, parent-child aware (no double-free)
 - Signal bridging — Qt signals invoke Rust closures via a global trampoline
 - Layout ownership — adding a widget to a layout transfers ownership
@@ -162,7 +162,7 @@ Add to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-qtrs = "0.4.0"
+qtrs = "0.4.1"
 ```
 
 ## Memory management

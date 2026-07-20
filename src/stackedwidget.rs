@@ -96,7 +96,7 @@ impl StackedWidget {
 
     /// Connect a callback that fires when the current page changes.
     /// The callback receives the new page index as `i32`.
-    pub fn connect_current_changed<F: Fn(i32) + 'static>(&mut self, f: F) {
+    pub fn connect_current_changed<F: Fn(i32)>(&mut self, f: F) {
         debug_assert!(!self.ptr.is_null());
         let handle = signal::leak_int(f);
         unsafe { ffi::QStackedWidget_onCurrentChanged(self.ptr, handle.token); }
