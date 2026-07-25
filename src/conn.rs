@@ -22,15 +22,16 @@
 //!
 //! ```no_run
 //! use qtrs::prelude::*;
+//! use qtrs::signals::{slider_signals, spin_box_slots};
 //!
 //! let slider = Slider::horizontal().build();
 //! let spin = SpinBox::new().build();
 //!
 //! // Compile-time validated: slider -> spinbox
 //! slider.connect(
-//!     Slider::value_changed,
+//!     slider_signals::VALUE_CHANGED,
 //!     &spin,
-//!     SpinBox::set_value,
+//!     spin_box_slots::SET_VALUE,
 //!     ConnType::Auto,
 //! );
 //! ```
@@ -203,10 +204,11 @@ pub enum ConnType {
 ///
 /// ```compile_fail
 /// # use qtrs::prelude::*;
+/// # use qtrs::signals::{slider_signals, line_edit_slots};
 /// # let slider = Slider::horizontal().build();
 /// # let label = Label::new("").build();
 /// // Compile error: signal sends i32, slot expects String
-/// slider.connect(Slider::value_changed, &label, Label::set_text, ConnType::Auto);
+/// slider.connect(slider_signals::VALUE_CHANGED, &label, line_edit_slots::SET_TEXT, ConnType::Auto);
 /// ```
 ///
 /// # Thread Safety
@@ -217,15 +219,14 @@ pub enum ConnType {
 /// # Example
 ///
 /// ```no_run
-/// use qtrs::prelude::*;
-///
-/// let slider = Slider::horizontal().build();
-/// let spin = SpinBox::new().build();
-///
+/// # use qtrs::prelude::*;
+/// # use qtrs::signals::{slider_signals, spin_box_slots};
+/// # let slider = Slider::horizontal().build();
+/// # let spin = SpinBox::new().build();
 /// slider.connect(
-///     Slider::value_changed,
+///     slider_signals::VALUE_CHANGED,
 ///     &spin,
-///     SpinBox::set_value,
+///     spin_box_slots::SET_VALUE,
 ///     ConnType::Auto,
 /// );
 /// ```
@@ -265,9 +266,10 @@ pub trait ConnectExt: AsWidget {
     ///
     /// ```no_run
     /// # use qtrs::prelude::*;
+    /// # use qtrs::signals::{slider_signals, spin_box_slots};
     /// # let slider = Slider::horizontal().build();
     /// # let spin = SpinBox::new().build();
-    /// slider.connect(Slider::value_changed, &spin, SpinBox::set_value, ConnType::Auto);
+    /// slider.connect(slider_signals::VALUE_CHANGED, &spin, spin_box_slots::SET_VALUE, ConnType::Auto);
     /// ```
     fn connect<S, T>(
         &self,
@@ -332,9 +334,10 @@ pub trait ConnectExt: AsWidget {
     ///
     /// ```no_run
     /// # use qtrs::prelude::*;
+    /// # use qtrs::signals::{slider_signals, spin_box_slots};
     /// # let slider = Slider::horizontal().build();
     /// # let spin = SpinBox::new().build();
-    /// slider.disconnect(Slider::value_changed, &spin, SpinBox::set_value);
+    /// slider.disconnect(slider_signals::VALUE_CHANGED, &spin, spin_box_slots::SET_VALUE);
     /// ```
     fn disconnect<S, T>(
         &self,

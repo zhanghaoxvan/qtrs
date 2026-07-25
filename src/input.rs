@@ -30,7 +30,7 @@ use crate::widget::AsWidget;
 /// # Memory safety
 ///
 /// See [`PushButton`] for signal-closure lifecycle rules — the same
-/// parent/no-parent leak/reclaim logic applies here.
+/// parent/no-parent disconnect/reclaim logic applies here.
 ///
 /// [`PushButton`]: crate::PushButton
 ///

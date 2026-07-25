@@ -22,9 +22,8 @@ use crate::widget::AsWidget;
 /// # Example
 ///
 /// ```no_run
-/// use qtrs::ToolBar;
-///
-/// let toolbar = ToolBar::new("Edit")
+/// # use qtrs::prelude::*;
+/// let mut toolbar = ToolBar::new("Edit")
 ///     .build();
 /// toolbar.add_action("Undo", || println!("Undo"));
 /// toolbar.add_action("Redo", || println!("Redo"));

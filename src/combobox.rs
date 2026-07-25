@@ -21,6 +21,7 @@ use crate::widget::AsWidget;
 /// # Example
 ///
 /// ```no_run
+/// # use qtrs::prelude::*;
 /// let combo = ComboBox::new()
 ///     .items(&["Red", "Green", "Blue"])
 ///     .on_current_text_changed(|| println!("selection changed"))

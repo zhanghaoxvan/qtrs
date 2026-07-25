@@ -21,6 +21,7 @@ use crate::widget::AsWidget;
 /// # Example
 ///
 /// ```no_run
+/// # use qtrs::prelude::*;
 /// let editor = TextEdit::new()
 ///     .placeholder("Type here...")
 ///     .on_text_changed(|| println!("text changed"))
@@ -115,7 +116,7 @@ impl Builder {
         let mut te = TextEdit { ptr, has_parent: self.parent.is_some(), signal_handles: Vec::new() };
         if let Some(ref ph) = self.placeholder {
             let_cxx_string!(c_ph = ph);
-            unsafe { ffi::QTextEdit_setPlainText(ptr, &c_ph); }
+            unsafe { ffi::QTextEdit_setPlaceholderText(ptr, &c_ph); }
         }
         if let Some(f) = self.on_text_changed {
             let h = signal::leak_void(f);

@@ -22,6 +22,7 @@ use crate::widget::AsWidget;
 /// # Example
 ///
 /// ```no_run
+/// # use qtrs::prelude::*;
 /// let cb = CheckBox::new("Enable feature")
 ///     .on_toggled(|checked| println!("toggled: {}", checked))
 ///     .build();

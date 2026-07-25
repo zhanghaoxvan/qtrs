@@ -4,8 +4,11 @@
 
 use qtrs::prelude::*;
 use qtrs::dialog;
-use qtrs::signals::slider_signals::VALUE_CHANGED;
+use qtrs::signals::slider_signals::VALUE_CHANGED as SLIDER_VALUE_CHANGED;
+use qtrs::signals::spin_box_signals::VALUE_CHANGED as SPIN_VALUE_CHANGED;
 use qtrs::signals::spin_box_slots::SET_VALUE;
+use qtrs::signals::slider_slots::SET_VALUE as SLIDER_SET_VALUE;
+use qtrs::signals::progress_bar_slots::SET_VALUE as PB_SET_VALUE;
 
 fn main() {
     let app = Application::new();
@@ -170,7 +173,7 @@ fn main() {
 
     // Slider → SpinBox (bidirectional)
     slider.connect(
-        VALUE_CHANGED,
+        SLIDER_VALUE_CHANGED,
         &spin,
         SET_VALUE,
         ConnType::Queued,
@@ -178,25 +181,25 @@ fn main() {
 
     // SpinBox → Slider (bidirectional)
     spin.connect(
-        VALUE_CHANGED,
+        SPIN_VALUE_CHANGED,
         &slider,
-        SET_VALUE,
+        SLIDER_SET_VALUE,
         ConnType::Queued,
     );
 
     // Slider → ProgressBar
     slider.connect(
-        VALUE_CHANGED,
+        SLIDER_VALUE_CHANGED,
         &bar,
-        SET_VALUE,
+        PB_SET_VALUE,
         ConnType::Auto,
     );
 
     // SpinBox → ProgressBar
     spin.connect(
-        VALUE_CHANGED,
+        SPIN_VALUE_CHANGED,
         &bar,
-        SET_VALUE,
+        PB_SET_VALUE,
         ConnType::Auto,
     );
 
@@ -294,7 +297,7 @@ fn main() {
             dialog::information(
                 None,  // No parent needed
                 "About",
-                "qtrs Widget Gallery\nVersion 0.4.1\n\nAll widgets test",
+                "qtrs Widget Gallery\nVersion 0.4.2\n\nAll widgets test",
             );
         })
         .parent(&window)

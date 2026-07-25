@@ -18,7 +18,8 @@ pub const VERTICAL: i32 = 2;
 /// # Example
 ///
 /// ```no_run
-/// use qtrs::{Splitter, Label};
+/// # use qtrs::prelude::*;
+/// use qtrs::splitter::HORIZONTAL;
 ///
 /// let mut splitter = Splitter::new(HORIZONTAL).build();
 ///

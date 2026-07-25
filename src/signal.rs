@@ -2,7 +2,7 @@
 //
 // ## Memory model
 //
-// Closures are double-boxed and leaked onto the heap. The outer Box
+// Closures are double-boxed and stored on the heap. The outer Box
 // provides a stable heap address; the inner Box provides type erasure.
 // The raw pointer is cast to `u64` and stored in the C++ lambda capture.
 //
@@ -10,7 +10,7 @@
 //
 // On Drop with `has_parent = false`: reclaim closure, then delete C++ widget.
 //   → Safe: no more signals can fire after widget deletion.
-// On Drop with `has_parent = true`:  leak closure intentionally.
+// On Drop with `has_parent = true`:  disconnect signals first, then reclaim.
 //   → Safe: prevents use-after-free (C++ widget may outlive Rust wrapper).
 
 use crate::ffi;
@@ -83,7 +83,7 @@ macro_rules! leak_fn {
             // captured refs) is destroyed.  Qt signals are disconnected first.
             let thin: *mut F = Box::into_raw(Box::new(f));
             let fat: *mut $dyn = thin; // raw-pointer unsizing — no lifetime check
-            let inner: Box<$dyn> = unsafe { std::mem::transmute(fat) };
+            let inner: Box<$dyn> = unsafe { Box::from_raw(fat) };
             SignalHandle {
                 token: Box::into_raw(Box::new(inner)) as u64,
                 kind: SignalKind::$kind,

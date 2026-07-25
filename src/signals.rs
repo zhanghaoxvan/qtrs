@@ -39,9 +39,9 @@ use crate::conn::{SignalMeta, SlotMeta};
 ///
 /// # Example
 ///
-/// ```
+/// ```no_run
 /// # use qtrs::prelude::*;
-/// # use qtrs::signals::slider_signals::VALUE_CHANGED;
+/// # use qtrs::signals::{slider_signals::VALUE_CHANGED, spin_box_slots};
 /// # let slider = Slider::horizontal().build();
 /// # let spin = SpinBox::new().build();
 /// slider.connect(VALUE_CHANGED, &spin, spin_box_slots::SET_VALUE, ConnType::Auto);
@@ -127,6 +127,44 @@ pub mod slider_signals {
 }
 
 // ============================================================
+// Slider Slots
+// ============================================================
+
+/// Slot constants for [`Slider`](crate::Slider).
+///
+/// # Example
+///
+/// ```no_run
+/// # use qtrs::prelude::*;
+/// # use qtrs::signals::{spin_box_signals, slider_slots::SET_VALUE};
+/// # let spin = SpinBox::new().build();
+/// # let slider = Slider::horizontal().build();
+/// spin.connect(spin_box_signals::VALUE_CHANGED, &slider, SET_VALUE, ConnType::Auto);
+/// ```
+pub mod slider_slots {
+    use super::*;
+
+    /// Sets the slider's current value.
+    ///
+    /// Qt slot: `setValue(int)`
+    ///
+    /// The new value is passed as `i32`.
+    #[derive(Debug, Clone, Copy)]
+    pub struct SetValue;
+    #[cfg(qt_5)]
+    impl SlotMeta for SetValue {
+        const QT_SIGNATURE: &'static str = "setValue(int)";
+        type Args = (i32,);
+    }
+    #[cfg(qt_6)]
+    impl SlotMeta for SetValue {
+        const QT_SIGNATURE: &'static str = "1setValue(int)";
+        type Args = (i32,);
+    }
+    pub const SET_VALUE: SetValue = SetValue;
+}
+
+// ============================================================
 // SpinBox Slots
 // ============================================================
 
@@ -134,9 +172,9 @@ pub mod slider_signals {
 ///
 /// # Example
 ///
-/// ```
+/// ```no_run
 /// # use qtrs::prelude::*;
-/// # use qtrs::signals::spin_box_slots::SET_VALUE;
+/// # use qtrs::signals::{slider_signals, spin_box_slots::SET_VALUE};
 /// # let slider = Slider::horizontal().build();
 /// # let spin = SpinBox::new().build();
 /// slider.connect(slider_signals::VALUE_CHANGED, &spin, SET_VALUE, ConnType::Auto);

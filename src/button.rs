@@ -27,10 +27,8 @@ use crate::widget::AsWidget;
 ///
 /// - **No Qt parent:** closures are reclaimed, then the C++ object is
 ///   deleted. Safe — no more signals can fire after deletion.
-/// - **Has Qt parent:** closures are **intentionally leaked** to
-///   prevent use-after-free (the C++ widget outlives the Rust wrapper
-///   and could still fire signals). Keep the Rust wrapper alive for
-///   the widget's full lifetime to avoid this leak.
+/// - **Has Qt parent:** all signals are disconnected first, then closures
+///   are reclaimed. The C++ object is left alone (Qt deletes it).
 ///
 /// # Example
 ///

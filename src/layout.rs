@@ -103,6 +103,8 @@ impl VBoxLayout {
     /// Add a widget by value (auto-boxed).  Equivalent to `add_widget(Box::new(w))`.
     ///
     /// ```no_run
+    /// # use qtrs::prelude::*;
+    /// # let mut layout = VBoxLayout::new();
     /// layout.add(PushButton::new("OK").build());
     /// ```
     pub fn add<T: AsWidget + 'static>(&mut self, widget: T) {

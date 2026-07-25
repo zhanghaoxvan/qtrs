@@ -40,10 +40,10 @@ pub trait AsWidget {
     /// # Memory safety note
     ///
     /// When a widget has a parent and also has connected signals,
-    /// the signal closures are **intentionally leaked** on Drop to
-    /// prevent use-after-free (the C++ widget may still fire signals
-    /// after the Rust wrapper is gone). Keep the Rust wrapper alive
-    /// for the widget's full lifetime to avoid this leak.
+    /// the signals are **disconnected** first on Drop, then closures
+    /// are reclaimed. This prevents use-after-free (the C++ widget
+    /// may outlive the Rust wrapper). Keep the Rust wrapper alive
+    /// for the widget's full lifetime for best results.
     fn set_has_parent(&mut self);
 }
 
@@ -64,9 +64,9 @@ pub trait AsWidget {
 /// When a `Widget` is dropped:
 /// - If the widget has **no** Qt parent: signal closures are reclaimed,
 ///   then the C++ `QWidget` is deleted via `delete`.
-/// - If the widget **has** a Qt parent: signal closures are intentionally
-///   **leaked** (to prevent use-after-free), and the C++ object is left
-///   alone (Qt deletes it when the parent is destroyed).
+/// - If the widget **has** a Qt parent: all signals are disconnected first,
+///   then closures are reclaimed. The C++ object is left alone (Qt deletes
+///   it when the parent is destroyed).
 ///
 /// # Example
 ///
@@ -465,6 +465,7 @@ impl Drop for Widget {
 /// # Example
 ///
 /// ```no_run
+/// # use qtrs::prelude::*;
 /// let window = Widget::new()
 ///     .title("Demo")
 ///     .size(640, 480)

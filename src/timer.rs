@@ -20,11 +20,12 @@ use crate::signal::{self, SignalHandle};
 /// # Example
 ///
 /// ```no_run
+/// # use qtrs::prelude::*;
 /// let timer = Timer::new(1000)
 ///     .on_timeout(|| println!("tick"))
 ///     .build();
 /// // Prints "tick" every second
-/// app.exec();
+/// # // app.exec();
 /// ```
 pub struct Timer {
     ptr: *mut ffi::QTimer,
@@ -45,6 +46,7 @@ impl Timer {
     /// cleans up. No `Timer` object is returned — the callback owns itself.
     ///
     /// ```no_run
+    /// # use qtrs::prelude::*;
     /// Timer::single_shot(500, || println!("fired once!"));
     /// ```
     pub fn single_shot<F: Fn() + 'static>(interval_ms: i32, f: F) {

@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.4.2] - 2026-7-25
+
+### Fixed
+- Undefined behavior in `signal.rs`: replaced `std::mem::transmute` with `Box::from_raw` when reconstructing boxed closures from raw pointers
+- `TextEdit::build()` now calls `setPlaceholderText` instead of `setPlainText` for placeholder text
+- Outdated documentation claiming signal closures are "leaked" when widget has parent — they are correctly reclaimed
+- All 19 broken doctests — examples now use correct signal/slot constants from `qtrs::signals`
+
+### Added
+- `slider_slots` module with `SET_VALUE` slot constant for `Slider`
+
+### Changed
+- Updated `demo.rs` example to use correct signal/slot imports
+- Updated internal doctests to use `# use qtrs::signals::{...}` pattern
+
+---
+
 ## [0.4.1] - 2026-7-20
 
 ### Changed

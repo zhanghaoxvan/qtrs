@@ -56,13 +56,15 @@ pub const NO_BUTTON: i32 = 0x00000000;
 /// # Example
 ///
 /// ```no_run
-/// use qtrs::MessageBox;
+/// # use qtrs::prelude::*;
+/// use qtrs::{MessageBox, INFORMATION, OK};
 ///
 /// let result = MessageBox::new()
-///     .icon(qtrs::INFORMATION)
+///     .icon(INFORMATION)
 ///     .text("File saved.")
 ///     .window_title("Success")
-///     .set_standard_buttons(qtrs::OK)
+///     .standard_buttons(OK)
+///     .build()
 ///     .exec();
 /// ```
 pub struct MessageBox {

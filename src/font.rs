@@ -20,6 +20,7 @@ use crate::ffi;
 /// # Example
 ///
 /// ```no_run
+/// # use qtrs::prelude::*;
 /// use qtrs::Font;
 ///
 /// let font = Font::new()
@@ -28,6 +29,7 @@ use crate::ffi;
 ///     .bold(true)
 ///     .build();
 ///
+/// # let label = Label::new("Hello").build();
 /// label.set_font(&font);
 /// ```
 pub struct Font {
