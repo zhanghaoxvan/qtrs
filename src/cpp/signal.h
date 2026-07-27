@@ -44,6 +44,11 @@ inline void qtrs_setStringTrampoline(rust::Fn<void(uint64_t, rust::String)> t) {
 // Generic signal-slot connection (string signature)
 // ============================================================
 
+/// Disconnect all signals from a QObject
+inline void QObject_disconnectAll(QObject *obj) {
+    QObject::disconnect(obj, nullptr, nullptr, nullptr);
+}
+
 /// Connect signal to slot using Qt6 string signature format
 /// sig: "2signalName(args)" (signal)
 /// slt: "1slotName(args)"   (slot)

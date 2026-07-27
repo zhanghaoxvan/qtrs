@@ -121,6 +121,8 @@ fn main() {
         "dateedit", "timeedit", "datetimeedit",
         "plaintextedit", "textbrowser",
         "frame", "toolbutton", "calendarwidget", "shortcut", "systemtrayicon",
+        "standarditemmodel", "tableview", "listview", "treeview",
+        "itemselectionmodel",
     ] {
         println!("cargo:rerun-if-changed=src/cpp/{}.h", name);
     }

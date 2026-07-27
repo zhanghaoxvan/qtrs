@@ -48,3 +48,8 @@
 #include "shortcut.h"
 #include "systemtrayicon.h"
 #include "font.h"
+#include "standarditemmodel.h"
+#include "tableview.h"
+#include "listview.h"
+#include "treeview.h"
+#include "itemselectionmodel.h"

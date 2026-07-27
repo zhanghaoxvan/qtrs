@@ -61,6 +61,13 @@ pub mod ffi_inner {
         type QSystemTrayIcon;
         type QFont;
 
+        // --- Model/View types ---
+        type QStandardItemModel;
+        type QTableView;
+        type QListView;
+        type QTreeView;
+        type QItemSelectionModel;
+
         // --- QObject (base class for signal-slot connections) ---
         type QObject;
 
@@ -79,6 +86,8 @@ pub mod ffi_inner {
             receiver: *mut QObject,
             slt: &CxxString,
         ) -> bool;
+
+        unsafe fn QObject_disconnectAll(obj: *mut QObject);
 
         // --- Thread safety ---
         unsafe fn QObject_isInGuiThread() -> bool;
@@ -118,6 +127,34 @@ pub mod ffi_inner {
         unsafe fn QWidget_setFont(widget: *mut QWidget, font: *mut QFont);
         unsafe fn QWidget_font(widget: *mut QWidget) -> *mut QFont;
         unsafe fn QWidget_disconnectAll(widget: *mut QWidget);
+
+        // --- QWidget getters / state queries ---
+        unsafe fn QWidget_width(widget: *mut QWidget) -> i32;
+        unsafe fn QWidget_height(widget: *mut QWidget) -> i32;
+        unsafe fn QWidget_x(widget: *mut QWidget) -> i32;
+        unsafe fn QWidget_y(widget: *mut QWidget) -> i32;
+        unsafe fn QWidget_setGeometry(widget: *mut QWidget, x: i32, y: i32, w: i32, h: i32);
+        unsafe fn QWidget_isVisible(widget: *mut QWidget) -> bool;
+        unsafe fn QWidget_isEnabled(widget: *mut QWidget) -> bool;
+        unsafe fn QWidget_isHidden(widget: *mut QWidget) -> bool;
+        unsafe fn QWidget_windowTitle(widget: *mut QWidget) -> String;
+        unsafe fn QWidget_setFocus(widget: *mut QWidget);
+        unsafe fn QWidget_hasFocus(widget: *mut QWidget) -> bool;
+        unsafe fn QWidget_clearFocus(widget: *mut QWidget);
+        unsafe fn QWidget_setObjectName(widget: *mut QWidget, name: &CxxString);
+        unsafe fn QWidget_objectName(widget: *mut QWidget) -> String;
+        unsafe fn QWidget_update(widget: *mut QWidget);
+        unsafe fn QWidget_repaint(widget: *mut QWidget);
+        unsafe fn QWidget_close(widget: *mut QWidget);
+        unsafe fn QWidget_parentWidget(widget: *mut QWidget) -> *mut QWidget;
+        unsafe fn QWidget_minimumWidth(widget: *mut QWidget) -> i32;
+        unsafe fn QWidget_minimumHeight(widget: *mut QWidget) -> i32;
+        unsafe fn QWidget_maximumWidth(widget: *mut QWidget) -> i32;
+        unsafe fn QWidget_maximumHeight(widget: *mut QWidget) -> i32;
+        unsafe fn QWidget_raiseWidget(widget: *mut QWidget);
+        unsafe fn QWidget_lowerWidget(widget: *mut QWidget);
+        unsafe fn QWidget_isMinimized(widget: *mut QWidget) -> bool;
+        unsafe fn QWidget_isMaximized(widget: *mut QWidget) -> bool;
 
         // --- toQWidget upcasts ---
         unsafe fn toQWidget_QWidget(w: *mut QWidget) -> *mut QWidget;
@@ -780,6 +817,107 @@ pub mod ffi_inner {
         unsafe fn QSystemTrayIcon_isVisible(tray: *mut QSystemTrayIcon) -> bool;
         unsafe fn QSystemTrayIcon_setContextMenu(tray: *mut QSystemTrayIcon, menu: *mut QMenu);
         unsafe fn QSystemTrayIcon_onActivated(tray: *mut QSystemTrayIcon, ctx: u64);
+
+        // ============================================================
+        // QStandardItemModel
+        // ============================================================
+
+        unsafe fn QStandardItemModel_new(parent: *mut QObject) -> *mut QStandardItemModel;
+        unsafe fn QStandardItemModel_delete(model: *mut QStandardItemModel);
+        unsafe fn QStandardItemModel_rowCount(model: *mut QStandardItemModel) -> i32;
+        unsafe fn QStandardItemModel_columnCount(model: *mut QStandardItemModel) -> i32;
+        unsafe fn QStandardItemModel_setRowCount(model: *mut QStandardItemModel, rows: i32);
+        unsafe fn QStandardItemModel_setColumnCount(model: *mut QStandardItemModel, cols: i32);
+        unsafe fn QStandardItemModel_setData(
+            model: *mut QStandardItemModel, row: i32, col: i32, value: &CxxString,
+        );
+        unsafe fn QStandardItemModel_data(
+            model: *mut QStandardItemModel, row: i32, col: i32,
+        ) -> String;
+        unsafe fn QStandardItemModel_setHeaderData(
+            model: *mut QStandardItemModel, section: i32, orientation: i32,
+            value: &CxxString,
+        );
+        unsafe fn QStandardItemModel_headerData(
+            model: *mut QStandardItemModel, section: i32, orientation: i32,
+        ) -> String;
+        unsafe fn QStandardItemModel_insertRow(model: *mut QStandardItemModel, row: i32);
+        unsafe fn QStandardItemModel_removeRow(model: *mut QStandardItemModel, row: i32);
+        unsafe fn QStandardItemModel_insertColumn(model: *mut QStandardItemModel, column: i32);
+        unsafe fn QStandardItemModel_removeColumn(model: *mut QStandardItemModel, column: i32);
+        unsafe fn QStandardItemModel_clear(model: *mut QStandardItemModel);
+        unsafe fn QStandardItemModel_appendRow(
+            model: *mut QStandardItemModel, texts: Vec<String>,
+        );
+        unsafe fn QStandardItemModel_onModelReset(model: *mut QStandardItemModel, ctx: u64);
+        unsafe fn QStandardItemModel_onDataChanged(model: *mut QStandardItemModel, ctx: u64);
+        unsafe fn QStandardItemModel_onRowsInserted(model: *mut QStandardItemModel, ctx: u64);
+        unsafe fn QStandardItemModel_onRowsRemoved(model: *mut QStandardItemModel, ctx: u64);
+
+        // ============================================================
+        // QTableView
+        // ============================================================
+
+        unsafe fn QTableView_new(parent: *mut QWidget) -> *mut QTableView;
+        unsafe fn QTableView_delete(view: *mut QTableView);
+        unsafe fn QTableView_setModel(view: *mut QTableView, model: *mut QStandardItemModel);
+        unsafe fn QTableView_model(view: *mut QTableView) -> *mut QStandardItemModel;
+        unsafe fn QTableView_setSelectionMode(view: *mut QTableView, mode: i32);
+        unsafe fn QTableView_setSelectionBehavior(view: *mut QTableView, behavior: i32);
+        unsafe fn QTableView_setShowGrid(view: *mut QTableView, show: bool);
+        unsafe fn QTableView_setAlternatingRowColors(view: *mut QTableView, enable: bool);
+        unsafe fn QTableView_setSortingEnabled(view: *mut QTableView, enable: bool);
+        unsafe fn QTableView_resizeColumnsToContents(view: *mut QTableView);
+        unsafe fn QTableView_resizeRowsToContents(view: *mut QTableView);
+        unsafe fn QTableView_selectRow(view: *mut QTableView, row: i32);
+        unsafe fn QTableView_clearSelection(view: *mut QTableView);
+        unsafe fn QTableView_onClicked(view: *mut QTableView, ctx: u64);
+        unsafe fn QTableView_onDoubleClicked(view: *mut QTableView, ctx: u64);
+        unsafe fn toQWidget_QTableView(view: *mut QTableView) -> *mut QWidget;
+
+        // ============================================================
+        // QListView
+        // ============================================================
+
+        unsafe fn QListView_new(parent: *mut QWidget) -> *mut QListView;
+        unsafe fn QListView_delete(view: *mut QListView);
+        unsafe fn QListView_setModel(view: *mut QListView, model: *mut QStandardItemModel);
+        unsafe fn QListView_model(view: *mut QListView) -> *mut QStandardItemModel;
+        unsafe fn QListView_setSelectionMode(view: *mut QListView, mode: i32);
+        unsafe fn QListView_setViewMode(view: *mut QListView, mode: i32);
+        unsafe fn QListView_onClicked(view: *mut QListView, ctx: u64);
+        unsafe fn QListView_onDoubleClicked(view: *mut QListView, ctx: u64);
+        unsafe fn toQWidget_QListView(view: *mut QListView) -> *mut QWidget;
+
+        // ============================================================
+        // QTreeView
+        // ============================================================
+
+        unsafe fn QTreeView_new(parent: *mut QWidget) -> *mut QTreeView;
+        unsafe fn QTreeView_delete(view: *mut QTreeView);
+        unsafe fn QTreeView_setModel(view: *mut QTreeView, model: *mut QStandardItemModel);
+        unsafe fn QTreeView_model(view: *mut QTreeView) -> *mut QStandardItemModel;
+        unsafe fn QTreeView_setSelectionMode(view: *mut QTreeView, mode: i32);
+        unsafe fn QTreeView_setHeaderHidden(view: *mut QTreeView, hidden: bool);
+        unsafe fn QTreeView_setAnimated(view: *mut QTreeView, animated: bool);
+        unsafe fn QTreeView_setIndentation(view: *mut QTreeView, indent: i32);
+        unsafe fn QTreeView_setRootIsDecorated(view: *mut QTreeView, decorated: bool);
+        unsafe fn QTreeView_setItemsExpandable(view: *mut QTreeView, expandable: bool);
+        unsafe fn QTreeView_expandAll(view: *mut QTreeView);
+        unsafe fn QTreeView_collapseAll(view: *mut QTreeView);
+        unsafe fn QTreeView_onClicked(view: *mut QTreeView, ctx: u64);
+        unsafe fn QTreeView_onDoubleClicked(view: *mut QTreeView, ctx: u64);
+        unsafe fn QTreeView_onExpanded(view: *mut QTreeView, ctx: u64);
+        unsafe fn QTreeView_onCollapsed(view: *mut QTreeView, ctx: u64);
+        unsafe fn toQWidget_QTreeView(view: *mut QTreeView) -> *mut QWidget;
+
+        // ============================================================
+        // QItemSelectionModel
+        // ============================================================
+
+        unsafe fn QItemSelectionModel_hasSelection(sm: *mut QItemSelectionModel) -> bool;
+        unsafe fn QItemSelectionModel_onSelectionChanged(sm: *mut QItemSelectionModel, ctx: u64);
+        unsafe fn QItemSelectionModel_onCurrentChanged(sm: *mut QItemSelectionModel, ctx: u64);
 
     }
 

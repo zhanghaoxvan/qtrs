@@ -7,6 +7,7 @@
 #include <QtCore/QString>
 #include <QtWidgets/QWidget>
 #include <string>
+#include "rust/cxx.h"
 
 inline QWidget *QWidget_new(QWidget *parent) { return new QWidget(parent); }
 inline void QWidget_show(QWidget *widget) { widget->show(); }
@@ -63,3 +64,61 @@ inline void QWidget_move(QWidget *w, int x, int y) {
 inline void QWidget_moveToPoint(QWidget *w, QPoint *p) {
     w->move(*p);
 }
+
+// --- Size/Position getters ---
+inline int QWidget_width(QWidget *w) { return w->width(); }
+inline int QWidget_height(QWidget *w) { return w->height(); }
+inline int QWidget_x(QWidget *w) { return w->x(); }
+inline int QWidget_y(QWidget *w) { return w->y(); }
+
+// --- Geometry ---
+inline void QWidget_setGeometry(QWidget *w, int x, int y, int ww, int h) {
+    w->setGeometry(x, y, ww, h);
+}
+
+// --- State queries ---
+inline bool QWidget_isVisible(QWidget *w) { return w->isVisible(); }
+inline bool QWidget_isEnabled(QWidget *w) { return w->isEnabled(); }
+inline bool QWidget_isHidden(QWidget *w) { return w->isHidden(); }
+
+// --- Window title getter ---
+inline rust::String QWidget_windowTitle(QWidget *w) {
+    return rust::String(w->windowTitle().toStdString());
+}
+
+// --- Focus ---
+inline void QWidget_setFocus(QWidget *w) { w->setFocus(); }
+inline bool QWidget_hasFocus(QWidget *w) { return w->hasFocus(); }
+inline void QWidget_clearFocus(QWidget *w) { w->clearFocus(); }
+
+// --- Object name ---
+inline void QWidget_setObjectName(QWidget *w, const std::string &name) {
+    w->setObjectName(QString::fromStdString(name));
+}
+inline rust::String QWidget_objectName(QWidget *w) {
+    return rust::String(w->objectName().toStdString());
+}
+
+// --- Repaint ---
+inline void QWidget_update(QWidget *w) { w->update(); }
+inline void QWidget_repaint(QWidget *w) { w->repaint(); }
+
+// --- Close ---
+inline void QWidget_close(QWidget *w) { w->close(); }
+
+// --- Parent ---
+inline QWidget *QWidget_parentWidget(QWidget *w) {
+    return w->parentWidget();
+}
+
+// --- Min/max size getters ---
+inline int QWidget_minimumWidth(QWidget *w) { return w->minimumWidth(); }
+inline int QWidget_minimumHeight(QWidget *w) { return w->minimumHeight(); }
+inline int QWidget_maximumWidth(QWidget *w) { return w->maximumWidth(); }
+inline int QWidget_maximumHeight(QWidget *w) { return w->maximumHeight(); }
+
+// --- Window state ---
+inline void QWidget_raiseWidget(QWidget *w) { w->raise(); }
+inline void QWidget_lowerWidget(QWidget *w) { w->lower(); }
+inline bool QWidget_isMinimized(QWidget *w) { return w->isMinimized(); }
+inline bool QWidget_isMaximized(QWidget *w) { return w->isMaximized(); }

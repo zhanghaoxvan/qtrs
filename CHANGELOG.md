@@ -7,6 +7,45 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.5.0] - 2026-07-27
+
+### Added
+- **Model/View architecture**: `StandardItemModel`, `TableView`, `ListView`,
+  `TreeView`, and `ItemSelectionModel` — the full Qt Model/View framework
+  with proper data-model separation. All views support signal callbacks
+  (clicked, double-clicked, expanded, collapsed) and builder-pattern
+  construction.
+- **24 new QWidget methods** added as default methods on the `AsWidget`
+  trait, available on every widget automatically:
+  - Size/position getters: `width()`, `height()`, `x()`, `y()`,
+    `pos() -> Point`, `size() -> (i32, i32)`
+  - Geometry: `set_geometry()`, `geometry() -> (x, y, w, h)`
+  - State queries: `is_visible()`, `is_enabled()`, `is_hidden()`,
+    `is_minimized()`, `is_maximized()`
+  - Window title getter: `window_title() -> String`
+  - Focus management: `set_focus()`, `has_focus()`, `clear_focus()`
+  - Object name: `set_object_name()`, `object_name() -> String`
+  - Repaint: `update()`, `repaint()`
+  - Window actions: `close()`, `raise_widget()`, `lower_widget()`
+  - Size limit getters: `minimum_width()`, `minimum_height()`,
+    `maximum_width()`, `maximum_height()`
+  - Parent access: `parent_widget() -> Option<Widget>`
+- `QObject_disconnectAll()` for safely disconnecting all signals from
+  non-widget QObjects (e.g. `ItemSelectionModel`)
+- `slider_slots` module with `SET_VALUE` slot constant for `Slider`
+
+### Fixed
+- Undefined behavior in `signal.rs`: replaced `std::mem::transmute` with `Box::from_raw` when reconstructing boxed closures from raw pointers
+- `TextEdit::build()` now calls `setPlaceholderText` instead of `setPlainText` for placeholder text
+- Outdated documentation claiming signal closures are "leaked" when widget has parent — they are correctly reclaimed
+- All 19 broken doctests — examples now use correct signal/slot constants from `qtrs::signals`
+
+### Changed
+- Updated `demo.rs` example to use correct signal/slot imports
+- Updated internal doctests to use `# use qtrs::signals::{...}` pattern
+
+---
+
 ## [0.4.2] - 2026-7-25
 
 ### Fixed

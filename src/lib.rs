@@ -10,7 +10,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! qtrs = "0.4.2"
+//! qtrs = "0.5.0"
 //! ```
 //!
 //! ## Design principles
@@ -228,6 +228,11 @@ pub mod calendarwidget;
 pub mod shortcut;
 pub mod systemtrayicon;
 pub mod font;
+pub mod standarditemmodel;
+pub mod tableview;
+pub mod listview;
+pub mod treeview;
+pub mod itemselectionmodel;
 
 // ================================================
 // Re-Exports
@@ -284,6 +289,11 @@ pub use toolbutton::ToolButton;
 pub use calendarwidget::CalendarWidget;
 pub use shortcut::Shortcut;
 pub use systemtrayicon::SystemTrayIcon;
+pub use standarditemmodel::StandardItemModel;
+pub use tableview::TableView;
+pub use listview::ListView;
+pub use treeview::TreeView;
+pub use itemselectionmodel::ItemSelectionModel;
 
 
 // ============================================================
@@ -305,6 +315,9 @@ pub mod prelude {
         Frame, ToolButton, CalendarWidget, Shortcut, SystemTrayIcon,
         ConnectExt, ConnType, signals, FileDialog, Point,
         Font, FontExt, UiLoader,
+        StandardItemModel, TableView, ListView, TreeView, ItemSelectionModel,
         get_text, get_int, get_double, get_item,
     };
+    pub use super::standarditemmodel::{HORIZONTAL, VERTICAL};
+    pub use super::listview::{LIST_MODE, ICON_MODE};
 }

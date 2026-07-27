@@ -45,6 +45,159 @@ pub trait AsWidget {
     /// may outlive the Rust wrapper). Keep the Rust wrapper alive
     /// for the widget's full lifetime for best results.
     fn set_has_parent(&mut self);
+
+    // ============================================================
+    // Default methods — every widget gets these for free
+    // ============================================================
+
+    /// Get the widget width in pixels.
+    fn width(&self) -> i32 {
+        unsafe { ffi::QWidget_width(self.widget_ptr()) }
+    }
+
+    /// Get the widget height in pixels.
+    fn height(&self) -> i32 {
+        unsafe { ffi::QWidget_height(self.widget_ptr()) }
+    }
+
+    /// Get the widget's x position relative to its parent.
+    fn x(&self) -> i32 {
+        unsafe { ffi::QWidget_x(self.widget_ptr()) }
+    }
+
+    /// Get the widget's y position relative to its parent.
+    fn y(&self) -> i32 {
+        unsafe { ffi::QWidget_y(self.widget_ptr()) }
+    }
+
+    /// Get the widget's position as a `Point`.
+    fn pos(&self) -> Point {
+        Point::new(self.x(), self.y())
+    }
+
+    /// Get the widget's size as `(width, height)`.
+    fn size(&self) -> (i32, i32) {
+        (self.width(), self.height())
+    }
+
+    /// Set the widget's geometry (position and size) in one call.
+    fn set_geometry(&self, x: i32, y: i32, w: i32, h: i32) {
+        unsafe { ffi::QWidget_setGeometry(self.widget_ptr(), x, y, w, h); }
+    }
+
+    /// Get the widget's geometry as `(x, y, width, height)`.
+    fn geometry(&self) -> (i32, i32, i32, i32) {
+        (self.x(), self.y(), self.width(), self.height())
+    }
+
+    /// Returns `true` if the widget is visible.
+    fn is_visible(&self) -> bool {
+        unsafe { ffi::QWidget_isVisible(self.widget_ptr()) }
+    }
+
+    /// Returns `true` if the widget is enabled.
+    fn is_enabled(&self) -> bool {
+        unsafe { ffi::QWidget_isEnabled(self.widget_ptr()) }
+    }
+
+    /// Returns `true` if the widget is hidden.
+    fn is_hidden(&self) -> bool {
+        unsafe { ffi::QWidget_isHidden(self.widget_ptr()) }
+    }
+
+    /// Get the window title (returns empty string if no title set).
+    fn window_title(&self) -> String {
+        unsafe { ffi::QWidget_windowTitle(self.widget_ptr()) }
+    }
+
+    /// Give keyboard focus to this widget.
+    fn set_focus(&self) {
+        unsafe { ffi::QWidget_setFocus(self.widget_ptr()); }
+    }
+
+    /// Returns `true` if the widget has keyboard focus.
+    fn has_focus(&self) -> bool {
+        unsafe { ffi::QWidget_hasFocus(self.widget_ptr()) }
+    }
+
+    /// Remove keyboard focus from this widget.
+    fn clear_focus(&self) {
+        unsafe { ffi::QWidget_clearFocus(self.widget_ptr()); }
+    }
+
+    /// Set the Qt object name (used for `findChild` and stylesheets).
+    fn set_object_name(&self, name: &str) {
+        let_cxx_string!(c_name = name);
+        unsafe { ffi::QWidget_setObjectName(self.widget_ptr(), &c_name); }
+    }
+
+    /// Get the Qt object name.
+    fn object_name(&self) -> String {
+        unsafe { ffi::QWidget_objectName(self.widget_ptr()) }
+    }
+
+    /// Schedule a repaint. Qt coalesces multiple `update()` calls
+    /// into a single paint event for efficiency.
+    fn update(&self) {
+        unsafe { ffi::QWidget_update(self.widget_ptr()); }
+    }
+
+    /// Immediately repaint the widget (use sparingly; prefer [`update`](Self::update)).
+    fn repaint(&self) {
+        unsafe { ffi::QWidget_repaint(self.widget_ptr()); }
+    }
+
+    /// Close this widget. Returns `true` if the widget was closed.
+    fn close(&self) {
+        unsafe { ffi::QWidget_close(self.widget_ptr()); }
+    }
+
+    /// Get the parent widget, or `None` if this is a top-level window.
+    fn parent_widget(&self) -> Option<Widget> {
+        let ptr = unsafe { ffi::QWidget_parentWidget(self.widget_ptr()) };
+        if ptr.is_null() { None }
+        else { Some(Widget::from_raw(ptr, true)) }
+    }
+
+    /// Get the minimum width constraint.
+    fn minimum_width(&self) -> i32 {
+        unsafe { ffi::QWidget_minimumWidth(self.widget_ptr()) }
+    }
+
+    /// Get the minimum height constraint.
+    fn minimum_height(&self) -> i32 {
+        unsafe { ffi::QWidget_minimumHeight(self.widget_ptr()) }
+    }
+
+    /// Get the maximum width constraint.
+    fn maximum_width(&self) -> i32 {
+        unsafe { ffi::QWidget_maximumWidth(self.widget_ptr()) }
+    }
+
+    /// Get the maximum height constraint.
+    fn maximum_height(&self) -> i32 {
+        unsafe { ffi::QWidget_maximumHeight(self.widget_ptr()) }
+    }
+
+    /// Raise this widget to the top of the parent's widget stack.
+    fn raise_widget(&self) {
+        unsafe { ffi::QWidget_raiseWidget(self.widget_ptr()); }
+    }
+
+    /// Lower this widget to the bottom of the parent's widget stack.
+    fn lower_widget(&self) {
+        unsafe { ffi::QWidget_lowerWidget(self.widget_ptr()); }
+    }
+
+    /// Returns `true` if the widget is minimized (iconified).
+    fn is_minimized(&self) -> bool {
+        unsafe { ffi::QWidget_isMinimized(self.widget_ptr()) }
+    }
+
+    /// Returns `true` if the widget is maximized.
+    fn is_maximized(&self) -> bool {
+        unsafe { ffi::QWidget_isMaximized(self.widget_ptr()) }
+    }
 }
 
 /// A generic `QWidget` — can be a top-level window or a container.
