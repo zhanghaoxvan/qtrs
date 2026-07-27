@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.5.1] - 2026-07-27
+
+### Added
+- `move_to()` and `move_to_point()` added as default methods on the `AsWidget`
+  trait (was previously only on `Widget`). Now available on all widgets
+  including `Label`, `PushButton`, `CheckBox`, etc.
+
+---
+
 ## [0.5.0] - 2026-07-27
 
 ### Added

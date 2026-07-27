@@ -5,4 +5,5 @@ Cargo.lock
 compile_commands.json
 .cache/
 .clangd
-*.zip
+*.zip.claude/settings.local.json.tmp.*
+.claude/settings.local.json.tmp.*

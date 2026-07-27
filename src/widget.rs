@@ -80,6 +80,16 @@ pub trait AsWidget {
         (self.width(), self.height())
     }
 
+    /// Move the widget to `(x, y)` relative to its parent.
+    fn move_to(&self, x: i32, y: i32) {
+        unsafe { ffi::QWidget_move(self.widget_ptr(), x, y); }
+    }
+
+    /// Move the widget to a `Point` position.
+    fn move_to_point(&self, point: Point) {
+        unsafe { ffi::QWidget_moveToPoint(self.widget_ptr(), point.to_raw()); }
+    }
+
     /// Set the widget's geometry (position and size) in one call.
     fn set_geometry(&self, x: i32, y: i32, w: i32, h: i32) {
         unsafe { ffi::QWidget_setGeometry(self.widget_ptr(), x, y, w, h); }
