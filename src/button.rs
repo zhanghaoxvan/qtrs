@@ -74,12 +74,40 @@ impl PushButton {
     }
 
     /// Show this button.
-    ///
-    /// Normally child widgets are shown automatically by their parent;
-    /// use this only for standalone buttons.
     pub fn show(&self) {
-        debug_assert!(!self.ptr.is_null(), "PushButton::show on null pointer");
+        debug_assert!(!self.ptr.is_null());
         unsafe { ffi::QPushButton_show(self.ptr) };
+    }
+
+    /// Set the button icon from a file path.
+    pub fn set_icon(&self, path: &str) {
+        debug_assert!(!self.ptr.is_null());
+        let_cxx_string!(c = path);
+        unsafe { ffi::QPushButton_setIcon(self.ptr, &c); }
+    }
+
+    /// Set whether the button has a flat appearance.
+    pub fn set_flat(&self, flat: bool) {
+        debug_assert!(!self.ptr.is_null());
+        unsafe { ffi::QPushButton_setFlat(self.ptr, flat); }
+    }
+
+    /// Returns `true` if the button is flat.
+    pub fn is_flat(&self) -> bool {
+        debug_assert!(!self.ptr.is_null());
+        unsafe { ffi::QPushButton_isFlat(self.ptr) }
+    }
+
+    /// Set this as the default button (activated by Enter key).
+    pub fn set_default(&self, def: bool) {
+        debug_assert!(!self.ptr.is_null());
+        unsafe { ffi::QPushButton_setDefault(self.ptr, def); }
+    }
+
+    /// Set auto-default behavior (activated by Enter when focused).
+    pub fn set_auto_default(&self, def: bool) {
+        debug_assert!(!self.ptr.is_null());
+        unsafe { ffi::QPushButton_setAutoDefault(self.ptr, def); }
     }
 
     /// Connect a click callback to an already-existing button.
@@ -144,18 +172,26 @@ impl Drop for PushButton {
 /// `QPushButton` (and connects signals) in [`build`](Self::build).
 pub struct Builder {
     text: String,
+    icon: Option<String>,
+    flat: Option<bool>,
+    default: Option<bool>,
     on_clicked: Option<Box<dyn Fn()>>,
     parent: Option<*mut ffi::QWidget>,
 }
 
 impl Builder {
     fn new(text: String) -> Self {
-        Self {
-            text,
-            on_clicked: None,
-            parent: None,
-        }
+        Self { text, icon: None, flat: None, default: None, on_clicked: None, parent: None }
     }
+
+    /// Set the button icon from a file path.
+    pub fn icon(mut self, path: impl Into<String>) -> Self { self.icon = Some(path.into()); self }
+
+    /// Set whether the button has a flat appearance.
+    pub fn flat(mut self, flat: bool) -> Self { self.flat = Some(flat); self }
+
+    /// Make this the default button (activated by Enter).
+    pub fn default(mut self, def: bool) -> Self { self.default = Some(def); self }
 
     /// Set the click callback.
     ///
@@ -193,6 +229,14 @@ impl Builder {
 
         let has_parent = self.parent.is_some();
         let mut signal_handles = Vec::new();
+
+        // Apply builder settings
+        if let Some(ref path) = self.icon {
+            let_cxx_string!(c = path);
+            unsafe { ffi::QPushButton_setIcon(ptr, &c); }
+        }
+        if let Some(flat) = self.flat { unsafe { ffi::QPushButton_setFlat(ptr, flat); } }
+        if let Some(def) = self.default { unsafe { ffi::QPushButton_setDefault(ptr, def); } }
 
         // Connect click signal if a callback was provided.
         if let Some(cb) = self.on_clicked {

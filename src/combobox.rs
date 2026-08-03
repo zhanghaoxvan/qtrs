@@ -55,6 +55,42 @@ impl ComboBox {
         unsafe { ffi::QComboBox_setCurrentIndex(self.ptr, index); }
     }
 
+    /// Get the number of items.
+    pub fn count(&self) -> i32 {
+        debug_assert!(!self.ptr.is_null());
+        unsafe { ffi::QComboBox_count(self.ptr) }
+    }
+
+    /// Remove the item at the given index.
+    pub fn remove_item(&self, index: i32) {
+        debug_assert!(!self.ptr.is_null());
+        unsafe { ffi::QComboBox_removeItem(self.ptr, index); }
+    }
+
+    /// Remove all items.
+    pub fn clear(&self) {
+        debug_assert!(!self.ptr.is_null());
+        unsafe { ffi::QComboBox_clear(self.ptr); }
+    }
+
+    /// Set whether the user can edit the combobox text.
+    pub fn set_editable(&self, editable: bool) {
+        debug_assert!(!self.ptr.is_null());
+        unsafe { ffi::QComboBox_setEditable(self.ptr, editable); }
+    }
+
+    /// Returns `true` if the combobox is editable.
+    pub fn is_editable(&self) -> bool {
+        debug_assert!(!self.ptr.is_null());
+        unsafe { ffi::QComboBox_isEditable(self.ptr) }
+    }
+
+    /// Set the maximum number of items.
+    pub fn set_max_count(&self, max: i32) {
+        debug_assert!(!self.ptr.is_null());
+        unsafe { ffi::QComboBox_setMaxCount(self.ptr, max); }
+    }
+
     /// Connect a callback that fires when the selected index changes.
     /// The callback receives the new index as `i32`.
     pub fn connect_current_index_changed<F: Fn(i32)>(&mut self, f: F) {
@@ -95,17 +131,25 @@ impl Drop for ComboBox {
 
 pub struct Builder {
     items: Vec<String>,
+    editable: Option<bool>,
+    max_count: Option<i32>,
     on_current_text_changed: Option<Box<dyn Fn()>>,
     parent: Option<*mut ffi::QWidget>,
 }
 
 impl Builder {
-    fn new() -> Self { Self { items: Vec::new(), on_current_text_changed: None, parent: None } }
+    fn new() -> Self { Self { items: Vec::new(), editable: None, max_count: None, on_current_text_changed: None, parent: None } }
 
     /// Set the list of items (replaces any previous items).
     pub fn items(mut self, items: &[&str]) -> Self {
         self.items = items.iter().map(|s| s.to_string()).collect(); self
     }
+
+    /// Make the combobox editable.
+    pub fn editable(mut self, e: bool) -> Self { self.editable = Some(e); self }
+
+    /// Set the maximum number of items.
+    pub fn max_count(mut self, max: i32) -> Self { self.max_count = Some(max); self }
 
     /// Called when the selected item changes (void — call `current_text()` to read).
     pub fn on_current_text_changed<F: Fn() + 'static>(mut self, f: F) -> Self {
@@ -126,6 +170,8 @@ impl Builder {
             let_cxx_string!(c_item = item);
             unsafe { ffi::QComboBox_addItem(ptr, &c_item); }
         }
+        if let Some(e) = self.editable { unsafe { ffi::QComboBox_setEditable(ptr, e); } }
+        if let Some(m) = self.max_count { unsafe { ffi::QComboBox_setMaxCount(ptr, m); } }
         if let Some(f) = self.on_current_text_changed {
             let h = signal::leak_void(f);
             unsafe { ffi::QComboBox_onCurrentTextChanged(ptr, h.token); }

@@ -10,7 +10,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! qtrs = "0.5.1"
+//! qtrs = "0.5.2"
 //! ```
 //!
 //! ## Design principles
@@ -233,6 +233,28 @@ pub mod tableview;
 pub mod listview;
 pub mod treeview;
 pub mod itemselectionmodel;
+pub mod fontcombobox;
+pub mod buttongroup;
+pub mod keysequenceedit;
+pub mod stringlistmodel;
+pub mod sortfilterproxymodel;
+pub mod completer;
+pub mod clipboard;
+pub mod desktopservices;
+pub mod undostack;
+pub mod validator;
+pub mod filesystemmodel;
+pub mod headerview;
+pub mod wizard;
+pub mod columnview;
+pub mod dial;
+pub mod doublespinbox;
+pub mod lcdnumber;
+pub mod scrollbar;
+pub mod dialogbuttonbox;
+pub mod dockwidget;
+pub mod toolbox;
+pub mod form;
 
 // ================================================
 // Re-Exports
@@ -272,7 +294,7 @@ pub use messagebox::{
     MessageBox, NO_ICON, INFORMATION, WARNING, CRITICAL, QUESTION,
     OK, CANCEL, YES, NO, CLOSE, SAVE, DISCARD, APPLY, RESET,
     RESTORE_DEFAULTS, HELP, SAVE_ALL, YES_TO_ALL, NO_TO_ALL,
-    ABORT, RETRY, IGNORE, NO_BUTTON,
+    ABORT, RETRY, IGNORE, NO_BUTTON, information, warning, question,
 };
 pub use conn::{ConnectExt, ConnType, SignalMeta, SlotMeta};
 pub use dateedit::DateEdit;
@@ -294,6 +316,27 @@ pub use tableview::TableView;
 pub use listview::ListView;
 pub use treeview::TreeView;
 pub use itemselectionmodel::ItemSelectionModel;
+pub use form::FormLayout;
+pub use fontcombobox::FontComboBox;
+pub use buttongroup::ButtonGroup;
+pub use keysequenceedit::KeySequenceEdit;
+pub use stringlistmodel::StringListModel;
+pub use sortfilterproxymodel::SortFilterProxyModel;
+pub use completer::Completer;
+pub use undostack::UndoStack;
+pub use validator::{IntValidator, DoubleValidator};
+pub use filesystemmodel::FileSystemModel;
+pub use headerview::HeaderView;
+pub use wizard::{Wizard, WizardPage};
+pub use columnview::ColumnView;
+pub use dial::Dial;
+pub use doublespinbox::DoubleSpinBox;
+pub use lcdnumber::LcdNumber;
+pub use scrollbar::ScrollBar;
+pub use dialog::Dialog;
+pub use dialogbuttonbox::DialogButtonBox;
+pub use dockwidget::DockWidget;
+pub use toolbox::ToolBox;
 
 
 // ============================================================
@@ -304,18 +347,24 @@ pub use itemselectionmodel::ItemSelectionModel;
 pub mod prelude {
     pub use super::{
         Action, Application, AsLayout, AsWidget, CheckBox, ComboBox, FoundWidget,
-        GridLayout, HBoxLayout, Label, LineEdit, PushButton, Slider,
+        GridLayout, HBoxLayout, FormLayout, Label, LineEdit, PushButton, Slider,
         TextEdit, Timer, VBoxLayout, Widget, WidgetKind,
         ProgressBar, RadioButton, GroupBox, TabWidget, SpinBox, ListWidget,
         Menu, MenuBar,
         MainWindow, StatusBar, ToolBar, MessageBox,
-        ProgressDialog, ScrollArea, Splitter, StackedWidget,
+        Dialog, ProgressDialog, ScrollArea, Splitter, StackedWidget,
         TableWidget, TreeWidget,
         DateEdit, DateTimeEdit, PlainTextEdit, TextBrowser, TimeEdit,
         Frame, ToolButton, CalendarWidget, Shortcut, SystemTrayIcon,
         ConnectExt, ConnType, signals, FileDialog, Point,
         Font, FontExt, UiLoader,
         StandardItemModel, TableView, ListView, TreeView, ItemSelectionModel,
+        Dial, DoubleSpinBox, LcdNumber, ScrollBar,
+        DialogButtonBox, DockWidget, ToolBox,
+        FontComboBox, ButtonGroup, KeySequenceEdit,
+        StringListModel, SortFilterProxyModel, Completer,
+        UndoStack, IntValidator, DoubleValidator,
+        FileSystemModel, HeaderView, Wizard, WizardPage, ColumnView,
         get_text, get_int, get_double, get_item,
     };
     pub use super::standarditemmodel::{HORIZONTAL, VERTICAL};

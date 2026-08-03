@@ -45,3 +45,4 @@ inline void QSpinBox_onValueChanged(QSpinBox *sb, uint64_t ctx) {
                          if (g_hasIntTrampoline) g_intTrampoline(ctx, value);
                      });
 }
+inline void QSpinBox_setPrefix(QSpinBox *sb, const std::string &prefix) { sb->setPrefix(QString::fromStdString(prefix)); }

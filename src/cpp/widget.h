@@ -122,3 +122,25 @@ inline void QWidget_raiseWidget(QWidget *w) { w->raise(); }
 inline void QWidget_lowerWidget(QWidget *w) { w->lower(); }
 inline bool QWidget_isMinimized(QWidget *w) { return w->isMinimized(); }
 inline bool QWidget_isMaximized(QWidget *w) { return w->isMaximized(); }
+
+// --- More QWidget essentials ---
+inline void QWidget_adjustSize(QWidget *w) { w->adjustSize(); }
+inline bool QWidget_isActiveWindow(QWidget *w) { return w->isActiveWindow(); }
+inline bool QWidget_underMouse(QWidget *w) { return w->underMouse(); }
+inline bool QWidget_isWindow(QWidget *w) { return w->isWindow(); }
+inline QWidget *QWidget_window(QWidget *w) { return w->window(); }
+inline void QWidget_setWindowOpacity(QWidget *w, double opacity) { w->setWindowOpacity(opacity); }
+inline void QWidget_setFixedWidth(QWidget *w, int width) { w->setFixedWidth(width); }
+inline void QWidget_setFixedHeight(QWidget *w, int height) { w->setFixedHeight(height); }
+inline void QWidget_setMouseTracking(QWidget *w, bool enable) { w->setMouseTracking(enable); }
+inline bool QWidget_hasMouseTracking(QWidget *w) { return w->hasMouseTracking(); }
+inline void QWidget_setAcceptDrops(QWidget *w, bool enable) { w->setAcceptDrops(enable); }
+inline void QWidget_setAutoFillBackground(QWidget *w, bool enable) { w->setAutoFillBackground(enable); }
+inline void QWidget_showFullScreen(QWidget *w) { w->showFullScreen(); }
+inline void QWidget_showMaximized(QWidget *w) { w->showMaximized(); }
+inline void QWidget_showMinimized(QWidget *w) { w->showMinimized(); }
+inline void QWidget_showNormal(QWidget *w) { w->showNormal(); }
+inline void QWidget_setSizePolicy(QWidget *w, int hPolicy, int vPolicy) {
+    w->setSizePolicy(static_cast<QSizePolicy::Policy>(hPolicy), static_cast<QSizePolicy::Policy>(vPolicy));
+}
+inline bool QWidget_isVisibleTo(QWidget *w, QWidget *ancestor) { return w->isVisibleTo(ancestor); }

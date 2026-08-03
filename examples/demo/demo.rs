@@ -2,8 +2,8 @@
 //
 // Run: cargo run --example demo
 
+use qtrs::messagebox;
 use qtrs::prelude::*;
-use qtrs::dialog;
 use qtrs::signals::slider_signals::VALUE_CHANGED as SLIDER_VALUE_CHANGED;
 use qtrs::signals::spin_box_signals::VALUE_CHANGED as SPIN_VALUE_CHANGED;
 use qtrs::signals::spin_box_slots::SET_VALUE;
@@ -294,10 +294,10 @@ fn main() {
     let help_menu = Menu::new("Help")
         .action("About", || {
             println!("[LOG] Menu: About");
-            dialog::information(
+            messagebox::information(
                 None,  // No parent needed
                 "About",
-                "qtrs Widget Gallery\nVersion 0.5.1\n\nAll widgets test",
+                "qtrs Widget Gallery\nVersion 0.5.2\n\nAll widgets test",
             );
         })
         .parent(&window)
@@ -319,7 +319,7 @@ fn main() {
     let info_btn = PushButton::new("Show Info")
         .on_clicked(|| {
             println!("[LOG] Info dialog shown");
-            dialog::information(None, "Info", "This is an information dialog");
+            messagebox::information(None, "Info", "This is an information dialog");
         })
         .parent(&window)
         .build();
@@ -328,7 +328,7 @@ fn main() {
     let warn_btn = PushButton::new("Show Warning")
         .on_clicked(|| {
             println!("[LOG] Warning dialog shown");
-            dialog::warning(None, "Warning", "This is a warning dialog");
+            messagebox::warning(None, "Warning", "This is a warning dialog");
         })
         .parent(&window)
         .build();
@@ -337,7 +337,7 @@ fn main() {
     let ask_btn = PushButton::new("Ask Question")
         .on_clicked(|| {
             println!("[LOG] Question dialog shown");
-            let answer = dialog::question(None, "Question", "Are you sure?");
+            let answer = messagebox::question(None, "Question", "Are you sure?");
             println!("[LOG] Answer: {}", if answer { "Yes" } else { "No" });
         })
         .parent(&window)

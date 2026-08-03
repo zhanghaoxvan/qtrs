@@ -1,4 +1,4 @@
-use qtrs::dialog;
+use qtrs::messagebox;
 use qtrs::prelude::*;
 use qtrs::splitter::HORIZONTAL;
 use std::cell::RefCell;
@@ -148,7 +148,7 @@ fn main() {
                 }
             }
         })
-        .action("About", || dialog::information(None, "About", "TextEditor v0.1.0"))
+        .action("About", || messagebox::information(None, "About", "TextEditor v0.1.0"))
         .action("Exit", || std::process::exit(0))
         .parent(&*window)
         .build();

@@ -75,52 +75,68 @@ pub struct MessageBox {
 
 impl MessageBox {
     /// Start building a new message box.
-    pub fn new() -> Builder { Builder::new() }
+    pub fn new() -> Builder {
+        Builder::new()
+    }
 
     /// Set the icon displayed in the message box.
     pub fn set_icon(&self, icon: i32) {
         debug_assert!(!self.ptr.is_null());
-        unsafe { ffi::QMessageBox_setIcon(self.ptr, icon); }
+        unsafe {
+            ffi::QMessageBox_setIcon(self.ptr, icon);
+        }
     }
 
     /// Set the main text.
     pub fn set_text(&self, text: &str) {
         debug_assert!(!self.ptr.is_null());
         let_cxx_string!(c_text = text);
-        unsafe { ffi::QMessageBox_setText(self.ptr, &c_text); }
+        unsafe {
+            ffi::QMessageBox_setText(self.ptr, &c_text);
+        }
     }
 
     /// Set the informative text (secondary text).
     pub fn set_informative_text(&self, text: &str) {
         debug_assert!(!self.ptr.is_null());
         let_cxx_string!(c_text = text);
-        unsafe { ffi::QMessageBox_setInformativeText(self.ptr, &c_text); }
+        unsafe {
+            ffi::QMessageBox_setInformativeText(self.ptr, &c_text);
+        }
     }
 
     /// Set the window title.
     pub fn set_window_title(&self, title: &str) {
         debug_assert!(!self.ptr.is_null());
         let_cxx_string!(c_title = title);
-        unsafe { ffi::QMessageBox_setWindowTitle(self.ptr, &c_title); }
+        unsafe {
+            ffi::QMessageBox_setWindowTitle(self.ptr, &c_title);
+        }
     }
 
     /// Set the standard buttons shown.
     pub fn set_standard_buttons(&self, buttons: i32) {
         debug_assert!(!self.ptr.is_null());
-        unsafe { ffi::QMessageBox_setStandardButtons(self.ptr, buttons); }
+        unsafe {
+            ffi::QMessageBox_setStandardButtons(self.ptr, buttons);
+        }
     }
 
     /// Set the default button.
     pub fn set_default_button(&self, button: i32) {
         debug_assert!(!self.ptr.is_null());
-        unsafe { ffi::QMessageBox_setDefaultButton(self.ptr, button); }
+        unsafe {
+            ffi::QMessageBox_setDefaultButton(self.ptr, button);
+        }
     }
 
     /// Set detailed text (shown in a collapsible area).
     pub fn set_detailed_text(&self, text: &str) {
         debug_assert!(!self.ptr.is_null());
         let_cxx_string!(c_text = text);
-        unsafe { ffi::QMessageBox_setDetailedText(self.ptr, &c_text); }
+        unsafe {
+            ffi::QMessageBox_setDetailedText(self.ptr, &c_text);
+        }
     }
 
     /// Show the message box modally. Returns the clicked button's code.
@@ -133,10 +149,14 @@ impl MessageBox {
 
     /// Show an **About** dialog.
     pub fn about(parent: Option<&dyn AsWidget>, title: &str, text: &str) {
-        let parent_ptr = parent.map(|p| p.widget_ptr()).unwrap_or(std::ptr::null_mut());
+        let parent_ptr = parent
+            .map(|p| p.widget_ptr())
+            .unwrap_or(std::ptr::null_mut());
         let_cxx_string!(c_title = title);
         let_cxx_string!(c_text = text);
-        unsafe { ffi::QMessageBox_about(parent_ptr, &c_title, &c_text); }
+        unsafe {
+            ffi::QMessageBox_about(parent_ptr, &c_title, &c_text);
+        }
     }
 
     /// Wrap an existing `QMessageBox*` obtained via `findChild`.
@@ -144,7 +164,11 @@ impl MessageBox {
     #[allow(dead_code)]
     pub(crate) fn from_raw(ptr: *mut ffi::QMessageBox, _name: &str) -> Self {
         debug_assert!(!ptr.is_null());
-        Self { ptr, has_parent: true, signal_handles: Vec::new() }
+        Self {
+            ptr,
+            has_parent: true,
+            signal_handles: Vec::new(),
+        }
     }
 }
 
@@ -153,17 +177,31 @@ impl AsWidget for MessageBox {
         debug_assert!(!self.ptr.is_null());
         unsafe { ffi::toQWidget_QMessageBox(self.ptr) }
     }
-    fn set_has_parent(&mut self) { self.has_parent = true; }
+    fn set_has_parent(&mut self) {
+        self.has_parent = true;
+    }
 }
 
 impl Drop for MessageBox {
     fn drop(&mut self) {
-        if self.ptr.is_null() { return; }
+        if self.ptr.is_null() {
+            return;
+        }
         if self.has_parent {
-            unsafe { ffi::QWidget_disconnectAll(self.ptr as *mut _); }
-            for h in self.signal_handles.drain(..) { unsafe { h.reclaim(); } }
+            unsafe {
+                ffi::QWidget_disconnectAll(self.ptr as *mut _);
+            }
+            for h in self.signal_handles.drain(..) {
+                unsafe {
+                    h.reclaim();
+                }
+            }
         } else {
-            for h in self.signal_handles.drain(..) { unsafe { h.reclaim(); } }
+            for h in self.signal_handles.drain(..) {
+                unsafe {
+                    h.reclaim();
+                }
+            }
             unsafe { ffi::QMessageBox_delete(self.ptr) };
         }
         self.ptr = std::ptr::null_mut();
@@ -198,62 +236,136 @@ impl Builder {
 
     /// Set the icon.
     pub fn icon(mut self, icon: i32) -> Self {
-        self.icon = Some(icon); self
+        self.icon = Some(icon);
+        self
     }
 
     /// Set the main text.
     pub fn text(mut self, text: impl Into<String>) -> Self {
-        self.text = Some(text.into()); self
+        self.text = Some(text.into());
+        self
     }
 
     /// Set the informative text.
     pub fn informative_text(mut self, text: impl Into<String>) -> Self {
-        self.informative_text = Some(text.into()); self
+        self.informative_text = Some(text.into());
+        self
     }
 
     /// Set the window title.
     pub fn window_title(mut self, title: impl Into<String>) -> Self {
-        self.window_title = Some(title.into()); self
+        self.window_title = Some(title.into());
+        self
     }
 
     /// Set the standard buttons.
     pub fn standard_buttons(mut self, buttons: i32) -> Self {
-        self.standard_buttons = Some(buttons); self
+        self.standard_buttons = Some(buttons);
+        self
     }
 
     /// Set the default button.
     pub fn default_button(mut self, button: i32) -> Self {
-        self.default_button = Some(button); self
+        self.default_button = Some(button);
+        self
     }
 
     /// Set detailed text.
     pub fn detailed_text(mut self, text: impl Into<String>) -> Self {
-        self.detailed_text = Some(text.into()); self
+        self.detailed_text = Some(text.into());
+        self
     }
 
     /// Set the parent widget.
     pub fn parent(mut self, parent: &dyn AsWidget) -> Self {
-        self.parent = Some(parent.widget_ptr()); self
+        self.parent = Some(parent.widget_ptr());
+        self
     }
 
     /// Create the C++ `QMessageBox` and return the Rust wrapper.
     pub fn build(self) -> MessageBox {
-        let ptr = unsafe {
-            ffi::QMessageBox_new(self.parent.unwrap_or(std::ptr::null_mut()))
-        };
+        let ptr = unsafe { ffi::QMessageBox_new(self.parent.unwrap_or(std::ptr::null_mut())) };
         debug_assert!(!ptr.is_null());
         let mb = MessageBox {
             ptr,
             has_parent: self.parent.is_some(),
             signal_handles: Vec::new(),
         };
-        if let Some(icon) = self.icon { mb.set_icon(icon); }
-        if let Some(text) = &self.text { mb.set_text(text); }
-        if let Some(text) = &self.informative_text { mb.set_informative_text(text); }
-        if let Some(title) = &self.window_title { mb.set_window_title(title); }
-        if let Some(btns) = self.standard_buttons { mb.set_standard_buttons(btns); }
-        if let Some(btn) = self.default_button { mb.set_default_button(btn); }
-        if let Some(text) = &self.detailed_text { mb.set_detailed_text(text); }
+        if let Some(icon) = self.icon {
+            mb.set_icon(icon);
+        }
+        if let Some(text) = &self.text {
+            mb.set_text(text);
+        }
+        if let Some(text) = &self.informative_text {
+            mb.set_informative_text(text);
+        }
+        if let Some(title) = &self.window_title {
+            mb.set_window_title(title);
+        }
+        if let Some(btns) = self.standard_buttons {
+            mb.set_standard_buttons(btns);
+        }
+        if let Some(btn) = self.default_button {
+            mb.set_default_button(btn);
+        }
+        if let Some(text) = &self.detailed_text {
+            mb.set_detailed_text(text);
+        }
         mb
     }
+}
+
+// =========================================================
+// Standard dialog boxes (QMessageBox convenience wrappers).
+// =========================================================
+
+/// Show a modal **information** dialog.
+pub fn information(parent: Option<&dyn AsWidget>, title: &str, text: &str) {
+    let parent_ptr = parent
+        .map(|p| p.widget_ptr())
+        .unwrap_or(std::ptr::null_mut());
+    let_cxx_string!(c_title = title);
+    let_cxx_string!(c_text = text);
+    unsafe {
+        ffi::QMessageBox_information(parent_ptr, &c_title, &c_text);
+    }
+}
+
+/// Show a modal **warning** dialog.
+pub fn warning(parent: Option<&dyn AsWidget>, title: &str, text: &str) {
+    let parent_ptr = parent
+        .map(|p| p.widget_ptr())
+        .unwrap_or(std::ptr::null_mut());
+    let_cxx_string!(c_title = title);
+    let_cxx_string!(c_text = text);
+    unsafe {
+        ffi::QMessageBox_warning(parent_ptr, &c_title, &c_text);
+    }
+}
+
+/// Show a modal **critical** (error) dialog.
+pub fn critical(parent: Option<&dyn AsWidget>, title: &str, text: &str) {
+    let parent_ptr = parent
+        .map(|p| p.widget_ptr())
+        .unwrap_or(std::ptr::null_mut());
+    let_cxx_string!(c_title = title);
+    let_cxx_string!(c_text = text);
+    unsafe {
+        ffi::QMessageBox_critical(parent_ptr, &c_title, &c_text);
+    }
+}
+
+/// Show a modal **question** dialog with Yes/No buttons.
+///
+/// Returns `true` if the user clicked **Yes**, `false` for **No**.
+/// (Qt's `QMessageBox::Yes` is 0x00004000, `QMessageBox::No` is 0x00010000.)
+pub fn question(parent: Option<&dyn AsWidget>, title: &str, text: &str) -> bool {
+    let parent_ptr = parent
+        .map(|p| p.widget_ptr())
+        .unwrap_or(std::ptr::null_mut());
+    let_cxx_string!(c_title = title);
+    let_cxx_string!(c_text = text);
+    let result = unsafe { ffi::QMessageBox_question(parent_ptr, &c_title, &c_text) };
+    result == 0x00004000 // QMessageBox::Yes
 }

@@ -85,6 +85,90 @@ impl LineEdit {
         unsafe { ffi::QLineEdit_setText(self.ptr, &c_text); }
     }
 
+    /// Clear the text content.
+    pub fn clear(&self) {
+        debug_assert!(!self.ptr.is_null());
+        unsafe { ffi::QLineEdit_clear(self.ptr); }
+    }
+
+    /// Select all text.
+    pub fn select_all(&self) {
+        debug_assert!(!self.ptr.is_null());
+        unsafe { ffi::QLineEdit_selectAll(self.ptr); }
+    }
+
+    /// Copy selected text to clipboard.
+    pub fn copy(&self) {
+        debug_assert!(!self.ptr.is_null());
+        unsafe { ffi::QLineEdit_copy(self.ptr); }
+    }
+
+    /// Cut selected text to clipboard.
+    pub fn cut(&self) {
+        debug_assert!(!self.ptr.is_null());
+        unsafe { ffi::QLineEdit_cut(self.ptr); }
+    }
+
+    /// Paste text from clipboard.
+    pub fn paste(&self) {
+        debug_assert!(!self.ptr.is_null());
+        unsafe { ffi::QLineEdit_paste(self.ptr); }
+    }
+
+    /// Undo the last edit operation.
+    pub fn undo(&self) {
+        debug_assert!(!self.ptr.is_null());
+        unsafe { ffi::QLineEdit_undo(self.ptr); }
+    }
+
+    /// Redo the last undone operation.
+    pub fn redo(&self) {
+        debug_assert!(!self.ptr.is_null());
+        unsafe { ffi::QLineEdit_redo(self.ptr); }
+    }
+
+    /// Set whether the text is read-only.
+    pub fn set_read_only(&self, ro: bool) {
+        debug_assert!(!self.ptr.is_null());
+        unsafe { ffi::QLineEdit_setReadOnly(self.ptr, ro); }
+    }
+
+    /// Returns `true` if the line edit is read-only.
+    pub fn is_read_only(&self) -> bool {
+        debug_assert!(!self.ptr.is_null());
+        unsafe { ffi::QLineEdit_isReadOnly(self.ptr) }
+    }
+
+    /// Set the echo mode (e.g. password mode).
+    pub fn set_echo_mode(&self, mode: i32) {
+        debug_assert!(!self.ptr.is_null());
+        unsafe { ffi::QLineEdit_setEchoMode(self.ptr, mode); }
+    }
+
+    /// Set the maximum input length.
+    pub fn set_max_length(&self, len: i32) {
+        debug_assert!(!self.ptr.is_null());
+        unsafe { ffi::QLineEdit_setMaxLength(self.ptr, len); }
+    }
+
+    /// Get the maximum input length.
+    pub fn max_length(&self) -> i32 {
+        debug_assert!(!self.ptr.is_null());
+        unsafe { ffi::QLineEdit_maxLength(self.ptr) }
+    }
+
+    /// Get the current cursor position.
+    pub fn cursor_position(&self) -> i32 {
+        debug_assert!(!self.ptr.is_null());
+        unsafe { ffi::QLineEdit_cursorPosition(self.ptr) }
+    }
+
+    /// Set the cursor position.
+    pub fn set_cursor_position(&self, pos: i32) {
+        debug_assert!(!self.ptr.is_null());
+        unsafe { ffi::QLineEdit_setCursorPosition(self.ptr, pos); }
+    }
+
     /// Connect a return-pressed callback to an already-existing widget.
     pub fn connect_return_pressed<F: Fn()>(&mut self, f: F) {
         debug_assert!(!self.ptr.is_null());
@@ -139,18 +223,26 @@ impl Drop for LineEdit {
 /// C++ `QLineEdit` (and connects signals) in [`build`](Self::build).
 pub struct Builder {
     text: String,
+    read_only: bool,
+    echo_mode: Option<i32>,
+    max_length: Option<i32>,
     on_return_pressed: Option<Box<dyn Fn()>>,
     parent: Option<*mut ffi::QWidget>,
 }
 
 impl Builder {
     fn new(text: String) -> Self {
-        Self {
-            text,
-            on_return_pressed: None,
-            parent: None,
-        }
+        Self { text, read_only: false, echo_mode: None, max_length: None, on_return_pressed: None, parent: None }
     }
+
+    /// Make the line edit read-only.
+    pub fn read_only(mut self, ro: bool) -> Self { self.read_only = ro; self }
+
+    /// Set the echo mode (e.g. password mode).
+    pub fn echo_mode(mut self, mode: i32) -> Self { self.echo_mode = Some(mode); self }
+
+    /// Set the maximum input length.
+    pub fn max_length(mut self, len: i32) -> Self { self.max_length = Some(len); self }
 
     /// Set the callback for when the user presses Enter/Return.
     ///
@@ -185,6 +277,10 @@ impl Builder {
 
         let has_parent = self.parent.is_some();
         let mut signal_handles = Vec::new();
+
+        if self.read_only { unsafe { ffi::QLineEdit_setReadOnly(ptr, true); } }
+        if let Some(mode) = self.echo_mode { unsafe { ffi::QLineEdit_setEchoMode(ptr, mode); } }
+        if let Some(len) = self.max_length { unsafe { ffi::QLineEdit_setMaxLength(ptr, len); } }
 
         if let Some(cb) = self.on_return_pressed {
             let handle = signal::leak_void(cb);

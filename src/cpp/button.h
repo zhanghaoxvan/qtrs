@@ -17,6 +17,13 @@ inline void QPushButton_setText(QPushButton *btn, const std::string &text) {
     btn->setText(QString::fromStdString(text));
 }
 inline void QPushButton_delete(QPushButton *btn) { delete btn; }
+inline void QPushButton_setIcon(QPushButton *btn, const std::string &path) {
+    btn->setIcon(QIcon(QString::fromStdString(path)));
+}
+inline void QPushButton_setFlat(QPushButton *btn, bool flat) { btn->setFlat(flat); }
+inline bool QPushButton_isFlat(QPushButton *btn) { return btn->isFlat(); }
+inline void QPushButton_setDefault(QPushButton *btn, bool def) { btn->setDefault(def); }
+inline void QPushButton_setAutoDefault(QPushButton *btn, bool def) { btn->setAutoDefault(def); }
 
 inline void QPushButton_onClicked(QPushButton *btn, uint64_t ctx) {
     QObject::connect(btn, &QPushButton::clicked, [ctx](bool) {

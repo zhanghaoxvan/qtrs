@@ -18,6 +18,20 @@ inline rust::String QLineEdit_text(QLineEdit *edit) {
 inline void QLineEdit_setText(QLineEdit *edit, const std::string &text) {
     edit->setText(QString::fromStdString(text));
 }
+inline void QLineEdit_clear(QLineEdit *e) { e->clear(); }
+inline void QLineEdit_selectAll(QLineEdit *e) { e->selectAll(); }
+inline void QLineEdit_copy(QLineEdit *e) { e->copy(); }
+inline void QLineEdit_cut(QLineEdit *e) { e->cut(); }
+inline void QLineEdit_paste(QLineEdit *e) { e->paste(); }
+inline void QLineEdit_undo(QLineEdit *e) { e->undo(); }
+inline void QLineEdit_redo(QLineEdit *e) { e->redo(); }
+inline void QLineEdit_setReadOnly(QLineEdit *e, bool ro) { e->setReadOnly(ro); }
+inline bool QLineEdit_isReadOnly(QLineEdit *e) { return e->isReadOnly(); }
+inline void QLineEdit_setEchoMode(QLineEdit *e, int mode) { e->setEchoMode(static_cast<QLineEdit::EchoMode>(mode)); }
+inline void QLineEdit_setMaxLength(QLineEdit *e, int len) { e->setMaxLength(len); }
+inline int QLineEdit_maxLength(QLineEdit *e) { return e->maxLength(); }
+inline int QLineEdit_cursorPosition(QLineEdit *e) { return e->cursorPosition(); }
+inline void QLineEdit_setCursorPosition(QLineEdit *e, int pos) { e->setCursorPosition(pos); }
 inline void QLineEdit_delete(QLineEdit *edit) { delete edit; }
 
 inline void QLineEdit_onReturnPressed(QLineEdit *edit, uint64_t ctx) {

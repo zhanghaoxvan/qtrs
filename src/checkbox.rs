@@ -48,6 +48,18 @@ impl CheckBox {
         unsafe { ffi::QCheckBox_setChecked(self.ptr, checked) };
     }
 
+    /// Set whether the checkbox is tristate (checked/unchecked/partial).
+    pub fn set_tristate(&self, tri: bool) {
+        debug_assert!(!self.ptr.is_null());
+        unsafe { ffi::QCheckBox_setTristate(self.ptr, tri); }
+    }
+
+    /// Returns `true` if the checkbox is tristate.
+    pub fn is_tristate(&self) -> bool {
+        debug_assert!(!self.ptr.is_null());
+        unsafe { ffi::QCheckBox_isTristate(self.ptr) }
+    }
+
     /// Connect a toggle callback to an already-existing checkbox.
     pub fn connect_toggled<F: Fn(bool)>(&mut self, f: F) {
         debug_assert!(!self.ptr.is_null());

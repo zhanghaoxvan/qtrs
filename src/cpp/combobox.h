@@ -36,3 +36,9 @@ inline void QComboBox_onCurrentIndexChanged(QComboBox *cb, uint64_t ctx) {
                          if (g_hasIntTrampoline) g_intTrampoline(ctx, index);
                      });
 }
+inline int QComboBox_count(QComboBox *cb) { return cb->count(); }
+inline void QComboBox_removeItem(QComboBox *cb, int index) { cb->removeItem(index); }
+inline void QComboBox_clear(QComboBox *cb) { cb->clear(); }
+inline void QComboBox_setEditable(QComboBox *cb, bool edit) { cb->setEditable(edit); }
+inline bool QComboBox_isEditable(QComboBox *cb) { return cb->isEditable(); }
+inline void QComboBox_setMaxCount(QComboBox *cb, int max) { cb->setMaxCount(max); }

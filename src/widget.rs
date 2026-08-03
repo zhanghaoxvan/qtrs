@@ -208,6 +208,102 @@ pub trait AsWidget {
     fn is_maximized(&self) -> bool {
         unsafe { ffi::QWidget_isMaximized(self.widget_ptr()) }
     }
+
+    /// Set the mouse cursor shape for this widget.
+    fn set_cursor(&self, shape: i32) {
+        unsafe { ffi::QWidget_setCursor(self.widget_ptr(), shape); }
+    }
+
+    /// Restore the default cursor for this widget.
+    fn unset_cursor(&self) {
+        unsafe { ffi::QWidget_unsetCursor(self.widget_ptr()); }
+    }
+
+    /// Adjust the widget size to fit its contents.
+    fn adjust_size(&self) {
+        unsafe { ffi::QWidget_adjustSize(self.widget_ptr()); }
+    }
+
+    /// Returns `true` if this widget's window is the active window.
+    fn is_active_window(&self) -> bool {
+        unsafe { ffi::QWidget_isActiveWindow(self.widget_ptr()) }
+    }
+
+    /// Returns `true` if the mouse cursor is over this widget.
+    fn under_mouse(&self) -> bool {
+        unsafe { ffi::QWidget_underMouse(self.widget_ptr()) }
+    }
+
+    /// Returns `true` if this widget is an independent window.
+    fn is_window(&self) -> bool {
+        unsafe { ffi::QWidget_isWindow(self.widget_ptr()) }
+    }
+
+    /// Get the top-level ancestor window.
+    fn window(&self) -> Option<Widget> {
+        let ptr = unsafe { ffi::QWidget_window(self.widget_ptr()) };
+        if ptr.is_null() { None } else { Some(Widget::from_raw(ptr, true)) }
+    }
+
+    /// Set the window opacity (0.0 = transparent, 1.0 = opaque).
+    fn set_window_opacity(&self, opacity: f64) {
+        unsafe { ffi::QWidget_setWindowOpacity(self.widget_ptr(), opacity); }
+    }
+
+    /// Set a fixed width for this widget.
+    fn set_fixed_width(&self, width: i32) {
+        unsafe { ffi::QWidget_setFixedWidth(self.widget_ptr(), width); }
+    }
+
+    /// Set a fixed height for this widget.
+    fn set_fixed_height(&self, height: i32) {
+        unsafe { ffi::QWidget_setFixedHeight(self.widget_ptr(), height); }
+    }
+
+    /// Enable mouse tracking (mouse move events even without buttons pressed).
+    fn set_mouse_tracking(&self, enable: bool) {
+        unsafe { ffi::QWidget_setMouseTracking(self.widget_ptr(), enable); }
+    }
+
+    /// Returns `true` if mouse tracking is enabled.
+    fn has_mouse_tracking(&self) -> bool {
+        unsafe { ffi::QWidget_hasMouseTracking(self.widget_ptr()) }
+    }
+
+    /// Enable or disable drop events for this widget.
+    fn set_accept_drops(&self, enable: bool) {
+        unsafe { ffi::QWidget_setAcceptDrops(self.widget_ptr(), enable); }
+    }
+
+    /// Set whether the widget background is filled automatically.
+    fn set_auto_fill_background(&self, enable: bool) {
+        unsafe { ffi::QWidget_setAutoFillBackground(self.widget_ptr(), enable); }
+    }
+
+    /// Show the widget in full-screen mode.
+    fn show_full_screen(&self) {
+        unsafe { ffi::QWidget_showFullScreen(self.widget_ptr()); }
+    }
+
+    /// Show the widget maximized.
+    fn show_maximized(&self) {
+        unsafe { ffi::QWidget_showMaximized(self.widget_ptr()); }
+    }
+
+    /// Show the widget minimized (iconified).
+    fn show_minimized(&self) {
+        unsafe { ffi::QWidget_showMinimized(self.widget_ptr()); }
+    }
+
+    /// Restore the widget to normal size after being maximized or minimized.
+    fn show_normal(&self) {
+        unsafe { ffi::QWidget_showNormal(self.widget_ptr()); }
+    }
+
+    /// Set the size policy for both horizontal and vertical directions.
+    fn set_size_policy(&self, h_policy: i32, v_policy: i32) {
+        unsafe { ffi::QWidget_setSizePolicy(self.widget_ptr(), h_policy, v_policy); }
+    }
 }
 
 /// A generic `QWidget` — can be a top-level window or a container.

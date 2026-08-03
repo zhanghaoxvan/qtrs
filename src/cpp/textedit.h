@@ -29,3 +29,12 @@ inline void QTextEdit_onTextChanged(QTextEdit *edit, uint64_t ctx) {
         if (g_hasVoidTrampoline) g_voidTrampoline(ctx);
     });
 }
+inline void QTextEdit_setReadOnly(QTextEdit *e, bool ro) { e->setReadOnly(ro); }
+inline bool QTextEdit_isReadOnly(QTextEdit *e) { return e->isReadOnly(); }
+inline void QTextEdit_append(QTextEdit *e, const std::string &text) { e->append(QString::fromStdString(text)); }
+inline void QTextEdit_copy(QTextEdit *e) { e->copy(); }
+inline void QTextEdit_cut(QTextEdit *e) { e->cut(); }
+inline void QTextEdit_paste(QTextEdit *e) { e->paste(); }
+inline void QTextEdit_undo(QTextEdit *e) { e->undo(); }
+inline void QTextEdit_redo(QTextEdit *e) { e->redo(); }
+inline void QTextEdit_selectAll(QTextEdit *e) { e->selectAll(); }

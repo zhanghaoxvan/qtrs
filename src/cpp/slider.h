@@ -25,3 +25,8 @@ inline void QSlider_onValueChanged(QSlider *s, uint64_t ctx) {
                          if (g_hasIntTrampoline) g_intTrampoline(ctx, value);
                      });
 }
+inline void QSlider_setOrientation(QSlider *s, int o) { s->setOrientation(static_cast<Qt::Orientation>(o)); }
+inline int QSlider_orientation(QSlider *s) { return static_cast<int>(s->orientation()); }
+inline void QSlider_setTickPosition(QSlider *s, int pos) { s->setTickPosition(static_cast<QSlider::TickPosition>(pos)); }
+inline void QSlider_setTickInterval(QSlider *s, int interval) { s->setTickInterval(interval); }
+inline bool QSlider_invertedAppearance(QSlider *s) { return s->invertedAppearance(); }

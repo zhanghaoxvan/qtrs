@@ -67,6 +67,13 @@ impl SpinBox {
         unsafe { ffi::QSpinBox_setSuffix(self.ptr, &c_suffix); }
     }
 
+    /// Set the prefix text (e.g. "$ ").
+    pub fn set_prefix(&self, prefix: &str) {
+        debug_assert!(!self.ptr.is_null());
+        let_cxx_string!(c = prefix);
+        unsafe { ffi::QSpinBox_setPrefix(self.ptr, &c); }
+    }
+
     #[doc(hidden)]
     pub(crate) fn from_raw(ptr: *mut ffi::QSpinBox) -> Self {
         debug_assert!(!ptr.is_null());

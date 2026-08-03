@@ -1,4 +1,4 @@
-// src/cpp/layout.h — QVBoxLayout / QHBoxLayout / QGridLayout + toQWidget upcasts
+// src/cpp/layout.h — QVBoxLayout / QHBoxLayout / QGridLayout / FormLayout + toQWidget upcasts
 #pragma once
 
 #include "qwidget.h"
@@ -34,6 +34,8 @@
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QToolButton>
 #include <QtWidgets/QCalendarWidget>
+#include <QtWidgets/QFormLayout>
+#include "rust/cxx.h"
 
 // --- QVBoxLayout ---
 inline QVBoxLayout *QVBoxLayout_new(QWidget *parent) {
@@ -203,4 +205,60 @@ inline QToolButton *QWidget_findToolButton(QWidget *parent, const std::string &n
 }
 inline QCalendarWidget *QWidget_findCalendarWidget(QWidget *parent, const std::string &name) {
     return parent->findChild<QCalendarWidget *>(QString::fromStdString(name));
+}
+// QVBoxLayout enhancements
+inline void QVBoxLayout_addLayout(QVBoxLayout* layout, QLayout* sublayout, int stretch) {
+    layout->addLayout(sublayout, stretch);
+}
+
+inline void QVBoxLayout_addStretch(QVBoxLayout* layout, int stretch) {
+    layout->addStretch(stretch);
+}
+
+inline void QVBoxLayout_addSpacing(QVBoxLayout* layout, int spacing) {
+    layout->addSpacing(spacing);
+}
+
+// QHBoxLayout enhancements
+inline void QHBoxLayout_addLayout(QHBoxLayout* layout, QLayout* sublayout, int stretch) {
+    layout->addLayout(sublayout, stretch);
+}
+
+inline void QHBoxLayout_addStretch(QHBoxLayout* layout, int stretch) {
+    layout->addStretch(stretch);
+}
+
+inline void QHBoxLayout_addSpacing(QHBoxLayout* layout, int spacing) {
+    layout->addSpacing(spacing);
+}
+
+// ============================================================
+// QFormLayout
+// ============================================================
+inline QFormLayout* QFormLayout_new(QWidget* parent) {
+    return new QFormLayout(parent);
+}
+
+inline void QFormLayout_addRow(QFormLayout* layout, const rust::String& label, QWidget* widget) {
+    layout->addRow(QString::fromStdString(std::string(label)), widget);   
+}
+
+inline void QFormLayout_addRowWidget(QFormLayout* layout, QWidget* widget) {
+    layout->addRow(widget);
+}
+
+inline void QFormLayout_setSpacing(QFormLayout* layout, int spacing) {
+    layout->setSpacing(spacing);
+}
+
+inline void QFormLayout_delete(QFormLayout* layout) {
+    delete layout;
+}
+
+inline void QFormLayout_setContentsMargins(QFormLayout* layout, int left, int top, int right, int bottom) {
+    layout->setContentsMargins(left, top, right, bottom);
+}
+
+inline QLayout *toQLayout_QFormLayout(QFormLayout *layout) {
+    return static_cast<QLayout *>(layout);
 }

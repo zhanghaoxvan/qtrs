@@ -56,6 +56,43 @@ impl TextEdit {
         unsafe { ffi::QTextEdit_setPlaceholderText(self.ptr, &c_text); }
     }
 
+    /// Set whether the editor is read-only.
+    pub fn set_read_only(&self, ro: bool) {
+        debug_assert!(!self.ptr.is_null());
+        unsafe { ffi::QTextEdit_setReadOnly(self.ptr, ro); }
+    }
+
+    /// Returns `true` if the editor is read-only.
+    pub fn is_read_only(&self) -> bool {
+        debug_assert!(!self.ptr.is_null());
+        unsafe { ffi::QTextEdit_isReadOnly(self.ptr) }
+    }
+
+    /// Append text to the end.
+    pub fn append(&self, text: &str) {
+        debug_assert!(!self.ptr.is_null());
+        let_cxx_string!(c = text);
+        unsafe { ffi::QTextEdit_append(self.ptr, &c); }
+    }
+
+    /// Copy to clipboard.
+    pub fn copy(&self) { debug_assert!(!self.ptr.is_null()); unsafe { ffi::QTextEdit_copy(self.ptr); } }
+
+    /// Cut to clipboard.
+    pub fn cut(&self) { debug_assert!(!self.ptr.is_null()); unsafe { ffi::QTextEdit_cut(self.ptr); } }
+
+    /// Paste from clipboard.
+    pub fn paste(&self) { debug_assert!(!self.ptr.is_null()); unsafe { ffi::QTextEdit_paste(self.ptr); } }
+
+    /// Undo the last edit.
+    pub fn undo(&self) { debug_assert!(!self.ptr.is_null()); unsafe { ffi::QTextEdit_undo(self.ptr); } }
+
+    /// Redo the last undo.
+    pub fn redo(&self) { debug_assert!(!self.ptr.is_null()); unsafe { ffi::QTextEdit_redo(self.ptr); } }
+
+    /// Select all text.
+    pub fn select_all(&self) { debug_assert!(!self.ptr.is_null()); unsafe { ffi::QTextEdit_selectAll(self.ptr); } }
+
     #[doc(hidden)]
     pub(crate) fn from_raw(ptr: *mut ffi::QTextEdit, _name: &str) -> Self {
         debug_assert!(!ptr.is_null());

@@ -1,27 +1,52 @@
-// src/cpp/dialog.h — QMessageBox convenience dialogs
+// src/cpp/dialog.h — QDialog support
 #pragma once
 
-#include <QtWidgets/QMessageBox>
+#include <QtWidgets/QDialog>
+#include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QPushButton>
 #include <QtCore/QString>
 #include <string>
 
-inline void QMessageBox_information(QWidget *parent, const std::string &title,
-                                     const std::string &text) {
-    QMessageBox::information(parent, QString::fromStdString(title),
-                              QString::fromStdString(text));
+inline QDialog* QDialog_new(QWidget* parent) {
+    return new QDialog(parent);
 }
-inline void QMessageBox_warning(QWidget *parent, const std::string &title,
-                                 const std::string &text) {
-    QMessageBox::warning(parent, QString::fromStdString(title),
-                          QString::fromStdString(text));
+
+inline void QDialog_setModal(QDialog* dialog, bool modal) {
+    dialog->setModal(modal);
 }
-inline void QMessageBox_critical(QWidget *parent, const std::string &title,
-                                  const std::string &text) {
-    QMessageBox::critical(parent, QString::fromStdString(title),
-                           QString::fromStdString(text));
+
+inline void QDialog_setWindowTitle(QDialog* dialog, const std::string& title) {
+    dialog->setWindowTitle(QString::fromStdString(title));
 }
-inline int QMessageBox_question(QWidget *parent, const std::string &title,
-                                 const std::string &text) {
-    return QMessageBox::question(parent, QString::fromStdString(title),
-                                  QString::fromStdString(text));
+
+inline void QDialog_setMinimumSize(QDialog* dialog, int w, int h) {
+    dialog->setMinimumSize(w, h);
+}
+
+inline void QDialog_resize(QDialog* dialog, int w, int h) {
+    dialog->resize(w, h);
+}
+
+inline void QDialog_show(QDialog* dialog) {
+    dialog->show();
+}
+
+inline void QDialog_exec(QDialog* dialog) {
+    dialog->exec();
+}
+
+inline void QDialog_accept(QDialog* dialog) {
+    dialog->accept();
+}
+
+inline void QDialog_reject(QDialog* dialog) {
+    dialog->reject();
+}
+
+inline void QDialog_setLayout(QDialog* dialog, QLayout* layout) {
+    dialog->setLayout(layout);
+}
+
+inline void QDialog_delete(QDialog* dialog) {
+    delete dialog;
 }

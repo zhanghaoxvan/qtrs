@@ -12,7 +12,7 @@ This document guides you through the **standard 5-layer process** for adding a n
 |------|------|--------|
 | 1 | `src/cpp/{widget}.h` | Create C++ inline wrapper functions |
 | 2 | `src/cpp/qt_widget.h` | Add `#include "{widget}.h"` |
-| 3 | `src/ffi.rs` | Add cxx bridge declarations |
+| 3 | `src/ffi/{widget name in Qt}.rs` | Add cxx bridge declarations |
 | 4 | `src/{widget}.rs` | Create safe Rust wrapper + Builder + Drop |
 | 5 | `src/lib.rs` | Add `pub mod {widget};` + `pub use {widget}::*;` |
 
@@ -71,19 +71,20 @@ Add the include to `src/cpp/qt_widget.h`:
 
 ---
 
-## Layer 3: cxx Bridge (src/ffi.rs)
+## Layer 3: cxx Bridge (src/ffi/picture.rs)
 
 Add declarations inside the `unsafe extern "C++"` block:
 
 ```rust
-// src/ffi.rs — add inside unsafe extern "C++" block
-
-// Picture (QLabel-based image widget)
-unsafe fn Picture_new(parent: *mut QWidget) -> *mut QLabel;
-unsafe fn Picture_setPixmap(pic: *mut QLabel, path: &CxxString);
-unsafe fn Picture_setPixmapScaled(pic: *mut QLabel, path: &CxxString, width: i32, height: i32);
-unsafe fn Picture_clear(pic: *mut QLabel);
-unsafe fn Picture_delete(pic: *mut QLabel);
+unsafe extern "C++" {
+    include!("src/cpp/picture.h");
+    // Picture (QLabel-based image widget)
+    unsafe fn Picture_new(parent: *mut QWidget) -> *mut QLabel;
+    unsafe fn Picture_setPixmap(pic: *mut QLabel, path: &CxxString);
+    unsafe fn Picture_setPixmapScaled(pic: *mut QLabel, path: &CxxString, width: i32, height: i32);
+    unsafe fn Picture_clear(pic: *mut QLabel);
+    unsafe fn Picture_delete(pic: *mut QLabel);
+}
 ```
 
 ### Upcast
@@ -104,7 +105,7 @@ inline QWidget *toQWidget_QClickableLabel(ClickableLabel *w) {
 
 ### For Widget::find() Support
 
-Add to `ffi.rs`:
+Add to `ffi/picture.rs`:
 
 ```rust
 unsafe fn QWidget_findPicture(parent: *mut QWidget, name: &CxxString) -> *mut QLabel;
@@ -371,21 +372,31 @@ inline void ClickableLabel_onClickedWithPos(ClickableLabel *label, uint64_t ctx)
 
 > **Note:** A generic convenience function `signal::leak(f)` exists for void callbacks (most common).
 
-### FFI Bridge (src/ffi.rs)
+### FFI Bridge (src/ffi/*.rs)
+
+#### in src/ffi/types.rs
+```rust
+type ClickableLabel;
+```
+
+#### in src/ffi/clickablelabel.rs
 
 ```rust
 // ClickableLabel
-type QClickableLabel;
+type ClickableLabel;
 
-unsafe fn QClickableLabel_new(parent: *mut QWidget) -> *mut QClickableLabel;
-unsafe fn QClickableLabel_setText(label: *mut QClickableLabel, text: &CxxString);
-unsafe fn QClickableLabel_setPixmap(label: *mut QClickableLabel, path: &CxxString);
-unsafe fn QClickableLabel_onClicked(label: *mut QClickableLabel, ctx: u64);
-unsafe fn QClickableLabel_onClickedWithPos(label: *mut QClickableLabel, ctx: u64);
-unsafe fn QClickableLabel_delete(label: *mut QClickableLabel);
+unsafe fn ClickableLabel_new(parent: *mut QWidget) -> *mut ClickableLabel;
+unsafe fn ClickableLabel_setText(label: *mut ClickableLabel, text: &CxxString);
+unsafe fn ClickableLabel_setPixmap(label: *mut ClickableLabel, path: &CxxString);
+unsafe fn ClickableLabel_onClicked(label: *mut ClickableLabel, ctx: u64);
+unsafe fn ClickableLabel_onClickedWithPos(label: *mut ClickableLabel, ctx: u64);
+unsafe fn ClickableLabel_delete(label: *mut ClickableLabel);
+```
 
-// Upcast
-unsafe fn toQWidget_QClickableLabel(label: *mut QClickableLabel) -> *mut QWidget;
+#### in src/ffi/upcast.rs
+
+```rust
+unsafe fn toQWidget_ClickableLabel(label: *mut ClickableLabel) -> *mut QWidget;
 ```
 
 ### Rust Wrapper (src/clickablelabel.rs)
@@ -648,24 +659,9 @@ inline QLabel *QWidget_findPicture(QWidget *parent, const std::string &name) {
 }
 ```
 
-And in `src/ffi.rs`:
+And in `src/ffi/findchild.rs`:
 ```rust
 unsafe fn QWidget_findPicture(parent: *mut QWidget, name: &CxxString) -> *mut QLabel;
-```
-
----
-
-## Update build.rs
-
-Add the new header to the rerun list:
-
-```rust
-for name in &[
-    // ...
-    "picture",  // ADD THIS
-] {
-    println!("cargo:rerun-if-changed=src/cpp/{}.h", name);
-}
 ```
 
 ---
@@ -722,4 +718,4 @@ fn main() {
 - **Version:** 2.2
 - **Qt Version:** 5.15+ / 6.2+
 - **Rust MSRV:** 1.70+
-- **Last Updated:** 2026-07-14
+- **Last Updated:** 2026-08-03

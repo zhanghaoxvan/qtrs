@@ -21,3 +21,5 @@ inline void QCheckBox_onToggled(QCheckBox *cb, uint64_t ctx) {
                          if (g_hasBoolTrampoline) g_boolTrampoline(ctx, checked);
                      });
 }
+inline void QCheckBox_setTristate(QCheckBox *cb, bool tri) { cb->setTristate(tri); }
+inline bool QCheckBox_isTristate(QCheckBox *cb) { return cb->isTristate(); }

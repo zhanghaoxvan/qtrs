@@ -7,6 +7,95 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.5.2] - 2026-08-03
+
+Happy Brithday - 
+
+### Added
+
+- **QDialog builder**: custom dialog windows with `.title()`, `.modal()`,
+  `.size()`, `.parent()`, and a content closure that receives a
+  `&mut VBoxLayout`. Supports `exec()`, `show()`, `accept()`, `reject()`.
+
+- **QFormLayout**: label-field pair layout with `add_row()` and `add_widget()`
+  — the missing piece for config dialogs and forms.
+
+- **New FFI split**: monolithic `ffi.rs` (1000+ lines) is now 40 files under
+  `src/ffi/`, auto-concatenated by `build.rs` into `$OUT_DIR/_all.rs`.
+
+- **QDialogButtonBox**: standard OK/Cancel/Apply buttons.
+
+- **New AsWidget methods** on all widgets:
+  - `adjust_size()`, `is_active_window()`, `under_mouse()`, `is_window()`
+  - `window() -> Option<Widget>`, `set_window_opacity()`
+  - `set_fixed_width()`, `set_fixed_height()`
+  - `set_mouse_tracking()`, `has_mouse_tracking()`
+  - `set_accept_drops()`, `set_auto_fill_background()`
+  - `show_full_screen()`, `show_maximized()`, `show_minimized()`, `show_normal()`
+  - `set_size_policy()`
+
+- **QComboBox** methods: `count()`, `remove_item()`, `clear()`, `set_editable()`,
+  `is_editable()`, `set_max_count()` (plus Builder equivalents)
+
+- **QPushButton** methods: `set_icon()`, `set_flat()`, `is_flat()`,
+  `set_default()`, `set_auto_default()` (plus Builder equivalents)
+
+- **QCheckBox** methods: `set_tristate()`, `is_tristate()`
+
+- **QLineEdit** methods: `clear()`, `select_all()`, `copy()`, `cut()`,
+  `paste()`, `undo()`, `redo()`, `set_read_only()`, `is_read_only()`,
+  `set_echo_mode()`, `set_max_length()`, `max_length()`, `cursor_position()`,
+  `set_cursor_position()` (plus Builder equivalents)
+
+- **QTextEdit** methods: `set_read_only()`, `is_read_only()`, `append()`,
+  `copy()`, `cut()`, `paste()`, `undo()`, `redo()`, `select_all()`
+
+- **QSlider** methods: `set_orientation()`, `orientation()`,
+  `set_tick_position()`, `set_tick_interval()`, `inverted_appearance()`
+
+- **QSpinBox** method: `set_prefix()`
+
+- **MessageBox**: static functions `information()`, `warning()`, `critical()`,
+  `question()` moved from `dialog` module to `messagebox` (now both object-based
+  and static APIs coexist)
+
+- **Dial, DoubleSpinBox, LcdNumber, ScrollBar, DockWidget, ToolBox** modules
+  added (wrappers for the corresponding Qt classes)
+
+- **New examples**: dialogs and form layout usage in `demo.rs`
+
+### Changed
+
+- `build.rs` now auto-generates `_all.rs` from `src/ffi/*.rs` instead of
+  compiling `ffi.rs` directly — makes incremental builds faster and
+  file organization cleaner
+
+- `dialog` module now contains `Dialog` builder (custom dialogs) instead of
+  static message boxes; static message box functions moved to `messagebox`
+
+- `Cargo.toml` version bumped to `0.5.2`
+
+- `README.md` updated with new modules and usage examples
+
+- `demo.rs` updated to use `messagebox` for static dialogs
+
+### Removed
+
+- Monolithic `src/ffi.rs` — replaced by 40 files under `src/ffi/` +
+  auto-generation in `build.rs`
+
+### Developer Notes
+
+- All new widgets follow qtrs's existing builder pattern:
+  - `NewWidget::new()` → `Builder` → `.build()`
+  - Setter methods available both on the instance and in the builder
+  - FFI bindings live in `src/ffi/` with corresponding `src/cpp/` headers
+
+- This is the first release after the `ffi.rs` split. If you hit missing
+  FFI symbols, check `src/ffi/` for the corresponding file.
+
+---
+
 ## [0.5.1] - 2026-07-27
 
 ### Added

@@ -54,6 +54,36 @@ impl Slider {
         unsafe { ffi::QSlider_setRange(self.ptr, min, max); }
     }
 
+    /// Set the slider orientation (HORIZONTAL or VERTICAL).
+    pub fn set_orientation(&self, o: i32) {
+        debug_assert!(!self.ptr.is_null());
+        unsafe { ffi::QSlider_setOrientation(self.ptr, o); }
+    }
+
+    /// Get the slider orientation.
+    pub fn orientation(&self) -> i32 {
+        debug_assert!(!self.ptr.is_null());
+        unsafe { ffi::QSlider_orientation(self.ptr) }
+    }
+
+    /// Set the tick mark position.
+    pub fn set_tick_position(&self, pos: i32) {
+        debug_assert!(!self.ptr.is_null());
+        unsafe { ffi::QSlider_setTickPosition(self.ptr, pos); }
+    }
+
+    /// Set the tick mark interval.
+    pub fn set_tick_interval(&self, interval: i32) {
+        debug_assert!(!self.ptr.is_null());
+        unsafe { ffi::QSlider_setTickInterval(self.ptr, interval); }
+    }
+
+    /// Returns `true` if the slider has inverted appearance.
+    pub fn inverted_appearance(&self) -> bool {
+        debug_assert!(!self.ptr.is_null());
+        unsafe { ffi::QSlider_invertedAppearance(self.ptr) }
+    }
+
     #[doc(hidden)]
     pub(crate) fn from_raw(ptr: *mut ffi::QSlider, _name: &str) -> Self {
         debug_assert!(!ptr.is_null());
