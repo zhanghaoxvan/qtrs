@@ -162,7 +162,7 @@ Add to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-qtrs = "0.5.2"
+qtrs = "0.5.3"
 ```
 
 ## Memory management

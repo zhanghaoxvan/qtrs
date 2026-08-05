@@ -1,8 +1,6 @@
 // src/cpp/uiloader.h — .ui file loading
 #pragma once
 
-#ifdef QTRS_HAS_UI
-
 #include <QtCore/QFile>
 #include <QtCore/QString>
 #include <QtUiTools/QUiLoader>
@@ -22,5 +20,3 @@ inline QWidget *QUiLoader_load(QUiLoader *loader,
 }
 
 inline void QUiLoader_delete(QUiLoader *loader) { delete loader; }
-
-#endif // QTRS_HAS_UI

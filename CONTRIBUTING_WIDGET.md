@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document guides you through the **standard 5-layer process** for adding a new Qt widget to the qtrs framework.
+This document guides you through the **standard 4-layer process** for adding a new Qt widget to the qtrs framework.
 
 ---
 
@@ -11,7 +11,6 @@ This document guides you through the **standard 5-layer process** for adding a n
 | Step | File | Action |
 |------|------|--------|
 | 1 | `src/cpp/{widget}.h` | Create C++ inline wrapper functions |
-| 2 | `src/cpp/qt_widget.h` | Add `#include "{widget}.h"` |
 | 3 | `src/ffi/{widget name in Qt}.rs` | Add cxx bridge declarations |
 | 4 | `src/{widget}.rs` | Create safe Rust wrapper + Builder + Drop |
 | 5 | `src/lib.rs` | Add `pub mod {widget};` + `pub use {widget}::*;` |
@@ -53,25 +52,9 @@ inline void Picture_clear(QLabel *pic) {
 // Destructor
 inline void Picture_delete(QLabel *pic) { delete pic; }
 ```
-
 ---
 
-## Layer 2: Umbrella Header
-
-Add the include to `src/cpp/qt_widget.h`:
-
-```cpp
-// src/cpp/qt_widget.h
-#pragma once
-
-// included headers
-// ...
-#include "picture.h"      // ADD THIS
-```
-
----
-
-## Layer 3: cxx Bridge (src/ffi/picture.rs)
+## Layer 2: cxx Bridge (src/ffi/picture.rs)
 
 Add declarations inside the `unsafe extern "C++"` block:
 
@@ -89,7 +72,7 @@ unsafe extern "C++" {
 
 ### Upcast
 
-The `toQWidget_QLabel` upcast already exists in `ffi.rs`. For custom widgets like `ClickableLabel`, add:
+The `toQWidget_QLabel` upcast already exists in `ffi/widget.rs`. For custom widgets like `ClickableLabel`, add:
 
 ```rust
 unsafe fn toQWidget_QClickableLabel(label: *mut QClickableLabel) -> *mut QWidget;
@@ -121,7 +104,7 @@ inline QLabel *QWidget_findPicture(QWidget *parent, const std::string &name) {
 
 ---
 
-## Layer 4: Rust Wrapper (src/picture.rs)
+## Layer 3: Rust Wrapper (src/picture.rs)
 
 Create the complete Rust wrapper:
 
@@ -264,7 +247,7 @@ impl Builder {
 
 ---
 
-## Layer 5: Library Exports (src/lib.rs)
+## Layer 4: Library Exports (src/lib.rs)
 
 Add the new widget to the public API:
 
@@ -703,7 +686,6 @@ fn main() {
 | Error | Likely Cause | Fix |
 |-------|--------------|-----|
 | `unknown type 'QLabel'` | Missing include in C++ header | Add `#include <QtWidgets/QLabel>` |
-| `cannot find function` | Header not included in `qt_widget.h` | Add `#include "{widget}.h"` |
 | `undefined reference` | C++ function signature mismatch | Check FFI matches C++ exactly |
 | `debug_assert!(!self.ptr.is_null())` | Widget not constructed | Check `*_new` returns non-null |
 | Signal not firing | Trampoline not registered | Ensure `ensure_trampolines_registered()` is called |
@@ -718,4 +700,4 @@ fn main() {
 - **Version:** 2.2
 - **Qt Version:** 5.15+ / 6.2+
 - **Rust MSRV:** 1.70+
-- **Last Updated:** 2026-08-03
+- **Last Updated:** 2026-08-05

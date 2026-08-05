@@ -10,7 +10,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! qtrs = "0.5.2"
+//! qtrs = "0.5.3"
 //! ```
 //!
 //! ## Design principles
@@ -255,6 +255,8 @@ pub mod dialogbuttonbox;
 pub mod dockwidget;
 pub mod toolbox;
 pub mod form;
+pub mod variant;
+pub mod settings;
 
 // ================================================
 // Re-Exports
@@ -337,6 +339,8 @@ pub use dialog::Dialog;
 pub use dialogbuttonbox::DialogButtonBox;
 pub use dockwidget::DockWidget;
 pub use toolbox::ToolBox;
+pub use variant::{Variant, VariantType};
+pub use settings::{Format, Scope, Status, Settings};
 
 
 // ============================================================
@@ -365,7 +369,7 @@ pub mod prelude {
         StringListModel, SortFilterProxyModel, Completer,
         UndoStack, IntValidator, DoubleValidator,
         FileSystemModel, HeaderView, Wizard, WizardPage, ColumnView,
-        get_text, get_int, get_double, get_item,
+        get_text, get_int, get_double, get_item, find,
     };
     pub use super::standarditemmodel::{HORIZONTAL, VERTICAL};
     pub use super::listview::{LIST_MODE, ICON_MODE};

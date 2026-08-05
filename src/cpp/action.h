@@ -6,6 +6,7 @@
 #include <QtGui/QKeySequence>
 #include <QtCore/QObject>
 #include <QtCore/QString>
+#include <QtWidgets/QWidget>
 #include <string>
 
 #include "rust/cxx.h"
@@ -13,7 +14,7 @@
 
 // Constructor / Destructor
 inline QAction *QAction_new(const std::string &text, QWidget *parent) {
-    return new QAction(QString::fromStdString(text), parent);
+    return new QAction(QString::fromStdString(text), static_cast<QObject*>(parent));
 }
 
 inline void QAction_delete(QAction *action) { delete action; }
