@@ -365,7 +365,7 @@ pub mod prelude {
         StringListModel, SortFilterProxyModel, Completer,
         UndoStack, IntValidator, DoubleValidator,
         FileSystemModel, HeaderView, Wizard, WizardPage, ColumnView,
-        get_text, get_int, get_double, get_item,
+        get_text, get_int, get_double, get_item, find,
     };
     pub use super::standarditemmodel::{HORIZONTAL, VERTICAL};
     pub use super::listview::{LIST_MODE, ICON_MODE};

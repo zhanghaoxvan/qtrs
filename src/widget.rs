@@ -683,6 +683,28 @@ pub enum FoundWidget {
     Widget(Widget),
 }
 
+#[macro_export]
+macro_rules! find {
+    ($w:expr, $kind:ident, $name:literal) => {
+        match $w.find(WidgetKind::$kind, $name) {
+            Some(FoundWidget::$kind(w)) => w,
+            _ => panic!("widget '{}' not found", $name),
+        }
+    };
+    ($w:expr, $kind:ident, $name:literal, $msg:literal) => {
+        match $w.find(WidgetKind::$kind, $name) {
+            Some(FoundWidget::$kind(w)) => w,
+            _ => panic!($msg),
+        }
+    };
+    ($w:expr, $kind:ident, $name:literal, $msg:expr) => {
+        match $w.find(WidgetKind::$kind, $name) {
+            Some(FoundWidget::$kind(w)) => w,
+            _ => panic!("{}", $msg),
+        }
+    };
+}
+
 impl AsWidget for Widget {
     fn widget_ptr(&self) -> *mut ffi::QWidget {
         debug_assert!(!self.ptr.is_null(), "widget_ptr on null pointer");
