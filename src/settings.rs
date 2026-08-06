@@ -434,6 +434,29 @@ impl Drop for Settings {
 }
 
 // ============================================================
+// Debug & Display
+// ============================================================
+
+impl std::fmt::Debug for Settings {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let keys = self.all_keys();
+        f.debug_struct("Settings")
+            .field("file", &self.file_name())
+            .field("key_count", &keys.len())
+            .field("keys", &keys)
+            .finish()
+    }
+}
+
+impl std::fmt::Display for Settings {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Settings({} keys, file: {})", 
+               self.all_keys().len(), 
+               self.file_name())
+    }
+}
+
+// ============================================================
 // Tests
 // ============================================================
 

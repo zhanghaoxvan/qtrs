@@ -10,7 +10,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! qtrs = "0.5.3"
+//! qtrs = "0.5.4"
 //! ```
 //!
 //! ## Design principles
@@ -369,6 +369,7 @@ pub mod prelude {
         StringListModel, SortFilterProxyModel, Completer,
         UndoStack, IntValidator, DoubleValidator,
         FileSystemModel, HeaderView, Wizard, WizardPage, ColumnView,
+        Format, Scope, Status, Settings,
         get_text, get_int, get_double, get_item, find,
     };
     pub use super::standarditemmodel::{HORIZONTAL, VERTICAL};

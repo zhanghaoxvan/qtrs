@@ -192,6 +192,109 @@ impl VariantType for f64 {
     }
 }
 
+// ============================================================
+// 小整数类型
+// ============================================================
+
+impl VariantType for u8 {
+    fn is_type(ptr: *mut ffi_inner::QVariant) -> bool {
+        unsafe { ffi_inner::QVariant_is_uint(ptr) }
+    }
+
+    unsafe fn extract(ptr: *mut ffi_inner::QVariant) -> Self {
+        ffi_inner::QVariant_to_uint(ptr) as u8
+    }
+
+    fn into_variant(self) -> Variant {
+        unsafe {
+            Variant {
+                inner: ffi_inner::QVariant_from_uint(self as u32),
+            }
+        }
+    }
+}
+
+impl VariantType for i8 {
+    fn is_type(ptr: *mut ffi_inner::QVariant) -> bool {
+        unsafe { ffi_inner::QVariant_is_int(ptr) }
+    }
+
+    unsafe fn extract(ptr: *mut ffi_inner::QVariant) -> Self {
+        ffi_inner::QVariant_to_int(ptr) as i8
+    }
+
+    fn into_variant(self) -> Variant {
+        unsafe {
+            Variant {
+                inner: ffi_inner::QVariant_from_int(self as i32),
+            }
+        }
+    }
+}
+
+impl VariantType for u16 {
+    fn is_type(ptr: *mut ffi_inner::QVariant) -> bool {
+        unsafe { ffi_inner::QVariant_is_uint(ptr) }
+    }
+
+    unsafe fn extract(ptr: *mut ffi_inner::QVariant) -> Self {
+        // u16 在 QVariant 中存储为 u32，需要转换
+        u16::try_from(ffi_inner::QVariant_to_uint(ptr))
+            .unwrap_or_else(|e| {
+                eprintln!("Warning: u16 conversion failed: {}", e);
+                0
+            })
+    }
+
+    fn into_variant(self) -> Variant {
+        unsafe {
+            Variant {
+                inner: ffi_inner::QVariant_from_uint(self as u32),
+            }
+        }
+    }
+}
+
+impl VariantType for i16 {
+    fn is_type(ptr: *mut ffi_inner::QVariant) -> bool {
+        unsafe { ffi_inner::QVariant_is_int(ptr) }
+    }
+
+    unsafe fn extract(ptr: *mut ffi_inner::QVariant) -> Self {
+        i16::try_from(ffi_inner::QVariant_to_int(ptr))
+            .unwrap_or_else(|e| {
+                eprintln!("Warning: i16 conversion failed: {}", e);
+                0
+            })
+    }
+
+    fn into_variant(self) -> Variant {
+        unsafe {
+            Variant {
+                inner: ffi_inner::QVariant_from_int(self as i32),
+            }
+        }
+    }
+}
+
+impl VariantType for f32 {
+    fn is_type(ptr: *mut ffi_inner::QVariant) -> bool {
+        unsafe { ffi_inner::QVariant_is_double(ptr) }
+    }
+
+    unsafe fn extract(ptr: *mut ffi_inner::QVariant) -> Self {
+        ffi_inner::QVariant_to_double(ptr) as f32
+    }
+
+    fn into_variant(self) -> Variant {
+        unsafe {
+            Variant {
+                inner: ffi_inner::QVariant_from_double(self as f64),
+            }
+        }
+    }
+}
+
 impl VariantType for String {
     fn is_type(ptr: *mut ffi_inner::QVariant) -> bool {
         unsafe { ffi_inner::QVariant_is_string(ptr) }

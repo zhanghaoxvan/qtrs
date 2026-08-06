@@ -1,7 +1,8 @@
 [package]
 name = "qtrs"
-version = "0.5.3"
+version = "0.5.4"
 edition = "2021"
+rust-version = "1.85.0"
 authors = ["zhanghaoxvan <3592114583@qq.com>"]
 license = "MIT OR Apache-2.0"
 description = "qtrs - A type-safe, builder-pattern-driven Qt6 GUI library for Rust"

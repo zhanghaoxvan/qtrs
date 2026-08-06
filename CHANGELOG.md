@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.5.4] - 2026-08-06
+
+### Added
+- More integer types for `Variant`: `u8`, `i8`, `u16`, `i16`, `f32`
+- `From<&str>` for `Variant`
+- `Debug & Display` trait for `Settings`
+
+### Changed
+- Set **MSRV**(**M**inimum **S**upported **R**ust **V**ersion) to 1.85.0
+
+---
+
 ## [0.5.3] - 2026-08-05
 
 ### Added
