@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.5.5] - 2026-08-07
+
+### Added
+- `VariantType::try_extract` (`Option<T>`)
+- `extract_checked!` macro
+
+### Changed
+- `QVariant` type checks use `canConvert`
+- `toXxx` functions take `ok` parameter
+- `Variant::convert` returns `None` on failure
+- Removed type-check macros from C++
+
+### Fixed
+- `42` → `String` works (`Some("42")`)
+- `"hello"` → `i32` returns `None`
+
+---
+
 ## [0.5.4] - 2026-08-06
 
 ### Added

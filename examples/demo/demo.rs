@@ -297,7 +297,7 @@ fn main() {
             messagebox::information(
                 None,  // No parent needed
                 "About",
-                "qtrs Widget Gallery\nVersion 0.5.4\n\nAll widgets test",
+                "qtrs Widget Gallery\nVersion 0.5.5\n\nAll widgets test",
             );
         })
         .parent(&window)

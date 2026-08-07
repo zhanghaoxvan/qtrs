@@ -40,11 +40,11 @@ impl Variant {
     /// # use qtrs::Variant;
     /// let v = Variant::from(42);
     /// assert_eq!(v.convert::<i32>(), Some(42));
-    /// assert_eq!(v.convert::<String>(), None);
+    /// assert_eq!(v.convert::<String>(), Some("42".to_string()));
     /// ```
     pub fn convert<T: VariantType>(&self) -> Option<T> {
         if T::is_type(self.inner) {
-            Some(unsafe { T::extract(self.inner) })
+            unsafe { T::try_extract(self.inner) }
         } else {
             None
         }
@@ -89,34 +89,51 @@ pub trait VariantType: Sized + 'static {
     /// Check if the variant contains this type
     fn is_type(ptr: *mut ffi_inner::QVariant) -> bool;
 
+    /// Try to extract the value; returns None if conversion fails
+    unsafe fn try_extract(ptr: *mut ffi_inner::QVariant) -> Option<Self>;
+
     /// Extract the value from the variant
     /// # Safety
     /// Caller must ensure the variant contains the correct type
-    unsafe fn extract(ptr: *mut ffi_inner::QVariant) -> Self;
+    unsafe fn extract(ptr: *mut ffi_inner::QVariant) -> Self {
+        Self::try_extract(ptr).unwrap_or_else(|| panic!("Variant type mismatch in extract"))
+    }
 
     /// Create a Variant from this type
     fn into_variant(self) -> Variant;
+}
+
+// Helper: returns Some(value) only if ok is true, None otherwise
+macro_rules! extract_checked {
+    ($ptr:expr, $ffi_fn:ident, $ty:ty) => {{
+        let mut ok = false;
+        let val = ffi_inner::$ffi_fn($ptr, &mut ok);
+        if ok { Some(val as $ty) } else { None }
+    }};
+    ($ptr:expr, $ffi_fn:ident) => {{
+        let mut ok = false;
+        let val = ffi_inner::$ffi_fn($ptr, &mut ok);
+        if ok { Some(val) } else { None }
+    }};
 }
 
 // ============================================================
 // Implementations for concrete types
 // ============================================================
 
+// src/variant.rs
+
 impl VariantType for i32 {
     fn is_type(ptr: *mut ffi_inner::QVariant) -> bool {
         unsafe { ffi_inner::QVariant_is_int(ptr) }
     }
 
-    unsafe fn extract(ptr: *mut ffi_inner::QVariant) -> Self {
-        ffi_inner::QVariant_to_int(ptr)
+    unsafe fn try_extract(ptr: *mut ffi_inner::QVariant) -> Option<Self> {
+        extract_checked!(ptr, QVariant_to_int, i32)
     }
 
     fn into_variant(self) -> Variant {
-        unsafe {
-            Variant {
-                inner: ffi_inner::QVariant_from_int(self),
-            }
-        }
+        unsafe { Variant { inner: ffi_inner::QVariant_from_int(self) } }
     }
 }
 
@@ -124,17 +141,11 @@ impl VariantType for u32 {
     fn is_type(ptr: *mut ffi_inner::QVariant) -> bool {
         unsafe { ffi_inner::QVariant_is_uint(ptr) }
     }
-
-    unsafe fn extract(ptr: *mut ffi_inner::QVariant) -> Self {
-        ffi_inner::QVariant_to_uint(ptr)
+    unsafe fn try_extract(ptr: *mut ffi_inner::QVariant) -> Option<Self> {
+        extract_checked!(ptr, QVariant_to_uint)
     }
-
     fn into_variant(self) -> Variant {
-        unsafe {
-            Variant {
-                inner: ffi_inner::QVariant_from_uint(self),
-            }
-        }
+        unsafe { Variant { inner: ffi_inner::QVariant_from_uint(self) } }
     }
 }
 
@@ -142,17 +153,11 @@ impl VariantType for i64 {
     fn is_type(ptr: *mut ffi_inner::QVariant) -> bool {
         unsafe { ffi_inner::QVariant_is_long(ptr) }
     }
-
-    unsafe fn extract(ptr: *mut ffi_inner::QVariant) -> Self {
-        ffi_inner::QVariant_to_long(ptr)
+    unsafe fn try_extract(ptr: *mut ffi_inner::QVariant) -> Option<Self> {
+        extract_checked!(ptr, QVariant_to_long)
     }
-
     fn into_variant(self) -> Variant {
-        unsafe {
-            Variant {
-                inner: ffi_inner::QVariant_from_long(self),
-            }
-        }
+        unsafe { Variant { inner: ffi_inner::QVariant_from_long(self) } }
     }
 }
 
@@ -160,17 +165,11 @@ impl VariantType for bool {
     fn is_type(ptr: *mut ffi_inner::QVariant) -> bool {
         unsafe { ffi_inner::QVariant_is_bool(ptr) }
     }
-
-    unsafe fn extract(ptr: *mut ffi_inner::QVariant) -> Self {
-        ffi_inner::QVariant_to_bool(ptr)
+    unsafe fn try_extract(ptr: *mut ffi_inner::QVariant) -> Option<Self> {
+        extract_checked!(ptr, QVariant_to_bool)
     }
-
     fn into_variant(self) -> Variant {
-        unsafe {
-            Variant {
-                inner: ffi_inner::QVariant_from_bool(self),
-            }
-        }
+        unsafe { Variant { inner: ffi_inner::QVariant_from_bool(self) } }
     }
 }
 
@@ -178,9 +177,8 @@ impl VariantType for f64 {
     fn is_type(ptr: *mut ffi_inner::QVariant) -> bool {
         unsafe { ffi_inner::QVariant_is_double(ptr) }
     }
-
-    unsafe fn extract(ptr: *mut ffi_inner::QVariant) -> Self {
-        ffi_inner::QVariant_to_double(ptr)
+    unsafe fn try_extract(ptr: *mut ffi_inner::QVariant) -> Option<Self> {
+        extract_checked!(ptr, QVariant_to_double)
     }
 
     fn into_variant(self) -> Variant {
@@ -201,8 +199,8 @@ impl VariantType for u8 {
         unsafe { ffi_inner::QVariant_is_uint(ptr) }
     }
 
-    unsafe fn extract(ptr: *mut ffi_inner::QVariant) -> Self {
-        ffi_inner::QVariant_to_uint(ptr) as u8
+    unsafe fn try_extract(ptr: *mut ffi_inner::QVariant) -> Option<Self> {
+        extract_checked!(ptr, QVariant_to_uint, u8)
     }
 
     fn into_variant(self) -> Variant {
@@ -219,8 +217,8 @@ impl VariantType for i8 {
         unsafe { ffi_inner::QVariant_is_int(ptr) }
     }
 
-    unsafe fn extract(ptr: *mut ffi_inner::QVariant) -> Self {
-        ffi_inner::QVariant_to_int(ptr) as i8
+    unsafe fn try_extract(ptr: *mut ffi_inner::QVariant) -> Option<Self> {
+        extract_checked!(ptr, QVariant_to_int, i8)
     }
 
     fn into_variant(self) -> Variant {
@@ -237,13 +235,8 @@ impl VariantType for u16 {
         unsafe { ffi_inner::QVariant_is_uint(ptr) }
     }
 
-    unsafe fn extract(ptr: *mut ffi_inner::QVariant) -> Self {
-        // u16 在 QVariant 中存储为 u32，需要转换
-        u16::try_from(ffi_inner::QVariant_to_uint(ptr))
-            .unwrap_or_else(|e| {
-                eprintln!("Warning: u16 conversion failed: {}", e);
-                0
-            })
+    unsafe fn try_extract(ptr: *mut ffi_inner::QVariant) -> Option<Self> {
+        extract_checked!(ptr, QVariant_to_uint, u16)
     }
 
     fn into_variant(self) -> Variant {
@@ -260,12 +253,8 @@ impl VariantType for i16 {
         unsafe { ffi_inner::QVariant_is_int(ptr) }
     }
 
-    unsafe fn extract(ptr: *mut ffi_inner::QVariant) -> Self {
-        i16::try_from(ffi_inner::QVariant_to_int(ptr))
-            .unwrap_or_else(|e| {
-                eprintln!("Warning: i16 conversion failed: {}", e);
-                0
-            })
+    unsafe fn try_extract(ptr: *mut ffi_inner::QVariant) -> Option<Self> {
+        extract_checked!(ptr, QVariant_to_int, i16)
     }
 
     fn into_variant(self) -> Variant {
@@ -282,8 +271,8 @@ impl VariantType for f32 {
         unsafe { ffi_inner::QVariant_is_double(ptr) }
     }
 
-    unsafe fn extract(ptr: *mut ffi_inner::QVariant) -> Self {
-        ffi_inner::QVariant_to_double(ptr) as f32
+    unsafe fn try_extract(ptr: *mut ffi_inner::QVariant) -> Option<Self> {
+        extract_checked!(ptr, QVariant_to_double, f32)
     }
 
     fn into_variant(self) -> Variant {
@@ -300,8 +289,8 @@ impl VariantType for String {
         unsafe { ffi_inner::QVariant_is_string(ptr) }
     }
 
-    unsafe fn extract(ptr: *mut ffi_inner::QVariant) -> Self {
-        ffi_inner::QVariant_to_string(ptr)
+    unsafe fn try_extract(ptr: *mut ffi_inner::QVariant) -> Option<Self> {
+        extract_checked!(ptr, QVariant_to_string)
     }
 
     fn into_variant(self) -> Variant {
@@ -317,9 +306,8 @@ impl VariantType for Vec<String> {
     fn is_type(ptr: *mut ffi_inner::QVariant) -> bool {
         unsafe { ffi_inner::QVariant_is_stringlist(ptr) }
     }
-
-    unsafe fn extract(ptr: *mut ffi_inner::QVariant) -> Self {
-        ffi_inner::QVariant_to_stringlist(ptr)
+    unsafe fn try_extract(ptr: *mut ffi_inner::QVariant) -> Option<Self> {
+        Some(ffi_inner::QVariant_to_stringlist(ptr))
     }
 
     fn into_variant(self) -> Variant {
@@ -335,9 +323,8 @@ impl VariantType for Vec<u8> {
     fn is_type(ptr: *mut ffi_inner::QVariant) -> bool {
         unsafe { ffi_inner::QVariant_is_bytearray(ptr) }
     }
-
-    unsafe fn extract(ptr: *mut ffi_inner::QVariant) -> Self {
-        ffi_inner::QVariant_to_bytearray(ptr)
+    unsafe fn try_extract(ptr: *mut ffi_inner::QVariant) -> Option<Self> {
+        Some(ffi_inner::QVariant_to_bytearray(ptr))
     }
 
     fn into_variant(self) -> Variant {
@@ -460,9 +447,9 @@ mod tests {
 
     #[test]
     fn test_convert() {
-        let v = Variant::from(42);
+        let v = Variant::from(42_i32);
         assert_eq!(v.convert::<i32>(), Some(42));
-        assert_eq!(v.convert::<String>(), None);
+        assert_eq!(v.convert::<String>(), Some("42".to_string()));
 
         let v = Variant::from("hello");
         assert_eq!(v.convert::<String>(), Some("hello".to_string()));
@@ -471,9 +458,9 @@ mod tests {
 
     #[test]
     fn test_convert_or() {
-        let v = Variant::from(42);
+        let v = Variant::from(42_i32);
         assert_eq!(v.convert_or::<i32>(), 42);
-        assert_eq!(v.convert_or::<String>(), String::default());
+        assert_eq!(v.convert_or::<String>(), "42".to_string());
 
         let v = Variant::from("hello".to_string());
         assert_eq!(v.convert_or_else::<String>("default".to_string()), "hello");

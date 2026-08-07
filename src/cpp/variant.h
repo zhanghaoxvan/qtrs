@@ -64,79 +64,71 @@ inline void QVariant_delete(QVariant* v) {
 #endif
 
 // Qt6: typeId() + QMetaType, Qt5: type() + QVariant
-#if QT_IS_QT6
-    #define QVARIANT_TYPE_ID(v) ((v)->typeId())
-    #define QVARIANT_TYPE_ENUM(type) QMetaType::type
-    #define QVARIANT_TYPE_ENUM_QSTRING QMetaType::QString
-    #define QVARIANT_TYPE_ENUM_QSTRINGLIST QMetaType::QStringList
-    #define QVARIANT_TYPE_ENUM_QBYTEARRAY QMetaType::QByteArray
-#else
-    #define QVARIANT_TYPE_ID(v) ((v)->type())
-    #define QVARIANT_TYPE_ENUM(type) QVariant::type
-    #define QVARIANT_TYPE_ENUM_QSTRING QVariant::String
-    #define QVARIANT_TYPE_ENUM_QSTRINGLIST QVariant::StringList
-    #define QVARIANT_TYPE_ENUM_QBYTEARRAY QVariant::ByteArray
-#endif
-
-// Generic type check macro
-#define QVARIANT_IS_TYPE(v, type) \
-    (QVARIANT_TYPE_ID(v) == QVARIANT_TYPE_ENUM(type))
-
-// Special type check macro for Qt types with different names
-#define QVARIANT_IS_QT_TYPE(v, type_enum) \
-    (QVARIANT_TYPE_ID(v) == type_enum)
-
 inline bool QVariant_is_int(QVariant* v) {
-    return QVARIANT_IS_TYPE(v, Int);
+    return v->canConvert<int>();
 }
 
 inline bool QVariant_is_uint(QVariant* v) {
-    return QVARIANT_IS_TYPE(v, UInt);
+    return v->canConvert<unsigned int>();
 }
 
 inline bool QVariant_is_long(QVariant* v) {
-    return QVARIANT_IS_TYPE(v, LongLong);
+    return v->canConvert<qint64>();
 }
 
 inline bool QVariant_is_bool(QVariant* v) {
-    return QVARIANT_IS_TYPE(v, Bool);
+    return v->canConvert<bool>();
 }
 
 inline bool QVariant_is_double(QVariant* v) {
-    return QVARIANT_IS_TYPE(v, Double);
+    return v->canConvert<double>();
 }
 
 inline bool QVariant_is_string(QVariant* v) {
-    return QVARIANT_IS_QT_TYPE(v, QVARIANT_TYPE_ENUM_QSTRING);
+    return v->canConvert<QString>();
 }
 
 inline bool QVariant_is_stringlist(QVariant* v) {
-    return QVARIANT_IS_QT_TYPE(v, QVARIANT_TYPE_ENUM_QSTRINGLIST);
+    return v->canConvert<QStringList>();
 }
 
 inline bool QVariant_is_bytearray(QVariant* v) {
-    return QVARIANT_IS_QT_TYPE(v, QVARIANT_TYPE_ENUM_QBYTEARRAY);
+    return v->canConvert<QByteArray>();
 }
 
 // --- Getters (Qt -> Rust) ---
-inline int QVariant_to_int(QVariant* v) {
-    return v->toInt();
+inline int QVariant_to_int(QVariant* v, bool* ok) {
+    return v->toInt(ok);
 }
 
-inline unsigned int QVariant_to_uint(QVariant* v) {
-    return v->toUInt();
+inline unsigned int QVariant_to_uint(QVariant* v, bool* ok) {
+    return v->toUInt(ok);
 }
 
-inline int64_t QVariant_to_long(QVariant* v) {
-    return static_cast<int64_t>(v->toLongLong());
+inline int64_t QVariant_to_long(QVariant* v, bool* ok) {
+    return v->toLongLong(ok);
 }
 
-inline bool QVariant_to_bool(QVariant* v) {
+inline bool QVariant_to_bool(QVariant* v, bool* ok) {
+    if (!v->canConvert<bool>()) {
+        *ok = false;
+        return false;
+    }
+    *ok = true;
     return v->toBool();
 }
 
-inline double QVariant_to_double(QVariant* v) {
-    return v->toDouble();
+inline double QVariant_to_double(QVariant* v, bool* ok) {
+    return v->toDouble(ok);
+}
+
+inline rust::String QVariant_to_string(QVariant* v, bool* ok) {
+    if (!v->canConvert<QString>()) {
+        *ok = false;
+        return rust::String("");
+    }
+    *ok = true;
+    return rust::String(v->toString().toStdString());
 }
 
 inline rust::String QVariant_to_string(QVariant* v) {

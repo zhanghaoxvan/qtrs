@@ -26,12 +26,12 @@ unsafe extern "C++" {
     unsafe fn QVariant_is_bytearray(v: *mut QVariant) -> bool;
 
     // --- Getters ---
-    unsafe fn QVariant_to_int(v: *mut QVariant) -> i32;
-    unsafe fn QVariant_to_uint(v: *mut QVariant) -> u32;
-    unsafe fn QVariant_to_long(v: *mut QVariant) -> i64;
-    unsafe fn QVariant_to_bool(v: *mut QVariant) -> bool;
-    unsafe fn QVariant_to_double(v: *mut QVariant) -> f64;
-    unsafe fn QVariant_to_string(v: *mut QVariant) -> String;
+    unsafe fn QVariant_to_int(v: *mut QVariant, ok: *mut bool) -> i32;
+    unsafe fn QVariant_to_uint(v: *mut QVariant, ok: *mut bool) -> u32;
+    unsafe fn QVariant_to_long(v: *mut QVariant, ok: *mut bool) -> i64;
+    unsafe fn QVariant_to_bool(v: *mut QVariant, ok: *mut bool) -> bool;
+    unsafe fn QVariant_to_double(v: *mut QVariant, ok: *mut bool) -> f64;
+    unsafe fn QVariant_to_string(v: *mut QVariant, ok: *mut bool) -> String;
     unsafe fn QVariant_to_stringlist(v: *mut QVariant) -> Vec<String>;
     unsafe fn QVariant_to_bytearray(v: *mut QVariant) -> Vec<u8>;
 }

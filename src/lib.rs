@@ -10,7 +10,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! qtrs = "0.5.4"
+//! qtrs = "0.5.5"
 //! ```
 //!
 //! ## Design principles

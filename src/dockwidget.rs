@@ -1,4 +1,4 @@
-//! Dock widget — a floating/dockable panel within a [`MainWindow`].
+//! Dock widget — a floating/dockable panel within a `MainWindow`.
 //!
 //! Wraps [`QDockWidget`](https://doc.qt.io/qt-6/qdockwidget.html).
 
