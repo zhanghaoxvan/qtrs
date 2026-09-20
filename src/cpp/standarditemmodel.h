@@ -5,7 +5,7 @@
 #include <QtCore/QString>
 #include <string>
 #include "rust/cxx.h"
-#include "signal.h"
+#include "qtrs_signal.h"
 
 inline QStandardItemModel *QStandardItemModel_new(QObject *parent) {
     return new QStandardItemModel(parent);

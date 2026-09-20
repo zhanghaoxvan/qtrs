@@ -8,7 +8,7 @@
 #include <string>
 
 #include "rust/cxx.h"
-#include "signal.h"
+#include "qtrs_signal.h"
 
 inline QDateEdit *QDateEdit_new(QWidget *parent) {
     return new QDateEdit(parent);

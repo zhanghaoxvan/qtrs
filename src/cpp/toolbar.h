@@ -8,7 +8,7 @@
 #include <QtWidgets/QWidget>
 #include <string>
 
-#include "signal.h"
+#include "qtrs_signal.h"
 
 // Constructor / Destructor
 inline QToolBar *QToolBar_new(const std::string &title, QWidget *parent) {

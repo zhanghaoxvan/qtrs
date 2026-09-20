@@ -6,7 +6,7 @@
 #include <QtCore/QString>
 #include <string>
 
-#include "signal.h"
+#include "qtrs_signal.h"
 
 inline QDial *QDial_new(QWidget *parent) { return new QDial(parent); }
 inline void QDial_delete(QDial *dial) { delete dial; }

@@ -2,7 +2,7 @@
 #pragma once
 
 #include <QUndoStack>
-#include "signal.h"
+#include "qtrs_signal.h"
 
 inline QUndoStack *QUndoStack_new(QObject *parent) { return new QUndoStack(parent); }
 inline void QUndoStack_delete(QUndoStack *s) { delete s; }

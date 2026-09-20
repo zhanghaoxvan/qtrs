@@ -3,7 +3,7 @@
 
 #include <QtCore/QSortFilterProxyModel>
 #include <QtGui/QStandardItemModel>
-#include "signal.h"
+#include "qtrs_signal.h"
 
 inline QSortFilterProxyModel *QSortFilterProxyModel_new(QObject *parent) {
     return new QSortFilterProxyModel(parent);

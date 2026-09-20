@@ -3,7 +3,7 @@
 
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QAbstractButton>
-#include "signal.h"
+#include "qtrs_signal.h"
 
 inline QButtonGroup *QButtonGroup_new(QObject *parent) {
     return new QButtonGroup(parent);

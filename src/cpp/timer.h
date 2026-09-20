@@ -4,7 +4,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QTimer>
 
-#include "signal.h"
+#include "qtrs_signal.h"
 
 inline QTimer *QTimer_new() { return new QTimer(); }
 inline void QTimer_start(QTimer *t, int ms) { t->start(ms); }

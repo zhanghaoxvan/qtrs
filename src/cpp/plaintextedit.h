@@ -7,7 +7,7 @@
 #include <string>
 
 #include "rust/cxx.h"
-#include "signal.h"
+#include "qtrs_signal.h"
 
 inline QPlainTextEdit *QPlainTextEdit_new(QWidget *parent) {
     return new QPlainTextEdit(parent);

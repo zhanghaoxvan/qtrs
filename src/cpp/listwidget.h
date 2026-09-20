@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "rust/cxx.h"
-#include "signal.h"
+#include "qtrs_signal.h"
 
 // Constructor / Destructor
 inline QListWidget *QListWidget_new(QWidget *parent = nullptr) {

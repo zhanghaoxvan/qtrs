@@ -286,7 +286,7 @@ If your widget emits signals (e.g., `clicked`, `valueChanged`), you need:
 
 #include <QtWidgets/QLabel>
 #include <QtGui/QMouseEvent>
-#include "signal.h"
+#include "qtrs_signal.h"
 
 // Define Qt subclass with signals
 class ClickableLabel : public QLabel {
@@ -689,7 +689,7 @@ fn main() {
 | `undefined reference` | C++ function signature mismatch | Check FFI matches C++ exactly |
 | `debug_assert!(!self.ptr.is_null())` | Widget not constructed | Check `*_new` returns non-null |
 | Signal not firing | Trampoline not registered | Ensure `ensure_trampolines_registered()` is called |
-| `g_*Trampoline` undefined | Missing `#include "signal.h"` | Add `#include "signal.h"` to C++ header |
+| `g_*Trampoline` undefined | Missing `#include "qtrs_signal.h"` | Add `#include "qtrs_signal.h"` to C++ header |
 | `rust::String` undefined | Missing `#include "rust/cxx.h"` | Add `#include "rust/cxx.h"` for String signals |
 | Closure not called on Drop | `has_parent` logic wrong | Check `has_parent` is set correctly |
 

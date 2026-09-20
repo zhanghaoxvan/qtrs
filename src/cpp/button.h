@@ -6,7 +6,7 @@
 #include <QtCore/QString>
 #include <string>
 
-#include "signal.h"
+#include "qtrs_signal.h"
 
 inline QPushButton *QPushButton_new(const std::string &text,
                                      QWidget *parent) {

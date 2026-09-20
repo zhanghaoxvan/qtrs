@@ -7,7 +7,7 @@
 #include <QtCore/QString>
 #include <string>
 
-#include "signal.h"
+#include "qtrs_signal.h"
 
 /// Create a new QTabWidget with optional parent.
 inline QTabWidget *QTabWidget_new(QWidget *parent) {

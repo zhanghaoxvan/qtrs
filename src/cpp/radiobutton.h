@@ -6,7 +6,7 @@
 #include <QtCore/QString>
 #include <string>
 
-#include "signal.h"
+#include "qtrs_signal.h"
 
 /// Create a new QRadioButton with text and optional parent.
 inline QRadioButton *QRadioButton_new(const std::string &text, QWidget *parent) {

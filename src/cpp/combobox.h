@@ -7,7 +7,7 @@
 #include <string>
 
 #include "rust/cxx.h"
-#include "signal.h"
+#include "qtrs_signal.h"
 
 inline QComboBox *QComboBox_new(QWidget *parent) {
     return new QComboBox(parent);

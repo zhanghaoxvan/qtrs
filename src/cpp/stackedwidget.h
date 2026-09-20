@@ -6,7 +6,7 @@
 #include <cstdint>
 
 #include "rust/cxx.h"
-#include "signal.h"
+#include "qtrs_signal.h"
 
 // Constructor / Destructor
 inline QStackedWidget *QStackedWidget_new(QWidget *parent = nullptr) {

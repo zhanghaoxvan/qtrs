@@ -8,7 +8,7 @@
 #include <string>
 
 #include "rust/cxx.h"
-#include "signal.h"
+#include "qtrs_signal.h"
 
 inline QTimeEdit *QTimeEdit_new(QWidget *parent) {
     return new QTimeEdit(parent);

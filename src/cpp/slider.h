@@ -5,7 +5,7 @@
 #include <QtWidgets/QSlider>
 #include <QtCore/Qt>
 
-#include "signal.h"
+#include "qtrs_signal.h"
 
 inline QSlider *QSlider_new(int orientation, QWidget *parent) {
     auto *s = new QSlider(static_cast<Qt::Orientation>(orientation), parent);

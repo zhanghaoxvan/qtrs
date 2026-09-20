@@ -8,7 +8,7 @@
 #include <QtCore/QString>
 #include <string>
 
-#include "signal.h"
+#include "qtrs_signal.h"
 
 // ============================================================
 // QMenu

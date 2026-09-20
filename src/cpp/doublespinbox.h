@@ -6,7 +6,7 @@
 #include <QtCore/QString>
 #include <string>
 
-#include "signal.h"
+#include "qtrs_signal.h"
 
 inline QDoubleSpinBox *QDoubleSpinBox_new(QWidget *parent) {
     return new QDoubleSpinBox(parent);

@@ -10,7 +10,7 @@
 #include <string>
 
 #include "rust/cxx.h"
-#include "signal.h"
+#include "qtrs_signal.h"
 
 // Constructor / Destructor
 inline QAction *QAction_new(const std::string &text, QWidget *parent) {

@@ -11,7 +11,7 @@
 #include <QtWidgets/QWidget>
 #include <string>
 
-#include "signal.h"
+#include "qtrs_signal.h"
 
 // Constructor / Destructor
 inline QMainWindow *QMainWindow_new(QWidget *parent) {

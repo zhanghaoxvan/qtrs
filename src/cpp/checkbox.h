@@ -6,7 +6,7 @@
 #include <QtCore/QString>
 #include <string>
 
-#include "signal.h"
+#include "qtrs_signal.h"
 
 inline QCheckBox *QCheckBox_new(const std::string &text, QWidget *parent) {
     return new QCheckBox(QString::fromStdString(text), parent);

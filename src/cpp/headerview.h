@@ -2,7 +2,7 @@
 #pragma once
 
 #include <QtWidgets/QHeaderView>
-#include "signal.h"
+#include "qtrs_signal.h"
 
 inline QHeaderView *QHeaderView_new(int orientation, QWidget *parent) {
     return new QHeaderView(static_cast<Qt::Orientation>(orientation), parent);

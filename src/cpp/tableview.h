@@ -3,7 +3,7 @@
 
 #include <QtWidgets/QTableView>
 #include <QtGui/QStandardItemModel>
-#include "signal.h"
+#include "qtrs_signal.h"
 
 inline QTableView *QTableView_new(QWidget *parent) {
     return new QTableView(parent);

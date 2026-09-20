@@ -7,7 +7,7 @@
 #include <QtCore/QObject>
 #include <string>
 
-#include "signal.h"
+#include "qtrs_signal.h"
 
 // Constructor / Destructor
 inline QShortcut *QShortcut_new(const std::string &key, QWidget *parent) {

@@ -6,7 +6,7 @@
 #include <QtCore/QString>
 #include <string>
 
-#include "signal.h"
+#include "qtrs_signal.h"
 
 inline QLCDNumber *QLCDNumber_new(QWidget *parent) {
     return new QLCDNumber(parent);

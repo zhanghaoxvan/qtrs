@@ -6,7 +6,7 @@
 #include <QtCore/QString>
 #include <string>
 
-#include "signal.h"
+#include "qtrs_signal.h"
 
 inline QScrollBar *QScrollBar_new(int orientation, QWidget *parent) {
     return new QScrollBar(static_cast<Qt::Orientation>(orientation), parent);

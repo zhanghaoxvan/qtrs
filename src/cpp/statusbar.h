@@ -6,7 +6,7 @@
 #include <QtWidgets/QWidget>
 #include <string>
 
-#include "signal.h"
+#include "qtrs_signal.h"
 
 // Constructor / Destructor
 inline QStatusBar *QStatusBar_new(QWidget *parent) {

@@ -7,7 +7,7 @@
 #include <cstdint>
 
 #include "rust/cxx.h"
-#include "signal.h"
+#include "qtrs_signal.h"
 
 // Constructor / Destructor
 inline QSplitter *QSplitter_new(int orientation, QWidget *parent = nullptr) {

@@ -3,7 +3,7 @@
 
 #include <QtWidgets/QListView>
 #include <QtGui/QStandardItemModel>
-#include "signal.h"
+#include "qtrs_signal.h"
 
 inline QListView *QListView_new(QWidget *parent) {
     return new QListView(parent);

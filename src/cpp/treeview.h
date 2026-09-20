@@ -3,7 +3,7 @@
 
 #include <QtWidgets/QTreeView>
 #include <QtGui/QStandardItemModel>
-#include "signal.h"
+#include "qtrs_signal.h"
 
 inline QTreeView *QTreeView_new(QWidget *parent) {
     return new QTreeView(parent);

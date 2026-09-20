@@ -9,7 +9,7 @@
 #include <string>
 
 #include "rust/cxx.h"
-#include "signal.h"
+#include "qtrs_signal.h"
 
 // Constructor / Destructor
 inline QCalendarWidget *QCalendarWidget_new(QWidget *parent) {

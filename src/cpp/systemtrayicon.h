@@ -8,7 +8,7 @@
 #include <QtCore/QString>
 #include <string>
 
-#include "signal.h"
+#include "qtrs_signal.h"
 
 // Constructor / Destructor
 inline QSystemTrayIcon *QSystemTrayIcon_new(const std::string &icon_path, QObject *parent) {

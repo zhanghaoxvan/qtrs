@@ -6,7 +6,7 @@
 #include <QtCore/QString>
 #include <string>
 #include "rust/cxx.h"
-#include "signal.h"
+#include "qtrs_signal.h"
 
 inline QCompleter *QCompleter_new(QStringListModel *model, QObject *parent) {
     return new QCompleter(model, parent);

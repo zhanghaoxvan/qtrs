@@ -6,7 +6,7 @@
 #include <QtCore/QString>
 #include <string>
 
-#include "signal.h"
+#include "qtrs_signal.h"
 
 inline QDockWidget *QDockWidget_new(QWidget *parent) {
     return new QDockWidget(parent);

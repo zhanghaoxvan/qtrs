@@ -7,7 +7,7 @@
 #include <string>
 
 #include "rust/cxx.h"
-#include "signal.h"
+#include "qtrs_signal.h"
 
 inline QLineEdit *QLineEdit_new(const std::string &text, QWidget *parent) {
     return new QLineEdit(QString::fromStdString(text), parent);

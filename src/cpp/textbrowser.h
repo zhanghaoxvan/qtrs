@@ -11,7 +11,7 @@
 #include "rust/cxx.h"
 
 #include "rust/cxx.h"
-#include "signal.h"
+#include "qtrs_signal.h"
 
 inline QTextBrowser *QTextBrowser_new(QWidget *parent) {
     return new QTextBrowser(parent);

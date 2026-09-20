@@ -64,13 +64,14 @@ fn main() {
 
     // 5. Generate ffi.rs from src/ffi/*.rs, then set up cxx bridge
     let all_rs = generate_ffi();
-    // 6. Generate ffi.rs from src/ffi/*.rs into $CARGO_MANIFEST_DIR, then set up cxx bridge
+    // 6. Generate ffi.rs from src/ffi/*.rs into $OUT_DIR, then set up cxx bridge
     
     let mut build = cxx_build::bridge(all_rs);
 
     // Add main include
     build.include(&include_path);
     build.include(&uitools_include);
+    build.include(&std::env::var("OUT_DIR").unwrap());
 
     // Add Qt module includes
     let modules = ["QtCore", "QtGui", "QtWidgets"];
@@ -129,10 +130,10 @@ fn main() {
     println!("cargo:rerun-if-changed=src/ffi.rs");
 }
 
-/// Concatenate src/ffi/*.rs into $CARGO_MANIFEST_DIR/ffi.rs
+/// Concatenate src/ffi/*.rs into $OUT_DIR/ffi.rs
 fn generate_ffi() -> PathBuf {
-    let out_dir = PathBuf::from(std::env::var("CARGO_MANIFEST_DIR").unwrap());
-    let out_path = out_dir.join("target").join("qtrs").join("ffi.rs");
+    let out_dir = PathBuf::from(std::env::var("OUT_DIR").unwrap());
+    let out_path = out_dir.join("qtrs").join("ffi.rs");
     let ffi_dir = Path::new("src/ffi");
 
     let mut body = String::new();
@@ -179,8 +180,8 @@ fn generate_ffi() -> PathBuf {
 }
 
 fn generate_umbrella(headers: Vec<String>) -> PathBuf {
-    let out_dir = PathBuf::from(std::env::var("CARGO_MANIFEST_DIR").unwrap());
-    let out_dir = out_dir.join("target").join("qtrs");
+    let out_dir = PathBuf::from(std::env::var("OUT_DIR").unwrap());
+    let out_dir = out_dir.join("qtrs");
     let out_path = out_dir.join("widgets.cpp");
 
     // make sure the directory exists.

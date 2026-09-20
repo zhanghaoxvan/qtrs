@@ -2,7 +2,7 @@
 #pragma once
 
 #include <QtCore/QItemSelectionModel>
-#include "signal.h"
+#include "qtrs_signal.h"
 
 // QItemSelectionModel is owned by the view — no new/delete here.
 // It is obtained from a view via the Rust wrapper.

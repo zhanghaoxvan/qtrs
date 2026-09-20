@@ -3,7 +3,7 @@
 
 #include <QtWidgets/QColumnView>
 #include <QtGui/QStandardItemModel>
-#include "signal.h"
+#include "qtrs_signal.h"
 
 inline QColumnView *QColumnView_new(QWidget *parent) { return new QColumnView(parent); }
 inline void QColumnView_delete(QColumnView *v) { delete v; }

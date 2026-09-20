@@ -5,7 +5,7 @@
 #include <QtCore/QString>
 #include <string>
 #include "rust/cxx.h"
-#include "signal.h"
+#include "qtrs_signal.h"
 
 inline QStringListModel *QStringListModel_new(QObject *parent) {
     return new QStringListModel(parent);

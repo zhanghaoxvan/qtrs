@@ -6,7 +6,7 @@
 #include <QtCore/QString>
 #include <string>
 #include "rust/cxx.h"
-#include "signal.h"
+#include "qtrs_signal.h"
 
 // QWizard
 inline QWizard *QWizard_new(QWidget *parent) { return new QWizard(parent); }

@@ -8,7 +8,7 @@
 #include <cstdint>
 
 #include "rust/cxx.h"
-#include "signal.h"
+#include "qtrs_signal.h"
 
 // Constructor / Destructor
 inline QTableWidget *QTableWidget_new(int rows, int cols, QWidget *parent = nullptr) {

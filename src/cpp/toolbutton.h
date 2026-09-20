@@ -9,7 +9,7 @@
 #include <QtCore/QString>
 #include <string>
 
-#include "signal.h"
+#include "qtrs_signal.h"
 
 // Constructor / Destructor
 inline QToolButton *QToolButton_new(QWidget *parent) {

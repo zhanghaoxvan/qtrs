@@ -6,7 +6,7 @@
 #include <QtCore/QString>
 #include <string>
 
-#include "signal.h"
+#include "qtrs_signal.h"
 
 /// Create a new QSpinBox with optional parent.
 inline QSpinBox *QSpinBox_new(QWidget *parent) {

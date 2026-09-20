@@ -4,7 +4,7 @@
 #include <QtWidgets/QKeySequenceEdit>
 #include <QtCore/QString>
 #include <string>
-#include "signal.h"
+#include "qtrs_signal.h"
 
 inline QKeySequenceEdit *QKeySequenceEdit_new(QWidget *parent) {
     return new QKeySequenceEdit(parent);

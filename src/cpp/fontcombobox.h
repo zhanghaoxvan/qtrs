@@ -4,7 +4,7 @@
 #include <QtWidgets/QFontComboBox>
 #include <QtCore/QString>
 #include <string>
-#include "signal.h"
+#include "qtrs_signal.h"
 
 inline QFontComboBox *QFontComboBox_new(QWidget *parent) {
     return new QFontComboBox(parent);
