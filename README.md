@@ -163,7 +163,7 @@ Add to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-qtrs = "0.5.8"
+qtrs = "0.5.9"
 ```
 
 ## Compile-time `.ui` / `.qrc` embedding

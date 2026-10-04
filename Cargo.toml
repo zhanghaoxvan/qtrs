@@ -1,6 +1,6 @@
 [package]
 name = "qtrs"
-version = "0.5.8"
+version = "0.5.9"
 edition = "2021"
 rust-version = "1.85.0"
 authors = ["zhanghaoxvan <3592114583@qq.com>"]
