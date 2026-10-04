@@ -65,8 +65,15 @@ fn main() {
     // 5. Generate ffi.rs from src/ffi/*.rs, then set up cxx bridge
     let all_rs = generate_ffi();
     // 6. Generate ffi.rs from src/ffi/*.rs into $OUT_DIR, then set up cxx bridge
-    
     let mut build = cxx_build::bridge(all_rs);
+
+    // Set the flags when using MSVC toolchain
+    if std::env::var("TARGET").unwrap().contains("msvc") {
+        build.flag("/std:c++17");
+        build.flag("/permissive-");
+        build.flag("/Zc:__cplusplus");
+        build.flag("/utf-8");
+    }
 
     // Add main include
     build.include(&include_path);
